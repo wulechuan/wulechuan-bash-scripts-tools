@@ -7,13 +7,15 @@ if [ "$windowsCurrentUserName" = "lechuan.wu" ]; then
 fi
 
 ___shouldUse16ColorsPrompt=0
-if [ `tput colors` -eq 8 ]; then
+___tputColors=`tput colors`
+if [ $___tputColors -eq 8 ]; then
     ___shouldUse16ColorsPrompt=1
 
     if [ $envIsCygwin -eq 1 ]; then
         ___shouldUse16ColorsPrompt=0
     fi
 fi
+unset ___tputColors
 
 if [ $___shouldUse16ColorsPrompt -eq 1 ]; then
     export PROMPT_COMMAND='_customize_prompt_with_git_branch_info_in_16_colors_';

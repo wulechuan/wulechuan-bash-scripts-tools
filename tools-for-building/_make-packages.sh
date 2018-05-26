@@ -92,6 +92,14 @@ function ___wlc_bash_scripts_make_one_package_for_one_senario {
     local fullPathOfPackagesDotSh="$distributionPath/$___wlcBashScriptsFolderName/packages.sh"
     echo "__wlcBashScriptsAllChosenPacakges=\"$allComponents\"" > "$fullPathOfPackagesDotSh"
 
+    local fullPathOfFileAfterMaking="$configurationFolder/after-making-this-senario.sh"
+    if [ -f "$fullPathOfFileAfterMaking" ]; then
+        echo -e "Taking action: \033[35mafter-making-this-senario.sh\033[0;0m"
+        source "$fullPathOfFileAfterMaking"
+    else
+        echo -e "No actions to take after making this senario."
+    fi
+
     unset ___allChosenLibsFolder
 }
 
