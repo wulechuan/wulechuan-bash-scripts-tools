@@ -23,20 +23,22 @@ unset ___tempDetectGitPS1Function___
 function _customize_prompt_with_git_branch_info_in_256_colors_ {
 	PS1=`clear-color`"\n"                         # New line
 
-	PS1=$PS1"\e[38;5;16;48;5;219m`date +"%m-%d"`" # Month & Day
-	PS1=$PS1"\e[38;5;16;48;5;211m`date +"%H:%M"`" # Hour & Minute
-	PS1=$PS1"\e[38;5;16;48;5;216m "               # A <space>
+	PS1=$PS1"\e[38;5;16;48;5;210m`date +"%m-%d"`" # Month & Day
+	PS1=$PS1"\e[38;5;16;48;5;216m "               # A <Space>
+	PS1=$PS1"\e[38;5;16;48;5;229m`date +"%H:%M"`" # Hour & Minute
+	PS1=$PS1"\e[38;5;16;48;5;120m "               # A <space>
 
-	PS1="${PS1}\e[38;5;16;48;5;222m$USERNAME"     # user
-	PS1="${PS1}\e[38;5;16;48;5;49m@"              # @
-	PS1="${PS1}\e[38;5;16;48;5;51m\h"             # host
+	PS1="${PS1}\e[38;5;16;48;5;49m$USERNAME"      # user
+	PS1="${PS1}\e[38;5;16;48;5;87m@"              # @
+	PS1="${PS1}\e[38;5;16;48;5;45m\h"             # host
 	PS1="${PS1}\e[38;5;16;48;5;39m:"              # :
-	PS1="${PS1}\e[38;5;16;48;5;135m\w"            # current working directory
+	PS1="${PS1}\e[38;5;16;48;5;69m\w"             # current working directory
+	PS1=$PS1"\e[38;5;16;48;5;63m "                # A <space>
 
 	PS1=$PS1`__get_git_ps1_or_empty_string_in_256_colors__` # git branch info
 
 	PS1=$PS1`clear-color`'\n'                     # New line
-	PS1=$PS1'$ '                                  # last prompt sign: $<space>
+	PS1=$PS1'> '                                  # last prompt sign: $<space>
 	PS1=$PS1`clear-color`
 }
 
