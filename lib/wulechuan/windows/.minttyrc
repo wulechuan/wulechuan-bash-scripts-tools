@@ -1,8 +1,8 @@
 BoldAsFont=-1
-ThemeFile=base16-chalk.minttyrc
-FontHeight=17
-Columns=100
-Rows=36
+ThemeFile=base16-wulechuan.minttyrc
+FontHeight=22
+Columns=128
+Rows=40
 Term=xterm
 Locale=C
 Charset=UTF-8
@@ -10,3 +10,4 @@ Language=@
 FontSmoothing=default
 MiddleClickAction=paste
 RightClickAction=menu
+Font=PT Mono
