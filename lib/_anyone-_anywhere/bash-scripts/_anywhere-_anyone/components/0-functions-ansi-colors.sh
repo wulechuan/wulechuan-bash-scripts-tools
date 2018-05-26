@@ -23,11 +23,11 @@ function set-color {
         color2=";`map-color-name-into-ansi-code $2`"
     fi
 
-    echo -e "\033[${color1}${color2}m"
+    echo -e "\e[${color1}${color2}m"
 }
 
 function clear-color {
-    echo -e "\033[0;0m";
+    echo -e "\e[0;0m";
 }
 
 function map-color-name-into-ansi-code() {

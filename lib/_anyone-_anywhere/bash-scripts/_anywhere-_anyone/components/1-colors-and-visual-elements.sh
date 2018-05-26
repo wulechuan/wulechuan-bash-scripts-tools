@@ -1,24 +1,24 @@
 # ------------------------------------------------
 #     colors and visual elements
 # ------------------------------------------------
-        noColor='\033[0;0m'
-            red='\033[31;1m'
-      dimmedRed='\033[31m'
+        noColor='\e[0;0m'
+            red='\e[31;1m'
+      dimmedRed='\e[31m'
 
-          green='\033[32m'
-    greenItalic='\033[32;3m'
-greenUnderscore='\033[32;4m'
+          green='\e[32m'
+    greenItalic='\e[32;3m'
+greenUnderscore='\e[32;4m'
 
-          brown='\033[33m'
+          brown='\e[33m'
 
-           blue='\033[34m'
-     blueItalic='\033[34;3m'
- blueUnderscore='\033[34;4m'
+           blue='\e[34m'
+     blueItalic='\e[34;3m'
+ blueUnderscore='\e[34;4m'
 
-           pink='\033[35m'
+           pink='\e[35m'
 
-          light='\033[37m'
-           dark='\033[30;1m'
+          light='\e[37m'
+           dark='\e[30;1m'
 
 darkline20=`colorful ──────────────────── textBrightBlack`
 darkline30=`colorful ────────────────────────────── textBrightBlack`

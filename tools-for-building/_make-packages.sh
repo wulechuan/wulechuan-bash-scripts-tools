@@ -18,7 +18,7 @@ function ___wlc_bash_scripts_make_one_package_for_one_senario {
     local distributionRootPath=$1
     local machineUserCombination=$2
     echo ''
-    echo -e "Processing senario: \033[32m$machineUserCombination\033[0;0m"
+    echo -e "Processing senario: \e[32m$machineUserCombination\e[0;0m"
     echo '────────────────────────────────────────────────────────────'
 
     local configurationFolder="$___here/senario-specific-configurations/$machineUserCombination"
@@ -47,13 +47,13 @@ function ___wlc_bash_scripts_make_one_package_for_one_senario {
 
     for libSourceSubPath in $___allChosenLibsFolder
     do
-        echo -e "  Lib: \033[34m$libSourceSubPath\033[0;0m"
+        echo -e "  Lib: \e[34m$libSourceSubPath\e[0;0m"
 
         libSourceFullPath="$___here/lib/$libSourceSubPath"
         libBashScriptsFolderPath="$libSourceFullPath/$___wlcBashScriptsFolderName"
 
         if [ ! -d "$libBashScriptsFolderPath" ]; then
-            echo -e "       \"\033[33m$___wlcBashScriptsFolderName\033[0;0m\" folder \033[31mnot found\033[0;0m";
+            echo -e "       \"\e[33m$___wlcBashScriptsFolderName\e[0;0m\" folder \e[31mnot found\e[0;0m";
         else
             for libBashScriptsContentName in `ls $libBashScriptsFolderPath`
             do
@@ -62,14 +62,14 @@ function ___wlc_bash_scripts_make_one_package_for_one_senario {
                 if [ -d "$libBashScriptsContentFullPath" ]; then
 
                     if [ -d "$libBashScriptsContentFullPath/components" ]; then
-                        echo -e "       Package: \033[32m$libBashScriptsContentName\033[0;0m"
+                        echo -e "       Package: \e[32m$libBashScriptsContentName\e[0;0m"
                         allComponents="$allComponents$libBashScriptsContentName "
                     fi
                 fi
             done
         fi
 
-        echo -e "\033[0;0m"
+        echo -e "\e[0;0m"
 
         for libContentName in `ls $libSourceFullPath`
         do
@@ -94,7 +94,7 @@ function ___wlc_bash_scripts_make_one_package_for_one_senario {
 
     local fullPathOfFileAfterMaking="$configurationFolder/after-making-this-senario.sh"
     if [ -f "$fullPathOfFileAfterMaking" ]; then
-        echo -e "Taking action: \033[35mafter-making-this-senario.sh\033[0;0m"
+        echo -e "Taking action: \e[35mafter-making-this-senario.sh\e[0;0m"
         source "$fullPathOfFileAfterMaking"
     else
         echo -e "No actions to take after making this senario."
