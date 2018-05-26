@@ -1,7 +1,7 @@
 function ___move_netis_bash_scripts_packages_to_local_machine_package___ {
     local distPath="$___here/$___wlcBashScriptsDistributionRootFolderName"
 
-    local targetPath="$distPath/local-machine-wulechuan/bash-scripts-for-netis-dockers"
+    local targetPath="$distPath/_local-machine-wulechuan/bash-scripts-for-netis-dockers"
     mkdir "$targetPath"
 
     if [ -d "$distPath/netis-docker-non-root-user" ]; then
