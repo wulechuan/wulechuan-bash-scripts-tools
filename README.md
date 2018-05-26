@@ -32,7 +32,7 @@
     中的 `___allChosenLibsFolder` 指明的【库】，均会参与拼合，最终构成该【场景】。
 
     例如：已有的
-    `senario-specific-configurations/local-machine-wulechuan`
+    `senario-specific-configurations/_local-machine-wulechuan`
     文件夹下，其 `_chosen-libs.sh` 中写道：
 
     ```sh
@@ -43,7 +43,7 @@
     "
     ```
 
-    这意味着，`local-machine-wulechuan` 这一【场景】，在构建成功后将包含上述三个库。即，该【场景】由三个【库】拼装而得。
+    这意味着，`_local-machine-wulechuan` 这一【场景】，在构建成功后将包含上述三个库。即，该【场景】由三个【库】拼装而得。
 
 1.  按需【创建】更多【场景】。
 
