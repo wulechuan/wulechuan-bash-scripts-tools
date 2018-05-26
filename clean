@@ -1,4 +1,8 @@
-___here=`pwd`
+#!/bin/bash
+
+# clean existing distribution if any
+
+___here=$(dirname `readlink -f $0`)
 echo ''
 
 source "$___here/configurations.sh"

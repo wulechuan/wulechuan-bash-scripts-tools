@@ -18,5 +18,5 @@ alias cdw2="cd $(WinDrive d)/projects/wulechuan/sundries/"
 alias cdw3="cd $(WinDrive d)/projects/wulechuan/once-served/"
 
 
-alias ssh-vm-l="ssh wulechuan@192.168.236.131"
-alias ssh-vm-l-root="ssh root@192.168.236.131"
+alias sshvmlinux="ssh wulechuan@192.168.236.131"
+alias sshvmlinux-root="ssh root@192.168.236.131"
