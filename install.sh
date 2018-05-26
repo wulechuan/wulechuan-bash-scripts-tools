@@ -6,7 +6,7 @@ echo -e '\033[34m─────────────────────
 source "$___here/clean.sh"
 
 source "$___here/tools-for-building/_make-packages.sh"
-source "$___here/tools-for-building/after-making-all-senarions.sh"
+source "$___here/tools-for-building/after-making-all-senarios.sh"
 source "$___here/tools-for-building/install-local-machine-package.sh"
 
 unset ___here
