@@ -27,7 +27,7 @@ function git-try-to-set-editor-as-ms-vscode {
     local succeeded=0
 
     local codeOnLinux=/usr/bin/code
-    local codeOnWindows="$(WinDrive c)/Program Files/Microsoft VS Code/Code.exe"
+    local codeOnWindows="c:/Program Files/Microsoft VS Code/Code.exe"
 
     if [ -f $codeOnLinux ]; then
 
@@ -36,7 +36,7 @@ function git-try-to-set-editor-as-ms-vscode {
 
     elif [ -f "$codeOnWindows" ]; then
 
-        git config --global core.editor "$codeOnWindows"
+        git config --global core.editor "\"$codeOnWindows\""
         succeeded=1
     
     fi
