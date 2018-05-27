@@ -1,0 +1,9 @@
+#!/bin/bash
+
+myUnnamedOrgLDPAUserName="dummyValueMyUnnamedOrgLDPAUserName"
+
+gitDefaultUserName="${myUnnamedOrgLDPAUserName}"
+gitDefaultUserEmail="${myUnnamedOrgLDPAUserName}@unnamedOrg.com"
+
+linuxBPCProjectRoot="/opt/bpc"
+dockerIPPrefix='dummyValueDockerIpPrefix'

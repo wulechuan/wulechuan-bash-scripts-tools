@@ -88,7 +88,7 @@ function __ssh_keygen_ {
     # local keyDomainName=
     # local keyDomainNameLastSegment=
     # local keyHumanReadableName=
-    # local remoteUserName=${defaultNonRootUserNameInDocker}
+    # local remoteUserName=${myUnnamedOrgLDPAUserName}
 
     # local REPureDigits='^[0-9]+$'
 
@@ -111,7 +111,7 @@ function __ssh_keygen_ {
     #     # echo "last" $keyDomainNameLastSegment
 
     #     if [[ $keyDomainNameLastSegment =~ $REPureDigits ]]; then
-    #         keyHumanReadableName="netis-docker-$keyDomainNameLastSegment"
+    #         keyHumanReadableName="unnamedOrg-docker-$keyDomainNameLastSegment"
     #     else
     #         keyHumanReadableName=$keyDomainName
     #     fi

@@ -23,8 +23,21 @@ function git-enable-colors {
     echo 'GIT: colors enabled'
 }
 
-function git-set-editor-as-ms-vscode {
-    git config --global core.editor /usr/bin/code
+function git-try-to-set-editor-as-ms-vscode {
+    local succeeded=0
 
-    echo 'GIT: editor set to Microsoft Visual Studio Code'
+    local codeOnLinux=/usr/bin/code
+    local codeOnWindows="c:/Program\ Files/Microsoft\ VS\ Code/Code.exe"
+
+    if [ -f $codeOnLinux ]; then
+        git config --global core.editor $codeOnLinux
+        succeeded=1
+    elif [ -f "$codeOnWindows" ]; then
+        git config --global core.editor "$codeOnWindows"
+        succeeded=1
+    fi
+
+    if [ $succeeded -eq 1 ]; then
+        echo 'GIT: editor set to Microsoft Visual Studio Code'
+    fi
 }

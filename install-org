@@ -1,0 +1,12 @@
+#!/bin/bash
+
+___here=$(dirname `readlink -f $0`)
+
+source "$___here/building-tools/print-repository-location.sh"
+source "$___here/building-tools/_configurations.sh"
+source "$___here/building-tools/make-organization-unnamed.sh"
+if [ $___unnamedOrgInputReturnCode -eq 0 ]; then
+    source "$___here/building-tools/install-local-machine-package.sh"
+fi
+
+unset ___here

@@ -3,10 +3,10 @@
 # clean existing distribution if any
 
 ___here=$(dirname `readlink -f $0`)
+
+source "$___here/building-tools/_configurations.sh"
+
 echo ''
-
-source "$___here/configurations.sh"
-
 if [ -d "$___here/$___wlcBashScriptsDistributionRootFolderName" ]; then
     rm -rf "$___here/$___wlcBashScriptsDistributionRootFolderName"
     echo -e '\e[33m────────────────────────────────────────────────────────────\e[0;0m'

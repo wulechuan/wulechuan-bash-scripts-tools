@@ -42,11 +42,11 @@ unset categoryFolder
 # ------------------------------------------------
 #     take some actions
 # ------------------------------------------------
-if [ "$windowsCurrentUserName" = "wulechuan" ]; then
+if [ "$USERNAME" = "wulechuan" ]; then
     copywritingLanguage="en_US"
 fi
 
-if [ "$windowsCurrentUserName" = "lechuan.wu" ]; then
+if [ "$USERNAME" = "lechuan.wu" ]; then
     copywritingLanguage="en_US"
 fi
 

@@ -1,7 +1,13 @@
 function ___install_local_machine_package___ {
+    echo ''
+    echo ''
+    echo -e '\e[34m────────────────────────────────────────────────────────────'
+    echo -e "\e[34mINSTALLING BUILT PACKAGES TO: \e[33m~"
+    echo -e '\e[34m────────────────────────────────────────────────────────────'
+
+
     local distPath="$___here/$___wlcBashScriptsDistributionRootFolderName/_local-machine-wulechuan"
 
-    # echo "rm -rf ~/$___wlcBashScriptsFolderName"
     if [ -d "~/$___wlcBashScriptsFolderName" ]; then
         rm -rf "~/$___wlcBashScriptsFolderName"
     fi

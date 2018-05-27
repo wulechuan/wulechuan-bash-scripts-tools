@@ -1,16 +1,10 @@
 #!/bin/bash
 
 ___here=$(dirname `readlink -f $0`)
-echo -e '\e[34m────────────────────────────────────────────────────────────'
-echo -e "\e[34mTOOLSET: \e[33m$___here"
-echo -e '\e[34m────────────────────────────────────────────────────────────'
 
-source "$___here/clean" # clean existing distribution if any
-
-source "$___here/tools-for-building/_make-packages.sh"
-source "$___here/tools-for-building/after-making-all-senarios.sh"
-source "$___here/tools-for-building/install-local-machine-package.sh"
+source "$___here/building-tools/print-repository-location.sh"
+source "$___here/building-tools/_configurations.sh"
+source "$___here/building-tools/make.sh"
+source "$___here/building-tools/install-local-machine-package.sh"
 
 unset ___here
-unset ___wlcBashScriptsDistributionRootFolderName
-unset ___wlcBashScriptsFolderName
