@@ -72,5 +72,5 @@ unset categoryFolder
 # ------------------------------------------------
 #     Finalization
 # ------------------------------------------------
-unset ___bashScriptsRootFolder
+# unset ___bashScriptsRootFolder # 不能删除该变量。加载动态变量时，该变量用于拼装源文件路径
 unset __wlcBashScriptsAllChosenPacakges
