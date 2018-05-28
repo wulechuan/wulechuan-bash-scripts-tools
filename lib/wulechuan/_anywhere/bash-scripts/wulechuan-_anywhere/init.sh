@@ -7,7 +7,7 @@ if [ "$USERNAME" = "lechuan.wu" ]; then
 fi
 
 ___shouldUse16ColorsPrompt=0
-if [ envIsLinux = 1 ] || [ envIsCygwin = 1 ] || [ envIsGitBash = 1 ]; then
+if [ $envIsLinux = 1 ] || [ $envIsCygwin = 1 ] || [ $envIsGitBash = 1 ]; then
     ___shouldUse16ColorsPrompt=0
 else
     ___tputColors=`tput colors`
