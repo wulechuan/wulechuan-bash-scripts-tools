@@ -1,4 +1,5 @@
-___bashScriptsRootFolder=~/bash-scripts # DO NOT QUOTE THIS VALUE!
+___bashScriptsFolderName=dummyValueBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
+___bashScriptsRootFolder=~/$___bashScriptsFolderName # DO NOT QUOTE THIS VALUE!
 source "$___bashScriptsRootFolder/packages.sh"
 
 

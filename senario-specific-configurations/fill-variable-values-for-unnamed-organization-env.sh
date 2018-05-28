@@ -13,8 +13,8 @@ function ___build_variables_from_tempaltes_for_unnamedOrg_env {
 			echo -e "${light}      Examples: ${noColor}"
 		fi
 
-        echo -e "      ${green}setup-wulechuan-bash-scripts  ${brown}duanduan${noColor}"
-        echo -e "      ${green}setup-wulechuan-bash-scripts  ${brown}duanduan${noColor}  ${light}172.16.13.${noColor}"
+        echo -e "      ${green}install-org  ${brown}duanduan${noColor}"
+        echo -e "      ${green}install-org  ${brown}duanduan${noColor}  ${light}172.16.13.${noColor}"
 
         echo
 
