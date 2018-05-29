@@ -2,7 +2,9 @@
 
 # 概述
 
-本套脚本系统构建于【类Bash】环境之上。方便 Bash 用户快速配置环境。
+本套工具用于轻松构建和管理**多个不同场景**下的【类
+Bash】环境的配置。该工具本身以及其产出的脚本集均运行于【类
+Bash】环境之上。
 
 作者：吴乐川（Wu Lechuan）[wulechuan@live.com](mailto:wulechuan@live.com)
 
