@@ -1,5 +1,5 @@
 function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
-    local wlcBashScriptsDistributionRootPath="$___here/$___wlcBashScriptsDistributionRootFolderName"
+    local wlcBashScriptsDistributionRootPath="$___here/$___wlcBashScriptsBuildingOutputFolderName"
     local _machineUserCombination
 
     if [ -d "$wlcBashScriptsDistributionRootPath" ]; then
@@ -54,11 +54,11 @@ function ___wlc_bash_scripts_make_one_package_for_one_senario {
         echo -e "  Lib: \e[34m$libSourceSubPath\e[0;0m"
 
         libSourceFullPath="$___here/lib/$libSourceSubPath"
-        libBashScriptsFolderPath="$libSourceFullPath/$___wlcBashScriptsFolderName"
+        libBashScriptsFolderPath="$libSourceFullPath/$wlcBashScriptsRunningFolderName"
 
 
         if [ ! -d "$libBashScriptsFolderPath" ]; then
-            echo -e "       \"\e[33m$___wlcBashScriptsFolderName\e[0;0m\" folder \e[31mnot found\e[0;0m";
+            echo -e "       \"\e[33m$wlcBashScriptsRunningFolderName\e[0;0m\" folder \e[31mnot found\e[0;0m";
         else
             for libBashScriptsContentName in `ls $libBashScriptsFolderPath`
             do
@@ -109,7 +109,7 @@ function ___wlc_bash_scripts_make_one_package_for_one_senario {
         fi
     done
 
-    local fullPathOfPackagesDotSh="$distributionPath/$___wlcBashScriptsFolderName/packages.sh"
+    local fullPathOfPackagesDotSh="$distributionPath/$wlcBashScriptsRunningFolderName/packages.sh"
     echo "__wlcBashScriptsAllChosenPacakges=\"$allPackages\"" > "$fullPathOfPackagesDotSh"
 
     local fullPathOfFileAfterMaking="$configurationFolder/after-making-this-senario.sh"

@@ -6,10 +6,10 @@ function ___install_local_machine_package___ {
     echo -e '\e[34m────────────────────────────────────────────────────────────'
 
 
-    local distPath="$___here/$___wlcBashScriptsDistributionRootFolderName/_local-machine-wulechuan"
+    local distPath="$___here/$___wlcBashScriptsBuildingOutputFolderName/_local-machine-wulechuan"
 
-    if [ -d "~/$___wlcBashScriptsFolderName" ]; then
-        rm -rf "~/$___wlcBashScriptsFolderName"
+    if [ -d "~/$wlcBashScriptsRunningFolderName" ]; then
+        rm -rf "~/$wlcBashScriptsRunningFolderName"
     fi
 
     local targetPath=~

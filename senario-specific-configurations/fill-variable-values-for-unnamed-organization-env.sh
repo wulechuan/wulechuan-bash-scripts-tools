@@ -50,7 +50,7 @@ function ___build_variables_from_tempaltes_for_unnamedOrg_env {
     local currentFileWithoutExt
 
 
-    currentSenarioDistPath="$templatesNearestParentPath/_anyone-_anywhere/$___wlcBashScriptsFolderName/unnamedOrg-_anyone-_anywhere"
+    currentSenarioDistPath="$templatesNearestParentPath/_anyone-_anywhere/$wlcBashScriptsRunningFolderName/unnamedOrg-_anyone-_anywhere"
 
     currentFileWithoutExt="${currentSenarioDistPath}/define-variables"
     cp "${currentFileWithoutExt}.template" "${currentFileWithoutExt}.filled-template"
@@ -59,7 +59,7 @@ function ___build_variables_from_tempaltes_for_unnamedOrg_env {
 
 
 
-    currentSenarioDistPath="$templatesNearestParentPath/local-machine-_anyone/$___wlcBashScriptsFolderName/unnamedOrg-local-machine-portable"
+    currentSenarioDistPath="$templatesNearestParentPath/local-machine-_anyone/$wlcBashScriptsRunningFolderName/unnamedOrg-local-machine-portable"
 
     currentFileWithoutExt="${currentSenarioDistPath}/define-variables-dynamic"
     cp "${currentFileWithoutExt}.template"                       "${currentFileWithoutExt}.filled-template"

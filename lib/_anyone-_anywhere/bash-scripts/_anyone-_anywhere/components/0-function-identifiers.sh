@@ -32,6 +32,12 @@ function showEnv {
 }
 
 function detectEnv {
+    envIsWSL=0
+    envIsLinux=0
+    envIsCygwin=0
+    envIsGitBash=0
+
+
     local shouldNotShowResult=$1
     [ ${shouldNotShowResult:=0} ]
 

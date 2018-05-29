@@ -1,2 +1,0 @@
-___wlcBashScriptsDistributionRootFolderName='dist'
-___wlcBashScriptsFolderName='bash-scripts'

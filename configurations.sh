@@ -1,0 +1,2 @@
+___wlcBashScriptsBuildingOutputFolderName='dist'
+wlcBashScriptsRunningFolderName='bash-scripts'

@@ -1,5 +1,5 @@
 function ___move_unnamedOrg_bash_script_dist_packages_into_local_machine_package___ {
-    local distPath="$___here/$___wlcBashScriptsDistributionRootFolderName"
+    local distPath="$___here/$___wlcBashScriptsBuildingOutputFolderName"
 
     local targetPath="$distPath/_local-machine-wulechuan/bash-scripts-for-unnamedOrg-dockers"
     mkdir "$targetPath"

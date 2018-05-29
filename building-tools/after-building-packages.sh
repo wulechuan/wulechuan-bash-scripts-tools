@@ -1,5 +1,5 @@
 function ___rename_dot_filled_template_into_dot_sh___ {
-    local searchingRoot="$___here/$___wlcBashScriptsDistributionRootFolderName"
+    local searchingRoot="$___here/$___wlcBashScriptsBuildingOutputFolderName"
     local foundFiles=`find "$searchingRoot" -name "*.filled-template"`
 
     local foundFile

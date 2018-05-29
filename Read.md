@@ -4,8 +4,26 @@
 
 本套脚本系统构建于【类Bash】环境之上。方便 Bash 用户快速配置环境。
 
+作者：吴乐川（Wu Lechuan）[wulechuan@live.com](mailto:wulechuan@live.com)
 
-# 安装
+
+
+# 概念与术语
+
+## 【库】
+
+所谓【库】，这里是指
+
+
+## 【场景】
+
+
+
+## 执行顺序
+
+
+
+# 安装指南
 
 1.  按需【修订】已有的各种【库】。它们均位于 `lib`
     文件夹内，可以嵌套至深层文件夹。
@@ -63,13 +81,15 @@
         ```
     3.  如果有必要，在 `my-company-any-user` 文件夹中，创建名为
         `after-making-this-senario.sh` 文件。在该文件中随意撰写 bash 脚本。
-        在之后的【构建（拼装）】过程中，当`dist/my-company-any-user`
+        在之后的【构建】过程中，当 `dist/my-company-any-user`
         文件夹被创建，且其内容填充完全后，位于
         `senario-specific-configurations/my-company-any-user` 下的
-        `after-making-this-senario.sh` 将会以 `source` 的方式被运行。
+        `after-making-this-senario.sh` 将会以 Bash 的 `source` 的方式被运行。
 
-1.  运行【构建（拼装）】脚本和【安装】脚本。步骤如下：
+1.  运行【构建】脚本和【安装】脚本。步骤如下：
     ```sh
     cd <this repository>
     ./install.sh
     ```
+
+    > 注： `./install-org.sh` 仅做概念示例用，它已经损坏，不能正常运行。
