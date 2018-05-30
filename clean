@@ -15,7 +15,7 @@ if [ -d "$___here/$___wlcBashScriptsBuildingOutputFolderName" ]; then
     rm -rf "$___here/$___wlcBashScriptsBuildingOutputFolderName"
     echo -e "\e[33mREMOVED: \e[37m<this repository>\e[31m/$___wlcBashScriptsBuildingOutputFolderName\e[0;0m"
 
-    if [ ___shouldPreventRMFromAsyncDeletingNewlyCreatedFilledTemplates -ne 0 ]; then
+    if [ $___shouldPreventRMFromAsyncDeletingNewlyCreatedFilledTemplates -ne 0 ]; then
         rm `find "$___here/lib/" -name "*.filled-template"`
         echo -e "\e[33mREMOVED: \e[37m<this repository>\e[31m/lib/**/*.filled-template\e[0;0m"
     fi
