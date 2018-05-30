@@ -6,6 +6,8 @@ ___here=$(dirname `readlink -f $0`)
 
 source "$___here/configurations.sh"
 
+${___shouldPreventRMFromAsyncDeletingNewlyCreatedFilledTemplates:=0}
+
 echo ''
 if [ -d "$___here/$___wlcBashScriptsBuildingOutputFolderName" ]; then
     echo -e '\e[33m────────────────────────────────────────────────────────────\e[0;0m'
@@ -13,8 +15,10 @@ if [ -d "$___here/$___wlcBashScriptsBuildingOutputFolderName" ]; then
     rm -rf "$___here/$___wlcBashScriptsBuildingOutputFolderName"
     echo -e "\e[33mREMOVED: \e[37m<this repository>\e[31m/$___wlcBashScriptsBuildingOutputFolderName\e[0;0m"
 
-    rm `find "$___here/lib/" -name "*.filled-template"`
-    echo -e "\e[33mREMOVED: \e[37m<this repository>\e[31m/lib/**/*.filled-template\e[0;0m"
+    if [ ___shouldPreventRMFromAsyncDeletingNewlyCreatedFilledTemplates -ne 0 ]; then
+        rm `find "$___here/lib/" -name "*.filled-template"`
+        echo -e "\e[33mREMOVED: \e[37m<this repository>\e[31m/lib/**/*.filled-template\e[0;0m"
+    fi
 
     echo -e '\e[33m────────────────────────────────────────────────────────────\e[0;0m'
 fi
