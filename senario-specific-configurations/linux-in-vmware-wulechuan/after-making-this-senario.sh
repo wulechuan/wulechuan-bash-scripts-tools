@@ -3,6 +3,7 @@ function ___scp_bash_scripts_entries_to_remote {
 
     echo ''
     echo -e "  \e[33mS-Copying files to linux in VM\e[0;0m"
+    echo -e "  \e[35m(You may press \"Ctrl-C\" to skip this.)\e[0;0m"
 
 
     echo -en '  \e[31m'
