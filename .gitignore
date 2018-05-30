@@ -1,2 +1,2 @@
 dist
-libs/**/*.filled-template
+*.filled-template
