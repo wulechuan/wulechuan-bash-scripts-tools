@@ -1,7 +1,7 @@
 # ------------------------------------------------
 #     generic - aliases - Windows CMD & DOS
 # ------------------------------------------------
-alias dir="ls"
+alias dir="ls -l"
 alias cls="clear"
 alias cd..="cd .."
 alias copy="cp"

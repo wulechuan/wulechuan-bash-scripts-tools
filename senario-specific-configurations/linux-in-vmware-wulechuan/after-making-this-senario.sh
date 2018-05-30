@@ -18,7 +18,7 @@ function ___scp_bash_scripts_entries_to_remote {
 
 [ ${shouldSkipSCopyingOutputToLinuxVM:=0} ]
 
-if [ shouldSkipSCopyingOutputToLinuxVM = 0 ]; then
+if [ $shouldSkipSCopyingOutputToLinuxVM = 0 ]; then
     ___scp_bash_scripts_entries_to_remote   "wulechuan@192.168.236.131"
     ___scp_bash_scripts_entries_to_remote   "root@192.168.236.131"
 fi
