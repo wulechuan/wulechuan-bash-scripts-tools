@@ -5,28 +5,14 @@ wlcBashScriptsFolderPath=~/$wlcBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
 
 
 
-# This is important and but be executed first of all.
-source "$wlcBashScriptsFolderPath/detect-environment.sh"
+# There are important and but be executed first.
+source "$wlcBashScriptsFolderPath/_utilities/detect-environment.sh"
+source "$wlcBashScriptsFolderPath/_utilities/alphabetically-run-all-shells-in-a-folder.sh"
 
 
 # This file will be automatically created during making process.
 source "$wlcBashScriptsFolderPath/packages.sh"
 
-
-
-
-function alphabetically-run-all-shells-in-a-folder {
-    local folderOfActions=$1
-
-    if [ ! -z "$folderOfActions" ] && [ -d "$folderOfActions" ]; then
-        local actions=`ls $folderOfActions | grep .sh$`
-        local action
-
-        for action in $actions; do
-            source "$folderOfActions/$action"
-        done
-    fi
-}
 
 
 
@@ -37,15 +23,12 @@ for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
 do
     ___bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${___categoryFolder}"
 
-    if [ -d "$___bashScriptsCurrentPath" ]; then
-
-        if [ -f "$___bashScriptsCurrentPath/define-variables.sh" ]; then
-            source "${___bashScriptsCurrentPath}/define-variables.sh"
-        fi
+    if [ -f "$___bashScriptsCurrentPath/define-variables.sh" ]; then
+        source "${___bashScriptsCurrentPath}/define-variables.sh"
     fi
 done
-unset ___categoryFolder
 unset ___bashScriptsCurrentPath
+unset ___categoryFolder
 
 
 
@@ -71,14 +54,12 @@ for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
 do
     ___bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${___categoryFolder}"
 
-    if [ -d "$___bashScriptsCurrentPath" ]; then
-        if [ -f "$___bashScriptsCurrentPath/init.sh" ]; then
-            source "$___bashScriptsCurrentPath/init.sh"
-        fi
+    if [ -f "$___bashScriptsCurrentPath/init.sh" ]; then
+        source "$___bashScriptsCurrentPath/init.sh"
     fi
 done
-unset ___categoryFolder
 unset ___bashScriptsCurrentPath
+unset ___categoryFolder
 
 
 
