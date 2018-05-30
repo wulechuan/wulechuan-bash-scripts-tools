@@ -6,7 +6,7 @@ ___here=$(dirname `readlink -f $0`)
 
 source "$___here/configurations.sh"
 
-${___shouldPreventRMFromAsyncDeletingNewlyCreatedFilledTemplates:=0}
+[ ${___shouldPreventRMFromAsyncDeletingNewlyCreatedFilledTemplates:=0} ]
 
 echo ''
 if [ -d "$___here/$___wlcBashScriptsBuildingOutputFolderName" ]; then
