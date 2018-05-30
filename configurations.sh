@@ -6,3 +6,4 @@ ___possibleHiddenFilesAndFoldersToCopy="
     .mintty
     .minttyrc
 "
+shouldSkipSCopyingOutputToLinuxVM=1

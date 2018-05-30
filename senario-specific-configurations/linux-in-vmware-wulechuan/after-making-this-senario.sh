@@ -16,5 +16,9 @@ function ___scp_bash_scripts_entries_to_remote {
     echo -e '  \e[0;0m'
 }
 
-___scp_bash_scripts_entries_to_remote   "wulechuan@192.168.236.131"
-___scp_bash_scripts_entries_to_remote   "root@192.168.236.131"
+[ ${shouldSkipSCopyingOutputToLinuxVM:=0} ]
+
+if [ shouldSkipSCopyingOutputToLinuxVM = 0 ]; then
+    ___scp_bash_scripts_entries_to_remote   "wulechuan@192.168.236.131"
+    ___scp_bash_scripts_entries_to_remote   "root@192.168.236.131"
+fi
