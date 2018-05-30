@@ -93,20 +93,20 @@ function ___wlc_bash_scripts_make_one_package_for_one_senario {
 
         for libContentName in `ls $libSourceFullPath`
         do
-            cp -r "$libSourceFullPath/$libContentName" "$distributionPath/" 
+            cp -r "$libSourceFullPath/$libContentName" "$distributionPath/"
         done
 
-        if [ -f "$libSourceFullPath/.bashrc" ]; then
-            cp "$libSourceFullPath/.bashrc" "$distributionPath/" 
-        fi
 
-        if [ -f "$libSourceFullPath/.minttyrc" ]; then
-            cp "$libSourceFullPath/.minttyrc" "$distributionPath/" 
-        fi
+        local hiddenItemName
+        for hiddenItemName in $___possibleHiddenFilesAndFoldersToCopy; do
+            if [ -f "$libSourceFullPath/$hiddenItemName" ]; then
+                cp "$libSourceFullPath/$hiddenItemName" "$distributionPath/"
+            fi
 
-        if [ -d "$libSourceFullPath/.mintty" ]; then
-            cp -r "$libSourceFullPath/.mintty" "$distributionPath/" 
-        fi
+            if [ -d "$libSourceFullPath/$hiddenItemName" ]; then
+                cp -rf "$libSourceFullPath/$hiddenItemName" "$distributionPath/"
+            fi
+        done
     done
 
     local fullPathOfPackagesDotSh="$distributionPath/$wlcBashScriptsRunningFolderName/packages.sh"

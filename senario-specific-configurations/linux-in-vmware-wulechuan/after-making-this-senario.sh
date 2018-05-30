@@ -7,7 +7,7 @@ function ___scp_bash_scripts_entries_to_remote {
 
     echo -en '  \e[31m'
     scp -rq \
-        "$___here/dist/linux-in-vmware-wulechuan/$___bashScriptsFolderName"\
+        "$___here/dist/linux-in-vmware-wulechuan/$wlcBashScriptsFolderName"\
         "$___here/dist/linux-in-vmware-wulechuan/.bashrc"\
         "$userAtHost:~"
 

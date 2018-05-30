@@ -15,8 +15,8 @@ if [ $shouldUseDetailedButSlowBranchInfoQueryInPrompt != "yes" ]; then
 	___tempShouldTryLoadGNU__git_ps1=0
 fi
 
-if [ $___tempShouldTryLoadGNU__git_ps1 -eq 1 ] && [ -f "$___bashScriptsRootFolder/GNU-tools/git-prompt.sh" ]; then
-	source "$___bashScriptsRootFolder/GNU-tools/git-prompt.sh";
+if [ $___tempShouldTryLoadGNU__git_ps1 -eq 1 ] && [ -f "$wlcBashScriptsFolderPath/GNU-tools/git-prompt.sh" ]; then
+	source "$wlcBashScriptsFolderPath/GNU-tools/git-prompt.sh";
 fi
 
 ___tempDetectGitPS1Function___=`declare -f __git_ps1 > /dev/null; echo $?`

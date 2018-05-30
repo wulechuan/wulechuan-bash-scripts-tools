@@ -12,6 +12,7 @@ function ___install_local_machine_package___ {
         rm -rf "~/$wlcBashScriptsRunningFolderName"
     fi
 
+
     local targetPath=~
     local itemName
 
@@ -20,17 +21,17 @@ function ___install_local_machine_package___ {
         cp -r "$distPath/$itemName" "$targetPath/"
     done
 
-    if [ -f "$distPath/.bashrc" ]; then
-        cp "$distPath/.bashrc" "$targetPath/"
-    fi
 
-    if [ -f "$distPath/.minttyrc" ]; then
-        cp "$distPath/.minttyrc" "$targetPath/"
-    fi
+    local hiddenItemName
+    for hiddenItemName in $___possibleHiddenFilesAndFoldersToCopy; do
+        if [ -f "$distPath/$hiddenItemName" ]; then
+            cp "$distPath/$hiddenItemName" "$targetPath/"
+        fi
 
-    if [ -d "$distPath/.mintty" ]; then
-        cp -r "$distPath/.mintty" "$targetPath/"
-    fi
+        if [ -d "$distPath/$hiddenItemName" ]; then
+            cp -rf "$distPath/$hiddenItemName" "$targetPath/"
+        fi
+    done
 }
 
 ___install_local_machine_package___

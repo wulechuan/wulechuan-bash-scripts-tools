@@ -8,8 +8,13 @@ source "$___here/configurations.sh"
 
 echo ''
 if [ -d "$___here/$___wlcBashScriptsBuildingOutputFolderName" ]; then
-    rm -rf "$___here/$___wlcBashScriptsBuildingOutputFolderName"
     echo -e '\e[33m────────────────────────────────────────────────────────────\e[0;0m'
-    echo -e "\e[33mREMOVED: \e[31m$___here/$___wlcBashScriptsBuildingOutputFolderName\e[0;0m"
+
+    rm -rf "$___here/$___wlcBashScriptsBuildingOutputFolderName"
+    echo -e "\e[33mREMOVED: \e[37m<this repository>\e[31m/$___wlcBashScriptsBuildingOutputFolderName\e[0;0m"
+
+    rm `find "$___here/lib/" -name "*.filled-template"`
+    echo -e "\e[33mREMOVED: \e[37m<this repository>\e[31m/lib/**/*.filled-template\e[0;0m"
+
     echo -e '\e[33m────────────────────────────────────────────────────────────\e[0;0m'
 fi

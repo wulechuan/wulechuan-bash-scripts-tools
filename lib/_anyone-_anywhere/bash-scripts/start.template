@@ -1,8 +1,8 @@
-___bashScriptsFolderName=dummyValueBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
-___bashScriptsRootFolder=~/$___bashScriptsFolderName # DO NOT QUOTE THIS VALUE!
-source "$___bashScriptsRootFolder/packages.sh"
+#!/bin/bash
 
-
+wlcBashScriptsFolderName=dummyValueBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
+wlcBashScriptsFolderPath=~/$wlcBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
+source "$wlcBashScriptsFolderPath/packages.sh"
 
 
 
@@ -11,9 +11,9 @@ source "$___bashScriptsRootFolder/packages.sh"
 # ------------------------------------------------
 #     import configurations and utilities(functions) 
 # ------------------------------------------------
-for categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
+for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
 do
-    ___bashScriptsCurrentPath="${___bashScriptsRootFolder}/${categoryFolder}"
+    ___bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${___categoryFolder}"
 
     if [ -d "$___bashScriptsCurrentPath" ]; then
 
@@ -32,7 +32,8 @@ do
 
     fi
 done
-unset categoryFolder
+unset ___categoryFolder
+unset ___bashScriptsCurrentPath
 
 
 
@@ -51,9 +52,9 @@ if [ "$USERNAME" = "lechuan.wu" ]; then
     copywritingLanguage="en_US"
 fi
 
-for categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
+for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
 do
-    ___bashScriptsCurrentPath="${___bashScriptsRootFolder}/${categoryFolder}"
+    ___bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${___categoryFolder}"
 
     if [ -d "$___bashScriptsCurrentPath" ]; then
         if [ -f "$___bashScriptsCurrentPath/init.sh" ]; then
@@ -61,7 +62,8 @@ do
         fi
     fi
 done
-unset categoryFolder
+unset ___categoryFolder
+unset ___bashScriptsCurrentPath
 
 
 
@@ -72,5 +74,5 @@ unset categoryFolder
 # ------------------------------------------------
 #     Finalization
 # ------------------------------------------------
-# unset ___bashScriptsRootFolder # 不能删除该变量。加载动态变量时，该变量用于拼装源文件路径
+# unset wlcBashScriptsFolderPath # 不能删除该变量。加载动态变量时，该变量用于拼装源文件路径
 unset __wlcBashScriptsAllChosenPacakges
