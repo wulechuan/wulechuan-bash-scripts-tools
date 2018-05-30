@@ -35,7 +35,7 @@ function ___build_variables_from_tempaltes_for_unnamedOrg_env {
             echo -n "Press any key to continue "
 		fi
 
-        read
+        read -n 1 -t 10
 
         echo
     else
