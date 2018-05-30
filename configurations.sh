@@ -1,9 +1,13 @@
+___wlcBashScriptsSourceLibFolderName='libs'
 ___wlcBashScriptsBuildingOutputFolderName='dist'
 wlcBashScriptsRunningFolderName='bash-scripts'
+wlcLocalMachineFolderNameOfBashScriptsForDockers='bash-scripts-for-unnamed-organization-dockers'
 ___possibleHiddenFilesAndFoldersToCopy="
     .bash_profile
     .bashrc
     .mintty
     .minttyrc
 "
-shouldSkipSCopyingOutputToLinuxVM=1
+
+___shouldSkipSCopyingOutputToLinuxVirtualMachine=0
+___virtualMachineHost="234.123.12.1"

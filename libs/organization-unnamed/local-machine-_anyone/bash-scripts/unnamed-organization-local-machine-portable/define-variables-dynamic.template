@@ -1,0 +1,6 @@
+#!/bin/bash
+
+myLDPAUserName="dummyValueMyLDPAUserName"
+defaultDockerIPSuffix='0'
+
+

@@ -1,10 +1,18 @@
 #!/bin/bash
 
 ___here=$(dirname `readlink -f $0`)
+___senariosToBuild="
+    _local-machine-wulechuan
+    linux-in-vmware-wulechuan
+"
 
-source "$___here/building-tools/print-repository-location.sh"
+
+source "$___here/building-tools/_utilities/ansi-colors.sh"
 source "$___here/configurations.sh"
-source "$___here/building-tools/make.sh"
-source "$___here/building-tools/install-local-machine-package.sh"
+source "$___here/building-tools/print-repository-location.sh"
+source "$___here/building-tools/1-make-packages/make-_default.sh"           $*
+source "$___here/building-tools/2-installation/install-on-local-machine.sh" $*
 
+
+unset ___senariosToBuild
 unset ___here

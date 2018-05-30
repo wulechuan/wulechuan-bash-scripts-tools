@@ -1,0 +1,8 @@
+#!/bin/bash
+
+myLDPAUserName="dummyValueMyLDPAUserName"
+
+gitDefaultUserName="${myLDPAUserName}"
+gitDefaultUserEmail="${myLDPAUserName}@unnamed-organization.com"
+
+dockerIPPrefix='dummyValueDockerIpPrefix'

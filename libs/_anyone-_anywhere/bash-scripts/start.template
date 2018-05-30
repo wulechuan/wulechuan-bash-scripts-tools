@@ -1,0 +1,91 @@
+#!/bin/bash
+
+wlcBashScriptsFolderName=dummyValueBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
+wlcBashScriptsFolderPath=~/$wlcBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
+
+
+
+# This is important and but be executed first of all.
+source "$wlcBashScriptsFolderPath/detect-environment.sh"
+
+
+# This file will be automatically created during making process.
+source "$wlcBashScriptsFolderPath/packages.sh"
+
+
+
+
+function alphabetically-run-all-shells-in-a-folder {
+    local folderOfActions=$1
+
+    if [ ! -z "$folderOfActions" ] && [ -d "$folderOfActions" ]; then
+        local actions=`ls $folderOfActions | grep .sh$`
+        local action
+
+        for action in $actions; do
+            source "$folderOfActions/$action"
+        done
+    fi
+}
+
+
+
+# ------------------------------------------------
+#     import all defined variables
+# ------------------------------------------------
+for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
+do
+    ___bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${___categoryFolder}"
+
+    if [ -d "$___bashScriptsCurrentPath" ]; then
+
+        if [ -f "$___bashScriptsCurrentPath/define-variables.sh" ]; then
+            source "${___bashScriptsCurrentPath}/define-variables.sh"
+        fi
+    fi
+done
+unset ___categoryFolder
+unset ___bashScriptsCurrentPath
+
+
+
+
+
+# ------------------------------------------------
+#     import functions and aliases
+# ------------------------------------------------
+for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
+do
+    alphabetically-run-all-shells-in-a-folder "${wlcBashScriptsFolderPath}/${___categoryFolder}/components"
+done
+unset ___categoryFolder
+
+
+
+
+
+# ------------------------------------------------
+#     take some initial actions
+# ------------------------------------------------
+for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
+do
+    ___bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${___categoryFolder}"
+
+    if [ -d "$___bashScriptsCurrentPath" ]; then
+        if [ -f "$___bashScriptsCurrentPath/init.sh" ]; then
+            source "$___bashScriptsCurrentPath/init.sh"
+        fi
+    fi
+done
+unset ___categoryFolder
+unset ___bashScriptsCurrentPath
+
+
+
+
+
+# ------------------------------------------------
+#     Finalization
+# ------------------------------------------------
+# unset wlcBashScriptsFolderPath # 不能删除该变量。加载动态变量时，该变量用于拼装源文件路径。
+unset __wlcBashScriptsAllChosenPacakges
