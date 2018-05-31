@@ -27,7 +27,7 @@ function set-color {
 }
 
 function clear-color {
-    echo -e "\e[0;0m";
+    echo -e "\e[0;0m"
 }
 
 function map-color-name-into-ansi-code() {

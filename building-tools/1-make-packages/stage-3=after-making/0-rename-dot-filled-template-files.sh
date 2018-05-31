@@ -1,4 +1,4 @@
-function ___rename_dot_filled_template_into_dot_sh___ {
+function ___wlc_bash_scripts_rename_dot_filled_template_into_dot_sh {
     local searchingRoot="$___here/$___wlcBashScriptsBuildingOutputFolderName"
     local foundFiles=`find "$searchingRoot" -name "*.filled-template"`
 
@@ -9,11 +9,12 @@ function ___rename_dot_filled_template_into_dot_sh___ {
     if [ ! -z "$foundFiles" ]; then
         echo
         echo
-        echo -e  '\e[34m────────────────────────────────────────────────────────────'
-        echo -en "\e[34mRenaming: \e[33m*.filled-tempalte"
-        echo -e  "\e[0;0m;"
-        echo -e  "\e[34mDeleting: \e[33m*.tempalte"
-        echo -e  '\e[34m────────────────────────────────────────────────────────────'
+        echo -e  `colorful  $VE_line_60          textBlue`
+        echo -en `colorful  "Renaming: "         textBlue`
+        echo -e  `colorful  "*.filled-tempalte"  textYellow`
+        echo -en `colorful  "Deleting: "         textRed`
+        echo -e  `colorful  "*.tempalte"         textRed`
+        echo -e  `colorful  $VE_line_60          textBlue`
 
 
         for foundFile in $foundFiles
@@ -29,4 +30,4 @@ function ___rename_dot_filled_template_into_dot_sh___ {
 }
 
 
-___rename_dot_filled_template_into_dot_sh___
+___wlc_bash_scripts_rename_dot_filled_template_into_dot_sh

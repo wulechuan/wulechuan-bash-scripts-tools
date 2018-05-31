@@ -1,4 +1,4 @@
-function ___fill_variable_values_in_lib_templates_for_organization_senarios {
+function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senarios {
     local copywritingLanguage="zh_CN"
 
 	if [ -z "$1" ]; then
@@ -17,12 +17,12 @@ function ___fill_variable_values_in_lib_templates_for_organization_senarios {
             echo -e "  "`colorful "Examples:"       textBlue`
 		fi
 
-        echo -en "    "`colorful "./install-org"    textBlue`
-        echo -e        `colorful "  duanduan"       textGreen`
+        echo -en "    "`colorful "./install-org"  textBlue`
+        echo -e        `colorful " duanduan"      textGreen`
 
-        echo -en "    "`colorful "./install-org"    textBlue`
-        echo -en       `colorful "  duanduan"       textGreen`
-        echo -e        `colorful "  172.16.13."     textCyan`
+        echo -en "    "`colorful "./install-org"  textBlue`
+        echo -en       `colorful " duanduan"      textGreen`
+        echo -e        `colorful " 123.45.67."    textCyan`
 
         echo
 
@@ -43,7 +43,7 @@ function ___fill_variable_values_in_lib_templates_for_organization_senarios {
 		fi
 		if [ "$copywritingLanguage" = "en_US" ]; then
 			echo -e  `colorful "You omitted the second argument."      textBlue`
-			echo -en `colorful "Thus the default IP Prefix is used: "  textBlue`
+			echo -en `colorful "Thus the default IP prefix is used: "  textBlue`
 			echo -e  `colorful "${_dockerIpPrefix}"                    textGreen`
             echo -n  `colorful "Press any key to continue "            textYellow`
 		fi
@@ -68,14 +68,14 @@ function ___fill_variable_values_in_lib_templates_for_organization_senarios {
     currentFileWithoutExt="${currentSenarioDistPath}/define-variables"
     cp "${currentFileWithoutExt}.template" "${currentFileWithoutExt}.filled-template"
     sed -i "s/dummyValueMyLDPAUserName/$_myLDPAUserName/g"  "${currentFileWithoutExt}.filled-template"
-    sed -i "s/dummyValueDockerIpPrefix/$_dockerIpPrefix/g"  "${currentFileWithoutExt}.filled-template"
+    sed -i "s/dummyValueDockerIpPrefix/$_dockerIpPrefix/g"       "${currentFileWithoutExt}.filled-template"
 
 
 
     currentSenarioDistPath="$templatesNearestParentPath/local-machine-_anyone/$wlcBashScriptsRunningFolderName/unnamed-organization-local-machine-portable"
 
     currentFileWithoutExt="${currentSenarioDistPath}/define-variables-dynamic"
-    cp "${currentFileWithoutExt}.template"                  "${currentFileWithoutExt}.filled-template"
+    cp "${currentFileWithoutExt}.template"                       "${currentFileWithoutExt}.filled-template"
     sed -i "s/dummyValueMyLDPAUserName/$_myLDPAUserName/g"  "${currentFileWithoutExt}.filled-template"
 
     currentFileWithoutExt="${currentSenarioDistPath}/define-variables"
@@ -92,4 +92,4 @@ function ___fill_variable_values_in_lib_templates_for_organization_senarios {
 # echo dollar2=$2
 # echo
 
-___fill_variable_values_in_lib_templates_for_organization_senarios  $1  $2
+___fill_variable_values_in_lib_templates_for_unnamed_organization_senarios  $1  $2

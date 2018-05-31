@@ -6,15 +6,26 @@ ___here=$(dirname `readlink -f $0`)
 
 source "$___here/configurations.sh"
 
-echo ''
+echo
 if [ -d "$___here/$___wlcBashScriptsBuildingOutputFolderName" ]; then
-    echo -e '\e[33m────────────────────────────────────────────────────────────\e[0;0m'
+    echo
+    echo -e  `colorful  $VE_line_60  textRed`
+
 
     rm -rf "$___here/$___wlcBashScriptsBuildingOutputFolderName"
-    echo -e "\e[33mDeleted: \e[37m<this repository>\e[31m/$___wlcBashScriptsBuildingOutputFolderName\e[0;0m"
+    echo -en `colorful  "Deleted: "  textRed`
+    echo -en '<this repository>/'
+    echo -e  `colorful  "$___wlcBashScriptsBuildingOutputFolderName" textRed`
+
 
     rm `find "$___here/$___wlcBashScriptsSourceLibFolderName/" -name "*.filled-template"`
-    echo -e "\e[33mDeleted: \e[37m<this repository>\e[31m/$___wlcBashScriptsSourceLibFolderName/**/*.filled-template\e[0;0m"
+    echo -en `colorful  "Deleted: "  textRed`
+    echo -en '<this repository>/'
+    echo -e  `colorful  "$___wlcBashScriptsSourceLibFolderName"      textRed`
 
-    echo -e '\e[33m────────────────────────────────────────────────────────────\e[0;0m'
+
+    echo -e  `colorful  $VE_line_60  textRed`
+    echo
+    echo
 fi
+echo

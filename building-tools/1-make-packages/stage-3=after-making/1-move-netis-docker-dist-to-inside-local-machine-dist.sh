@@ -4,11 +4,11 @@ ___unnamedOrganizationDockerDistNewPath="$___unnamedOrganizationDockerDistOldPat
 mkdir "$___unnamedOrganizationDockerDistNewPath"
 
 if [ -d "$___unnamedOrganizationDockerDistOldPath/unnamed-organization-docker-non-root-user" ]; then
-    mv "$___unnamedOrganizationDockerDistOldPath/unnamed-organization-docker-non-root-user" "$___unnamedOrganizationDockerDistNewPath"
+    mv  "$___unnamedOrganizationDockerDistOldPath/unnamed-organization-docker-non-root-user" "$___unnamedOrganizationDockerDistNewPath"
 fi
 
-if [ -d "$___unnamedOrganizationDockerDistOldPath/unnamed-organization-docker-root-user" ]; then
-    mv "$___unnamedOrganizationDockerDistOldPath/unnamed-organization-docker-root-user"     "$___unnamedOrganizationDockerDistNewPath"
+if [ -d "$___unnamedOrganizationDockerDistOldPath/unnamed-organization-docker-root-user"     ]; then
+    mv  "$___unnamedOrganizationDockerDistOldPath/unnamed-organization-docker-root-user"     "$___unnamedOrganizationDockerDistNewPath"
 fi
 
 unset ___unnamedOrganizationDockerDistOldPath
