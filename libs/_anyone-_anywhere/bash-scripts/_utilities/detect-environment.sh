@@ -38,6 +38,7 @@ function detectEnv {
     envIsLinux=0
     envIsCygwin=0
     envIsGitBash=0
+    envIsVSCode=0
 
 
     local shouldNotShowResult=$1
@@ -51,6 +52,10 @@ function detectEnv {
         envIsCygwin=1
     elif [[ `uname` =~ MINGW64_NT ]]; then
         envIsGitBash=1
+    fi
+
+    if [ `echo $TERM_PROGRAM` = 'vscode' ]; then
+        envIsVSCode=1
     fi
 
     if [ $shouldNotShowResult = 0 ]; then

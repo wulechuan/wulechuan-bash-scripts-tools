@@ -8,5 +8,5 @@ alias cdw3="cd $(WinDrive d)/projects/wulechuan/once-served/"
 alias cdbs="cd $(WinDrive d)/projects/wulechuan/non-web/wulechuan-bash-scripts-tools/"
 
 
-alias sshvmlinux="ssh wulechuan@192.168.236.131"
-alias sshvmlinux-root="ssh root@192.168.236.131"
+alias sshvmlinux="ssh wulechuan@123.45.67.89"
+alias sshvmlinux-root="ssh root@123.45.67.89"
