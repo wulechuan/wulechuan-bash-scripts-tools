@@ -55,7 +55,7 @@ function detectEnv {
         envIsGitBash=1
     fi
 
-    local termProgram=echo $TERM_PROGRAM
+    local termProgram=`echo $TERM_PROGRAM`
 
     if [ ! -z "$termProgram" ]; then
         if [ $termProgram = vscode ]; then
