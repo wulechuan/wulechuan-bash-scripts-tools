@@ -36,7 +36,7 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
 
 	if [ -z "$2" ]; then
 		if [ "$copywritingLanguage" = "zh_CN" ]; then
-			echo -e  `colorful "你未给出 Docker 的 【IP 地址前缀】。"  textBlue`
+			echo -e  `colorful "你未给出 Docker 的【IP 地址前缀】。"  textBlue`
 			echo -en `colorful "将使用默认值："                      textBlue`
 			echo -e  `colorful "${_dockerIpPrefix}"                textGreen`
             echo -n  `colorful "现在可按任意键继续 "                  textYellow`
@@ -54,6 +54,24 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
     else
         _dockerIpPrefix=$2
     fi
+
+
+    if [ "$copywritingLanguage" = "zh_CN" ]; then
+        echo -en `colorful "LDPA 用户名："             textBlue`
+        echo -e  `colorful "${_myLDPAUserName}"       textGreen`
+        echo -en `colorful "Docker 的【IP 地址前缀】："  textBlue`
+        echo -e  `colorful "${_dockerIpPrefix}"       textGreen`
+        echo -n  `colorful "现在可按任意键继续 "         textYellow`
+    fi
+    if [ "$copywritingLanguage" = "en_US" ]; then
+        echo -en `colorful "LDPA user name:"             textBlue`
+        echo -e  `colorful "${_myLDPAUserName}"          textGreen`
+        echo -en `colorful "Docker IP prefix: "          textBlue`
+        echo -e  `colorful "${_dockerIpPrefix}"          textGreen`
+        echo -n  `colorful "Press any key to continue "  textYellow`
+    fi
+    read -n 1 -t 3
+
 
 
     local libPath="$___here/$___wlcBashScriptsSourceLibFolderName"
