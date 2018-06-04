@@ -31,6 +31,7 @@ function showEnv {
     showOneEnv envIsLinux
     showOneEnv envIsCygwin
     showOneEnv envIsGitBash
+    showOneEnv envIsVSCode
 }
 
 function detectEnv {
@@ -54,8 +55,12 @@ function detectEnv {
         envIsGitBash=1
     fi
 
-    if [ `echo $TERM_PROGRAM` = 'vscode' ]; then
-        envIsVSCode=1
+    local termProgram=echo $TERM_PROGRAM
+
+    if [ ! -z "$termProgram" ]; then
+        if [ $termProgram = vscode ]; then
+            envIsVSCode=1
+        fi
     fi
 
     if [ $shouldNotShowResult = 0 ]; then
