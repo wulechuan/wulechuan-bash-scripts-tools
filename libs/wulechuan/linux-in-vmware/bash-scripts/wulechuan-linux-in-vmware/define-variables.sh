@@ -1,1 +1,1 @@
-rainbowPromptColorsAreInBackgroundButNotText=1
+rainbowPromptColorsAreInBackgroundButNotText='yes'
