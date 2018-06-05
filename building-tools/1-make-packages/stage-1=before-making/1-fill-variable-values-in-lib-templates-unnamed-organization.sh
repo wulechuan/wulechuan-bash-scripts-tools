@@ -57,18 +57,20 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
 
 
     if [ "$copywritingLanguage" = "zh_CN" ]; then
+        echo -en "             "
         echo -en `colorful "LDPA 用户名："             textBlue`
         echo -e  `colorful "${_myLDPAUserName}"       textGreen`
         echo -en `colorful "Docker 的【IP 地址前缀】："  textBlue`
         echo -e  `colorful "${_dockerIpPrefix}"       textGreen`
-        echo -n  `colorful "现在可按任意键继续 "         textYellow`
+        echo -en `colorful "现在可按任意键继续 "         textYellow`
     fi
     if [ "$copywritingLanguage" = "en_US" ]; then
-        echo -en `colorful "LDPA user name:"             textBlue`
+        echo -en "  "
+        echo -en `colorful "LDPA user name: "            textBlue`
         echo -e  `colorful "${_myLDPAUserName}"          textGreen`
         echo -en `colorful "Docker IP prefix: "          textBlue`
         echo -e  `colorful "${_dockerIpPrefix}"          textGreen`
-        echo -n  `colorful "Press any key to continue "  textYellow`
+        echo -en `colorful "Press any key to continue "  textYellow`
     fi
     read -n 1 -t 3
 

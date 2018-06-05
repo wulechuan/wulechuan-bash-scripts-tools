@@ -60,11 +60,12 @@ function _customize_prompt_with_git_branch_info_in_16_colors_ {
 	local timestampe=`date +"%m-%d %H:%M"`
 	PS1=$PS1`colorful "$timestampe" textBrightBlack`" "    # timestamp
 
-	PS1=$PS1`colorful "\u"  textBlack       bgndCyan`      # user
-	PS1=$PS1`colorful "@"   textBlack       bgndGreen`     # @
-	PS1=$PS1`colorful "\h"  textBlack       bgndYellow`    # host
-	PS1=$PS1`colorful ":"   textBrightBlack bgndBrightRed` # :
-	PS1=$PS1`colorful "\w"  textBlack       bgndMagenta`   # current working directory
+	local userName=`getCurrentUserName`
+	PS1=$PS1`colorful "$userName"  textBlack       bgndCyan`      # user
+	PS1=$PS1`colorful "@"          textBlack       bgndGreen`     # @
+	PS1=$PS1`colorful "\h"         textBlack       bgndYellow`    # host
+	PS1=$PS1`colorful ":"          textBrightBlack bgndBrightRed` # :
+	PS1=$PS1`colorful "\w"         textBlack       bgndMagenta`   # current working directory
 
 	PS1=$PS1`__get_git_ps1_or_empty_string_in_16_colors`   # git branch info
 
