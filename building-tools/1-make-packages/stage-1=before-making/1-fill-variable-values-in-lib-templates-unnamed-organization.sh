@@ -1,6 +1,4 @@
 function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senarios {
-    local copywritingLanguage="zh_CN"
-
 	if [ -z "$1" ]; then
         echo
 
@@ -48,7 +46,7 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
             echo -n  `colorful "Press any key to continue "            textYellow`
 		fi
 
-        read -n 1 -t 5
+        read -s -n 1 -t 5
 
         echo
     else
@@ -72,7 +70,7 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
         echo -e  `colorful "${_dockerIpPrefix}"          textGreen`
         echo -en `colorful "Press any key to continue "  textYellow`
     fi
-    read -n 1 -t 3
+    read -s -n 1 -t 3
 
 
 

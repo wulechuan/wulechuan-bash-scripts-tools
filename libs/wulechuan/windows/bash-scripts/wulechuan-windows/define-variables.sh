@@ -1,0 +1,1 @@
+rainbowPromptColorsAreInBackgroundButNotText=1
