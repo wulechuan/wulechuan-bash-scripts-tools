@@ -2,13 +2,13 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
 	if [ -z "$1" ]; then
         echo
 
-		if [ "$copywritingLanguage" = "zh_CN" ]; then
+		if [ "$___copywritingLanguageDuringBuilding" = "zh_CN" ]; then
 			echo -e     `colorful "必须在第一个参数给出用于 Docker 的【非 root】用户名。"           textRed`
 			echo -e     `colorful "第二个参数可以省略。如果给出，则作为 Docker 的 【IP 地址前缀】。"  textYellow`
             echo
 			echo -e "  "`colorful "示例："           textBlue`
 		fi
-		if [ "$copywritingLanguage" = "en_US" ]; then
+		if [ "$___copywritingLanguageDuringBuilding" = "en_US" ]; then
 			echo -e     `colorful "You MUST provide the user name for the non-root user of the docker, in the first argument."  textRed`
 			echo -e     `colorful "The second argument is optional, which means the IP prefix of the dockers."                  textYellow`
 			echo
@@ -33,13 +33,13 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
     local _dockerIpPrefix="172.16.13."
 
 	if [ -z "$2" ]; then
-		if [ "$copywritingLanguage" = "zh_CN" ]; then
+		if [ "$___copywritingLanguageDuringBuilding" = "zh_CN" ]; then
 			echo -e  `colorful "你未给出 Docker 的【IP 地址前缀】。"  textBlue`
 			echo -en `colorful "将使用默认值："                      textBlue`
 			echo -e  `colorful "${_dockerIpPrefix}"                textGreen`
             echo -n  `colorful "现在可按任意键继续 "                  textYellow`
 		fi
-		if [ "$copywritingLanguage" = "en_US" ]; then
+		if [ "$___copywritingLanguageDuringBuilding" = "en_US" ]; then
 			echo -e  `colorful "You omitted the second argument."      textBlue`
 			echo -en `colorful "Thus the default IP prefix is used: "  textBlue`
 			echo -e  `colorful "${_dockerIpPrefix}"                    textGreen`
@@ -54,7 +54,7 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
     fi
 
 
-    if [ "$copywritingLanguage" = "zh_CN" ]; then
+    if [ "$___copywritingLanguageDuringBuilding" = "zh_CN" ]; then
         echo -en "             "
         echo -en `colorful "LDPA 用户名："             textBlue`
         echo -e  `colorful "${_myLDPAUserName}"       textGreen`
@@ -62,7 +62,7 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
         echo -e  `colorful "${_dockerIpPrefix}"       textGreen`
         echo -en `colorful "现在可按任意键继续 "         textYellow`
     fi
-    if [ "$copywritingLanguage" = "en_US" ]; then
+    if [ "$___copywritingLanguageDuringBuilding" = "en_US" ]; then
         echo -en "  "
         echo -en `colorful "LDPA user name: "            textBlue`
         echo -e  `colorful "${_myLDPAUserName}"          textGreen`
