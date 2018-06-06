@@ -1,1 +1,1 @@
-rainbowPromptColorsAreInBackgroundButNotText='yes'
+wlcRainbowPromptColorsAreInBackgroundButNotTexts='yes'
