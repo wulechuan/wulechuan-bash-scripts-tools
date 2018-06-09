@@ -5,9 +5,10 @@ wlcBashScriptsFolderPath=~/$wlcBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
 
 
 
-# There are important and but be executed first.
-source "$wlcBashScriptsFolderPath/_utilities/detect-environment.sh"
-source "$wlcBashScriptsFolderPath/_utilities/alphabetically-run-all-shells-in-a-folder.sh"
+# # There are important and but be executed first.
+source "$wlcBashScriptsFolderPath/__utilities/detect-environment.sh"
+source "$wlcBashScriptsFolderPath/__utilities/ansi-colors.sh"
+source "$wlcBashScriptsFolderPath/__utilities/alphabetically-run-all-shells-in-a-folder.sh"
 
 
 # This file will be automatically created during making process.

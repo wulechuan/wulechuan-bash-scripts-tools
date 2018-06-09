@@ -1,7 +1,7 @@
 BoldAsFont=-1
 ThemeFile=base16-wulechuan.minttyrc
-FontHeight=22
-Columns=128
+FontHeight=19
+Columns=120
 Rows=40
 Term=xterm
 Locale=C
