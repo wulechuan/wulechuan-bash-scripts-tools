@@ -1,5 +1,5 @@
 if [ true ]; then
-    netis-docker-init
+    unnamed-organization-docker-init
 else
     clear
 

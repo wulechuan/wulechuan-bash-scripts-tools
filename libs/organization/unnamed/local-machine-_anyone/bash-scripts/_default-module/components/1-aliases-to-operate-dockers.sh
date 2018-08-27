@@ -1,0 +1,4 @@
+alias ssh-docker-for-developer=' __unnamed_organization_ssh_connect_to_docker_for_developer_'
+alias ssh-docker-for-supporter=' __unnamed_organization_ssh_connect_to_docker_for_supporter_'
+alias init-docker-for-developer='__unnamed_organization_init_docker_for_developer_'
+alias init-docker-for-supporter='__unnamed_organization_init_docker_for_supporter_'
