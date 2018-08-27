@@ -1,0 +1,10 @@
+___allChosenLibsFolder="
+    _anyone-_anywhere
+    organization/unnamed/_anyone-_anywhere
+    organization/unnamed/any-linux-_any-environment-root-user
+    organization/unnamed/any-linux-for-developer-root-user
+    organization/unnamed/docker-_any-environment-_any-user
+    organization/unnamed/docker-for-supporter-as-opening-root-user
+    personal/wulechuan/_anywhere
+    organization/unnamed/docker-wulechuan
+"

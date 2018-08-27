@@ -6,15 +6,21 @@ function ___wlc_bash_scripts_rename_dot_filled_template_into_dot_sh {
     local foundFileDirname
     local foundFileBasename
 
+    local logString=''
+
     if [ ! -z "$foundFiles" ]; then
-        echo
-        echo
-        echo -e  `colorful  $VE_line_60          textBlue`
-        echo -en `colorful  "Renaming: "         textBlue`
-        echo -e  `colorful  "*.filled-tempalte"  textYellow`
-        echo -en `colorful  "Deleting: "         textRed`
-        echo -e  `colorful  "*.tempalte"         textRed`
-        echo -e  `colorful  $VE_line_60          textBlue`
+        logString='\n\n'
+
+        append-colorful-string-to logString -n $VE_line_60          textBlue
+
+        append-colorful-string-to logString -- 'Renaming: '         textBlue
+        append-colorful-string-to logString -n '*.filled-tempalte'  textYellow
+        append-colorful-string-to logString -- 'Deleting: '         textRed
+        append-colorful-string-to logString -n '*.tempalte'         textRed
+
+        append-colorful-string-to logString -n $VE_line_60          textBlue
+
+        echo -en "$logString"
 
 
         for foundFile in $foundFiles

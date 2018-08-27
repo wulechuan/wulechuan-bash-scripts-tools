@@ -21,3 +21,5 @@ source "$___here/building-tools/2-deploy/deploy-senarios.sh"                    
 unset ___senarioNamesToBuild
 unset ___senarioNamesToDeploy
 unset ___here
+
+echo after-start 还没有更正

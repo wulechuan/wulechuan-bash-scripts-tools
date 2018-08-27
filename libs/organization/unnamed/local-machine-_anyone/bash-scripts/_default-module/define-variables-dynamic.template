@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# 此处 dynamic 一语双关。
+# 1. 这些配置因人而异，且时时可能变动
+# 2. 每次要使用这些变量的值时，都先借助 `source` 命令加载它们。以使得我们可以随时修订它们并立即生效。
+
+
+# 配置【远端用户名】，即你所采用 Docker 的【非 Root 用户】的【用户名】。
+# 配置该项，以免去今后在命令行中反复输入【远端用户名】。
+# 必须正确配置该项，方可正常操控 Docker。
+# 另注：远端用户名有别于你在本机（例如 Windows 笔记本）上的用户名，二者完全不相干，二者取值可以各不相同。
+myCompanyLDPAUserName="dummyValuemyCompanyLDPAUserName"
+
+
+# 你目前默认采用的 Docker 的 IP 地址【末项】。
+# 不妨配置该项，以免去在命令行中反复输入默认 Docker 的 IP 地址末项。
+defaultIPSuffixForDockerForDeveloper='123'
+
+

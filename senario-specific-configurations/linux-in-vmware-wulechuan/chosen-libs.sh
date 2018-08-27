@@ -1,8 +1,9 @@
 ___allChosenLibsFolder="
     _anyone-_anywhere
-    wulechuan/_anywhere
-    wulechuan/linux-in-vmware
-    organization-unnamed/_anyone-_anywhere
-    organization-unnamed/any-linux-root-user
-    organization-unnamed/linux-in-vmware-wulechuan
+    organization/unnamed/_anyone-_anywhere
+    organization/unnamed/any-linux-_any-environment-root-user
+    organization/unnamed/any-linux-for-developer-root-user
+    personal/wulechuan/_anywhere
+    personal/wulechuan/linux-in-vmware
+    organization/unnamed/linux-in-vmware-wulechuan
 "

@@ -5,28 +5,27 @@ function deploy-by-s-copying {
 
     local defaultDescriptionOfDeploymentTarget="$idOfTarget_inPatternOf_userAtHost:~"
 
-    echo
-    echo
-
     echo ${descriptionOfDeploymentTarget:=$defaultDescriptionOfDeploymentTarget} 1>/dev/null
 
-    if [ 1 ]; then
-        echo -e  `colorful  " Deploying by s-copying "    textBlack  bgndMagenta`
-        echo -e  `colorful  $VE_line_60                   textMagenta`
-    else
-        echo -en `colorful  " Deploying by s-copying "    textBlack  bgndMagenta`
-        echo -e  `colorful  "────────────────────────────────────"   textMagenta`    
-        echo
-    fi
+    echo
+    echo
 
-    echo -en `colorful  "Senario: "                       textBlue`
-    echo -e  `colorful  "$senarioNameToDeploy"            textYellow`
+    local logString=''
+    local decorationColor=Magenta
 
-    echo -en "     "
-    echo -en `colorful  "To: "                            textBlue`
-    echo -e  `colorful  "$descriptionOfDeploymentTarget"  textGreen`
+    append-colorful-string-to logString -n "$VE_line_60"                     text${decorationColor}
+    append-colorful-string-to logString -n "Deploying by s-copying"          text${decorationColor}
+    append-colorful-string-to logString -n "$VE_line_60"                     text${decorationColor}
 
-    echo -e  `colorful  $VE_line_40                       textMagenta`
+    append-colorful-string-to logString -- "Senario: "                       textGray
+    append-colorful-string-to logString -n "$senarioNameToDeploy"            textYellow
+    append-colorful-string-to logString -- "     To: "                       textGray
+    append-colorful-string-to logString -n "$descriptionOfDeploymentTarget"  textGreen
+
+    echo -en "$logString"
+
+
+
 
     local scopyingSources="
         $___here/$___wlcBashScriptsBuildingOutputFolderName/$senarioNameToDeploy/$wlcBashScriptsRunningFolderName
@@ -35,7 +34,9 @@ function deploy-by-s-copying {
     beautiful-scopy   "$scopyingSources"  "$idOfTarget_inPatternOf_userAtHost:~"  0
 
 
-    echo -e  `colorful  $VE_line_60                     textMagenta`
+    logString=''
+    append-colorful-string-to logString -- "$VE_line_60"               text${decorationColor}
+    echo -e "$logString"
 }
 
 function beautiful-scopy {
@@ -49,27 +50,38 @@ function beautiful-scopy {
         shouldNotPrintTitle=1
     fi
 
+    local logString=''
+    local decorationColor=Magenta
+
+    append-colorful-string-to logString -n "${VE_line_40:0:35}"        text${decorationColor}
+
     if [ $shouldNotPrintTitle = 0 ]; then
         [ ${descriptionOfThisCopying:="$idOfTarget_inPatternOf_userAtHost"} ]
-        echo
-        echo -e  `colorful  "S-copying files ${descriptionOfThisCopying}"  textYellow`
+        colorful -n "\nS-copying files ${descriptionOfThisCopying}"  textYellow
     fi
 
-    echo -e  `colorful  '(You may press "Ctrl-c" to skip this)'  textMagenta`
+    append-colorful-string-to logString -- '(You may press "Ctrl-c" to skip this)'    text${decorationColor}
+    echo -e "$logString"
 
 
 
-    echo -en `set-color textRed`
+    set-echo-color textRed
+
     scp  -rq  $scopyingSources  "$idOfTarget_inPatternOf_userAtHost"
     local scopyReturnValue=$?
 
-    # echo -en `clear-color`
+    clear-echo-color
+
+
+    logString='\n'
 
     if [ $scopyReturnValue = 0 ]; then
-        echo -e  `colorful "(s-copy done)"                  textGreen`
+        append-colorful-string-to logString -n '(s-copy done)'                  textGreen
     else
-        echo -en `colorful "(s-copy done with error code "  textYellow`
-        echo -en `colorful " $scopyReturnValue "            textBlack  bgndRed`
-        echo -e  `colorful ")"                              textYellow`
+        append-colorful-string-to logString -- '(s-copy terminated with error code '  textYellow
+        append-colorful-string-to logString -- " $scopyReturnValue "            textBlack  bgndRed
+        append-colorful-string-to logString -n ')'                              textYellow
     fi
+
+    echo -en "$logString"
 }

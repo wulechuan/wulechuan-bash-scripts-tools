@@ -1,1 +1,0 @@
-alias allowFastSudo='__unnamed_organization_docker_allow_non_root_user_skip_all_password_'

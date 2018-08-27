@@ -1,0 +1,1 @@
+wlcRainbowPromptColorsAreInBackgroundButNotTexts='no'

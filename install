@@ -1,6 +1,7 @@
 #!/bin/bash
 
-___here=$(dirname `readlink -f $0`)
+___here=$(dirname `readlink -f $0`) # 获取当前运行的文件夹
+
 ___senarioNamesToBuild="
     _local-machine-wulechuan
     linux-in-vmware-wulechuan
@@ -14,8 +15,8 @@ source "$___here/building-tools/_utilities/deploy-by-copying.sh"
 source "$___here/building-tools/_utilities/deploy-by-s-copying.sh"
 source "$___here/configurations.sh"
 source "$___here/building-tools/print-repository-location.sh"
-source "$___here/building-tools/1-make-packages/make-_default.sh"                  $*
-source "$___here/building-tools/2-deploy/deploy-senarios.sh"                       $___senarioNamesToDeploy
+source "$___here/building-tools/1-make-packages/make-_default.sh"                $*
+source "$___here/building-tools/2-deploy/deploy-senarios.sh"                     $___senarioNamesToDeploy
 
 
 unset ___senarioNamesToBuild

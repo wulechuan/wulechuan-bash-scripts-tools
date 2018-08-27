@@ -3,55 +3,58 @@ function deploy-by-copying {
     local descriptionOfThisDepolyment=$2
     local deploymentTargetLocation=$3
 
-    echo
-    echo
-
     echo ${descriptionOfThisDepolyment:=$senarioNameToDeploy} 1>/dev/null
-    echo ${deploymentTargetLocation:=~}                       1>/dev/null # Do NOT quote ~
+    echo ${deploymentTargetLocation:=~}                       1>/dev/null # Do NOT quote the ~
 
-    if [ 1 ]; then
-        echo -e  `colorful  " Deploying by copying "       textBlack  bgndCyan`
-        echo -e  `colorful  $VE_line_60                    textCyan`
-    else
-        echo -en `colorful  " Deploying by copying "       textBlack  bgndCyan`
-        echo -e  `colorful  "──────────────────────────────────────"  textCyan`
-        echo
-    fi
+    echo
+    echo
 
-    echo -en `colorful  "Senario: "                  textBlue`
-    echo -e  `colorful  "$senarioNameToDeploy"       textYellow`
+    local logString=''
+    local decorationColor=Cyan
 
-    echo -en "     "
-    echo -en `colorful  "To: "                       textBlue`
-    echo -e  `colorful  "$deploymentTargetLocation"  textGreen`
+    append-colorful-string-to logString -n "$VE_line_60"                text${decorationColor}
+    append-colorful-string-to logString -n "Deploying by copying"       text${decorationColor}
+    append-colorful-string-to logString -n "$VE_line_60"                text${decorationColor}
 
-    echo -e  `colorful  $VE_line_60                  textCyan`
+    append-colorful-string-to logString -- "Senario: "                  textGray
+    append-colorful-string-to logString -n "$senarioNameToDeploy"       textYellow
+    append-colorful-string-to logString -- "     To: "                  textGray
+    append-colorful-string-to logString -n "$deploymentTargetLocation"  textGreen
 
-
-    local deploymentTarget="$deploymentTargetLocation/$wlcBashScriptsRunningFolderName"
-    if [    -d "$deploymentTarget" ]; then
-        rm -rf "$deploymentTarget"
-    fi
+    echo -en "$logString"
 
 
+    # ./dist/<senario>
     local distPathAsCopyingSourceLocation="$___here/$___wlcBashScriptsBuildingOutputFolderName/$senarioNameToDeploy"
 
 
-    local itemName
-    for itemName in `ls $distPathAsCopyingSourceLocation`
-    do
-        cp      -r "$distPathAsCopyingSourceLocation/$itemName"        "$deploymentTargetLocation"
-    done
+    local sourceItemName
+    local sourceItemPath
+    local targetFolderPath
 
+    for sourceItemName in `ls -A $distPathAsCopyingSourceLocation`; do
+        sourceItemPath="$distPathAsCopyingSourceLocation/$sourceItemName"
 
-    local hiddenItemName
-    for hiddenItemName in $___possibleHiddenFilesAndFoldersToCopy; do
-        if [    -f "$distPathAsCopyingSourceLocation/$hiddenItemName" ]; then
-            cp  -f "$distPathAsCopyingSourceLocation/$hiddenItemName"  "$deploymentTargetLocation"
+        # 如果遇到文件，则直接复制，-f 强迫覆盖旧有文件。
+        if [    -f "$sourceItemPath" ]; then
+            cp  -f "$sourceItemPath"   "$deploymentTargetLocation/"
         fi
 
-        if [    -d "$distPathAsCopyingSourceLocation/$hiddenItemName" ]; then
-            cp -rf "$distPathAsCopyingSourceLocation/$hiddenItemName"  "$deploymentTargetLocation"
+
+        # 如果遇到文件夹，则先删除可能存在的旧目标文件夹，而后复制整个源文件夹。
+        if [    -d "$sourceItemPath" ]; then
+            targetFolderPath="$deploymentTargetLocation/$sourceItemName"
+
+            if [    -d "$targetFolderPath" ]; then
+                rm -rf "$targetFolderPath"
+            fi
+
+            cp -rf "$sourceItemPath"   "$deploymentTargetLocation/"
         fi
     done
+
+    
+    logString=''
+    append-colorful-string-to logString -- "$VE_line_60"                text${decorationColor}
+    echo -e "$logString"
 }

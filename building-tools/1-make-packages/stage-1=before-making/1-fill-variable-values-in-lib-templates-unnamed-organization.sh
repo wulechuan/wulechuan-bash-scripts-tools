@@ -1,30 +1,31 @@
 function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senarios {
+    local logString
+
+
 	if [ -z "$1" ]; then
-        echo
+        logString='\n'
 
-		if [ "$___copywritingLanguageDuringBuilding" = "zh_CN" ]; then
-			echo -e     `colorful "必须在第一个参数给出用于 Docker 的【非 root】用户名。"           textRed`
-			echo -e     `colorful "第二个参数可以省略。如果给出，则作为 Docker 的 【IP 地址前缀】。"  textYellow`
-            echo
-			echo -e "  "`colorful "示例："           textBlue`
-		fi
 		if [ "$___copywritingLanguageDuringBuilding" = "en_US" ]; then
-			echo -e     `colorful "You MUST provide the user name for the non-root user of the docker, in the first argument."  textRed`
-			echo -e     `colorful "The second argument is optional, which means the IP prefix of the dockers."                  textYellow`
-			echo
-            echo -e "  "`colorful "Examples:"       textBlue`
+            append-colorful-string-to logString -n 'You MUST provide the user name for the non-root user of the docker, in the first argument.'  textRed
+            append-colorful-string-to logString -n 'The second argument is optional, which means the IP prefix of the dockers.'                  textYellow
+            logString=$logString'\n'
+            append-colorful-string-to logString -n 'Examples:'  textGray
+        else
+            append-colorful-string-to logString -n '必须在第一个参数给出用于 Docker 的【非 root】用户名。'  textRed
+            append-colorful-string-to logString -n '第二个参数可以省略。如果给出，则作为 Docker 的 【IP 地址前缀】。'                  textYellow
+            logString=$logString'\n'
+            append-colorful-string-to logString -n '示例：'  textGray
 		fi
 
-        echo -en "    "`colorful "./install-org"  textBlue`
-        echo -e        `colorful " duanduan"      textGreen`
+        append-colorful-string-to logString -- '    ./install-org'    textBlue
+        append-colorful-string-to logString -n '  shirly.hu'          textGreen
 
-        echo -en "    "`colorful "./install-org"  textBlue`
-        echo -en       `colorful " duanduan"      textGreen`
-        echo -e        `colorful " 123.45.67."    textCyan`
+        append-colorful-string-to logString -- '    ./install-org'    textBlue
+        append-colorful-string-to logString -- '  shirly.hu'          textGreen
+        append-colorful-string-to logString -n '  172.16.13.'         textCyan
 
-        echo
+        echo -e "$logString"
 
-		# return 1
         exit 1
 	fi
 
@@ -33,17 +34,23 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
     local _dockerIpPrefix="172.16.13."
 
 	if [ -z "$2" ]; then
+
 		if [ "$___copywritingLanguageDuringBuilding" = "zh_CN" ]; then
-			echo -e  `colorful "你未给出 Docker 的【IP 地址前缀】。"  textBlue`
-			echo -en `colorful "将使用默认值："                      textBlue`
-			echo -e  `colorful "${_dockerIpPrefix}"                textGreen`
-            echo -n  `colorful "现在可按任意键继续 "                  textYellow`
+            logString=''
+        	append-colorful-string-to logString -n "你未给出 Docker 的【IP 地址前缀】。" textBlue
+        	append-colorful-string-to logString -- "将使用默认值："                    textBlue
+        	append-colorful-string-to logString -- "${_dockerIpPrefix}"              textGreen
+        	append-colorful-string-to logString -- "现在可按任意键继续 "                textYellow
+            echo -e "$logString"
 		fi
+
 		if [ "$___copywritingLanguageDuringBuilding" = "en_US" ]; then
-			echo -e  `colorful "You omitted the second argument."      textBlue`
-			echo -en `colorful "Thus the default IP prefix is used: "  textBlue`
-			echo -e  `colorful "${_dockerIpPrefix}"                    textGreen`
-            echo -n  `colorful "Press any key to continue "            textYellow`
+            logString=''
+        	append-colorful-string-to logString -n "You omitted the second argument."      textBlue
+        	append-colorful-string-to logString -- "Thus the default IP prefix is used: "  textBlue
+        	append-colorful-string-to logString -- "${_dockerIpPrefix}"                    textGreen
+        	append-colorful-string-to logString -- "Press any key to continue "            textYellow
+            echo -e "$logString"
 		fi
 
         read -s -n 1 -t 5
@@ -53,48 +60,49 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
         _dockerIpPrefix=$2
     fi
 
-
     if [ "$___copywritingLanguageDuringBuilding" = "zh_CN" ]; then
-        echo -en "             "
-        echo -en `colorful "LDPA 用户名："             textBlue`
-        echo -e  `colorful "${_myLDPAUserName}"       textGreen`
-        echo -en `colorful "Docker 的【IP 地址前缀】："  textBlue`
-        echo -e  `colorful "${_dockerIpPrefix}"       textGreen`
-        echo -en `colorful "现在可按任意键继续 "         textYellow`
+        logString=''
+        append-colorful-string-to logString -- "             LDPA 用户名："  textBlue
+        append-colorful-string-to logString -n "${_myLDPAUserName}"         textGreen
+        append-colorful-string-to logString -- "Docker 的【IP 地址前缀】："    textBlue
+        append-colorful-string-to logString -n "${_dockerIpPrefix}"         textGreen
+        append-colorful-string-to logString -- "现在可按任意键继续 "           textYellow
+        echo -e "$logString"
     fi
+
     if [ "$___copywritingLanguageDuringBuilding" = "en_US" ]; then
-        echo -en "  "
-        echo -en `colorful "LDPA user name: "            textBlue`
-        echo -e  `colorful "${_myLDPAUserName}"          textGreen`
-        echo -en `colorful "Docker IP prefix: "          textBlue`
-        echo -e  `colorful "${_dockerIpPrefix}"          textGreen`
-        echo -en `colorful "Press any key to continue "  textYellow`
+        logString=''
+        append-colorful-string-to logString -- "  LDPA user name: "          textBlue
+        append-colorful-string-to logString -n "${_myLDPAUserName}"          textGreen
+        append-colorful-string-to logString -- "Docker IP prefix: "          textBlue
+        append-colorful-string-to logString -n "${_dockerIpPrefix}"          textGreen
+        append-colorful-string-to logString -- "Press any key to continue "  textYellow
+        echo -e "$logString"
     fi
+
     read -s -n 1 -t 3
 
-
-
     local libPath="$___here/$___wlcBashScriptsSourceLibFolderName"
-    local templatesNearestParentPath="$libPath/organization-unnamed"
+    local templatesNearestParentPath="$libPath/organization/unnamed"
 
     local currentSenarioDistPath
     local currentFileWithoutExt
 
 
-    currentSenarioDistPath="$templatesNearestParentPath/_anyone-_anywhere/$wlcBashScriptsRunningFolderName/unnamed-organization-_anyone-_anywhere"
+    currentSenarioDistPath="$templatesNearestParentPath/_anyone-_anywhere/$wlcBashScriptsRunningFolderName/_default-module"
 
     currentFileWithoutExt="${currentSenarioDistPath}/define-variables"
     cp "${currentFileWithoutExt}.template" "${currentFileWithoutExt}.filled-template"
-    sed -i "s/dummyValueMyLDPAUserName/$_myLDPAUserName/g"  "${currentFileWithoutExt}.filled-template"
+    sed -i "s/dummyValuemyCompanyLDPAUserName/$_myLDPAUserName/g"  "${currentFileWithoutExt}.filled-template"
     sed -i "s/dummyValueDockerIpPrefix/$_dockerIpPrefix/g"       "${currentFileWithoutExt}.filled-template"
 
 
 
-    currentSenarioDistPath="$templatesNearestParentPath/local-machine-_anyone/$wlcBashScriptsRunningFolderName/unnamed-organization-local-machine-portable"
+    currentSenarioDistPath="$templatesNearestParentPath/local-machine-_anyone/$wlcBashScriptsRunningFolderName/_default-module"
 
     currentFileWithoutExt="${currentSenarioDistPath}/define-variables-dynamic"
     cp "${currentFileWithoutExt}.template"                       "${currentFileWithoutExt}.filled-template"
-    sed -i "s/dummyValueMyLDPAUserName/$_myLDPAUserName/g"  "${currentFileWithoutExt}.filled-template"
+    sed -i "s/dummyValuemyCompanyLDPAUserName/$_myLDPAUserName/g"  "${currentFileWithoutExt}.filled-template"
 
     currentFileWithoutExt="${currentSenarioDistPath}/define-variables"
     cp "${currentFileWithoutExt}.template"                                                                                 "${currentFileWithoutExt}.filled-template"
@@ -110,4 +118,4 @@ function ___fill_variable_values_in_lib_templates_for_unnamed_organization_senar
 # echo dollar2=$2
 # echo
 
-___fill_variable_values_in_lib_templates_for_unnamed_organization_senarios  $1  $2
+___fill_variable_values_in_lib_templates_for_unnamed_organization_senarios  $myCompanyLDPAUserName  '12.34.56.'

@@ -15,10 +15,14 @@ function ___wlc_bash_scripts_deploy_all_desired_senarios {
     echo
     echo
     echo
-    # echo -e  `colorful  $VE_line_70            textGreen`
-    echo -en `colorful  " Installation Done "  textBlack  bgndGreen`
-    # echo -e  `colorful  $VE_line_70            textGreen`
-    echo
+
+    local logString=''
+
+    # append-colorful-string-to logString  --  $VE_line_70            textGreen
+    append-colorful-string-to logString  --  ' Installation Done '  textBlack  bgndGreen
+    # append-colorful-string-to logString  --  $VE_line_70            textGreen
+
+    echo -e "$logString"
 }
 
 ___wlc_bash_scripts_deploy_all_desired_senarios

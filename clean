@@ -1,31 +1,56 @@
 #!/bin/bash
+# To clean existing distribution if any
 
-# clean existing distribution if any
+
+function ___clean {
+    local logString=
+
+    if [ -d "$___here/$___wlcBashScriptsBuildingOutputFolderName" ]; then
+        logString='\n'
+        append-colorful-string-to logString -- $VE_line_60    textRed
+        echo -e $logString
+
+
+
+
+
+        rm -rf "$___here/$___wlcBashScriptsBuildingOutputFolderName"
+
+        logString=''
+        append-colorful-string-to logString -- 'Deleted: '                                     textRed
+        logString=$logString'<this repository>/'
+        append-colorful-string-to logString -- "$___wlcBashScriptsBuildingOutputFolderName"    textBlack   bgndRed
+        echo -e $logString
+
+
+
+
+
+        rm `find "$___here/$___wlcBashScriptsSourceLibFolderName/" -name "*.filled-template"`
+
+        logString=''
+        append-colorful-string-to logString -- 'Deleted: '                                                   textRed
+        logString=$logString'<this repository>/'
+        append-colorful-string-to logString -- "$___wlcBashScriptsSourceLibFolderName/**/*.filled-template"  textBlack   bgndRed
+        echo -e $logString
+
+
+
+
+
+        logString=''
+        append-colorful-string-to logString -n $VE_line_60    textRed
+        logString=$logString'\n'
+        echo -e $logString
+    fi
+}
+
+
+
+
 
 ___here=$(dirname `readlink -f $0`)
-
+source "$___here/building-tools/_utilities/visual-elements.sh"
+source "$___here/building-tools/_utilities/ansi-colors.sh"
 source "$___here/configurations.sh"
-
-echo
-if [ -d "$___here/$___wlcBashScriptsBuildingOutputFolderName" ]; then
-    echo
-    echo -e  `colorful  $VE_line_60  textRed`
-
-
-    rm -rf "$___here/$___wlcBashScriptsBuildingOutputFolderName"
-    echo -en `colorful  "Deleted: "  textRed`
-    echo -en '<this repository>/'
-    echo -e  `colorful  "$___wlcBashScriptsBuildingOutputFolderName" textRed`
-
-
-    rm `find "$___here/$___wlcBashScriptsSourceLibFolderName/" -name "*.filled-template"`
-    echo -en `colorful  "Deleted: "  textRed`
-    echo -en '<this repository>/'
-    echo -e  `colorful  "$___wlcBashScriptsSourceLibFolderName"      textRed`
-
-
-    echo -e  `colorful  $VE_line_60  textRed`
-    echo
-    echo
-fi
-echo
+___clean
