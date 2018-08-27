@@ -1,0 +1,1 @@
+someDailyUsedPath='/usr/project/abc'

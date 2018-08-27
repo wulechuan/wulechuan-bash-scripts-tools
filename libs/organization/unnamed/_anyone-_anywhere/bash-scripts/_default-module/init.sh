@@ -1,3 +1,3 @@
-if [ "$USERNAME" = "lechuan.wu" ]; then
+if [ "$USERNAME" = "wulechuanLDAPUserName" ]; then
     copywritingLanguage="en_US"
 fi

@@ -1,0 +1,1 @@
+alias cdAPath="cd ${someDailyUsedPath}"
