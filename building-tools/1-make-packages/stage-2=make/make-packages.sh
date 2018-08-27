@@ -32,8 +32,7 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
         else
             logString=''
 
-            for coreLibBashScriptsContentName in `ls $coreLibBashScriptsFolderPath`
-            do
+            for coreLibBashScriptsContentName in `ls $coreLibBashScriptsFolderPath`; do
                 coreLibBashScriptsContentFullPath="$coreLibBashScriptsFolderPath/$coreLibBashScriptsContentName"
 
                 if [ -f "$coreLibBashScriptsContentFullPath" ]; then
@@ -52,27 +51,26 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
         fi
 
 
-        for coreLibContentName in `ls $coreLibSourceFullPath`
-        do
-            cp -r "$coreLibSourceFullPath/$coreLibContentName" "$distributionPath/"
-        done
+        # for coreLibContentName in `ls $coreLibSourceFullPath`; do
+        #     cp -r "$coreLibSourceFullPath/$coreLibContentName" "$distributionPath/"
+        # done
 
 
 
         local otherItemName
         local otherItemPath
 
-        for otherItemName in `ls -A "$libSourceFullPath"`; do
-            otherItemPath="$libSourceFullPath/$otherItemName"
+        for otherItemName in `ls -A "$coreLibSourceFullPath"`; do
+            otherItemPath="$coreLibSourceFullPath/$otherItemName"
 
             # 如果遇到文件，则直接复制。
             if [ -f "$otherItemPath" ]; then
-                cp "$otherItemPath" "$distributionPath/"
+                cp     "$otherItemPath"  "$distributionPath/"
             fi
 
             # 如果遇到文件夹，则应排除 bash-scripts，因为它在前文已经专门处理过了。
             if [ -d "$otherItemPath" ] && [ $otherItemName != "$wlcBashScriptsRunningFolderName" ]; then
-                cp -rf "$otherItemPath" "$distributionPath/"
+                cp -rf "$otherItemPath"  "$distributionPath/"
             fi
         done
 
@@ -140,8 +138,7 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
 
         local libModuleIndex=0
 
-        for libSourceSubPath in $allChosenLibsFolder
-        do
+        for libSourceSubPath in $allChosenLibsFolder; do
             logString='  Lib: '
             append-colorful-string-to logString -- "$libSourceSubPath" textBlue
             echo -e "$logString"
@@ -187,8 +184,11 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
 
             else
 
-                for libBashScriptsContentName in `ls $libBashScriptsFolderPath`
-                do
+                if [ ! -d "$distributionPath/$wlcBashScriptsRunningFolderName" ]; then
+                    mkdir "$distributionPath/$wlcBashScriptsRunningFolderName/"
+                fi
+
+                for libBashScriptsContentName in `ls $libBashScriptsFolderPath`; do
                     libBashScriptsContentFullPath="$libBashScriptsFolderPath/$libBashScriptsContentName"
 
                     # 如果遇到文件夹，则：
@@ -238,8 +238,7 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
                             # 找到其中的 `components` 文件夹。
                         # fi
 
-                        for itemNameInCurrentPackage in `ls $libBashScriptsContentFullPath`;
-                        do
+                        for itemNameInCurrentPackage in `ls $libBashScriptsContentFullPath`; do
                             fileInCurrentPackage="$libBashScriptsContentFullPath/$itemNameInCurrentPackage"
 
                             if [ -f "$fileInCurrentPackage" ]; then
