@@ -15,7 +15,10 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
         append-colorful-string-to logString -- "core" textGreen
         echo -e "$logString"
 
+        # ./lib-core/
         coreLibSourceFullPath="$___here/$___wlcBashScriptsSourceLibCoreFolderName"
+
+        # ./lib-core/bash-scripts/
         coreLibBashScriptsFolderPath="$coreLibSourceFullPath/$wlcBashScriptsRunningFolderName"
 
 
@@ -51,10 +54,6 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
         fi
 
 
-        # for coreLibContentName in `ls $coreLibSourceFullPath`; do
-        #     cp -r "$coreLibSourceFullPath/$coreLibContentName" "$distributionPath/"
-        # done
-
 
 
         local otherItemName
@@ -63,15 +62,7 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
         for otherItemName in `ls -A "$coreLibSourceFullPath"`; do
             otherItemPath="$coreLibSourceFullPath/$otherItemName"
 
-            # 如果遇到文件，则直接复制。
-            if [ -f "$otherItemPath" ]; then
-                cp     "$otherItemPath"  "$distributionPath/"
-            fi
-
-            # 如果遇到文件夹，则应排除 bash-scripts，因为它在前文已经专门处理过了。
-            if [ -d "$otherItemPath" ] && [ $otherItemName != "$wlcBashScriptsRunningFolderName" ]; then
-                cp -rf "$otherItemPath"  "$distributionPath/"
-            fi
+            cp -r  "$otherItemPath"  "$distributionPath/"
         done
 
         echo
