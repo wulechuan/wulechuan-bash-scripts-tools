@@ -1,0 +1,2 @@
+wlcRainbowPromptColorsAreInBackgroundButNotTexts='yes'
+shouldUseDetailedButSlowBranchInfoQueryInPrompt='no'

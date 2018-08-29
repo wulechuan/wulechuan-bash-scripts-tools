@@ -1,6 +1,10 @@
 __exampleUserName__=wulechuan
 __exampleDomainName__=live.com
 
+if [ ! -d ~/.ssh ]; then
+    mkdir ~/.ssh
+fi
+
 if [ ! -d ~/.ssh/backup ]; then
     mkdir ~/.ssh/backup
 fi
