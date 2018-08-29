@@ -1,4 +1,4 @@
-function setup-as-proxy {
+function setup-shadowsocks {
     local VE_line='────────────────────────────────────────────────────────────'
 
     local userNameInHostName
