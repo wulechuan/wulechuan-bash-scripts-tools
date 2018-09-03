@@ -11,5 +11,3 @@ alias del="rm"
 alias md="mkdir"
 alias rd="rmdir"
 alias move="mv"
-
-# echo "LOADED: DOS flavor aliases"
