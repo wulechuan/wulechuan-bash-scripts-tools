@@ -1,21 +1,26 @@
 #!/bin/bash
 
 ___here=$(dirname `readlink -f $0`)
-___senarioNamesToBuild=`ls $___here/senario-specific-configurations`
+# ___senarioNamesToBuild=`ls $___here/senario-specific-configurations`
+___senarioNamesToBuild='
+	_local-machine-_anyone
+	_local-machine-wulechuan
+'
+
 
 
 
 ___senarioNamesToDeploy=$___senarioNamesToBuild
 
-
 source "$___here/building-tools/_utilities/visual-elements.sh"
 source "$___here/building-tools/_utilities/ansi-colors.sh"
+source "$___here/building-tools/_utilities/detect-environment.sh"
 source "$___here/building-tools/_utilities/deploy-by-copying.sh"
 source "$___here/building-tools/_utilities/deploy-by-s-copying.sh"
 source "$___here/configurations.sh"
 source "$___here/building-tools/print-repository-location.sh"
 source "$___here/building-tools/1-make-packages/make-for-organization-unnamed.sh"  $*
-source "$___here/building-tools/2-deploy/deploy-senarios.sh"                       $___senarioNamesToDeploy
+source "$___here/building-tools/2-deploy/deploy-senarios.sh"                     $___senarioNamesToDeploy
 
 
 unset ___senarioNamesToBuild

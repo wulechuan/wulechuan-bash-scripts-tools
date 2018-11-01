@@ -5,69 +5,82 @@ wlcBashScriptsFolderPath=~/$wlcBashScriptsFolderName # DO NOT QUOTE THIS VALUE!
 
 
 
-# # There are important and but be executed first.
+
+
+
+function __wlc-bash-scripts-import-all-defined-variables {
+    local categoryFolder
+    local bashScriptsCurrentPath
+    local variablesDefinitionFiles
+    local variablesDefinitionFileName
+    local variablesDefinitionFilePath
+
+    for categoryFolder in ${__wlcBashScriptsAllChosenPacakges}; do
+        bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${categoryFolder}"
+
+        variablesDefinitionFiles=`ls -p "$bashScriptsCurrentPath" | grep -v / | grep define-variables.\*\.sh`
+
+        for variablesDefinitionFileName in $variablesDefinitionFiles; do
+            variablesDefinitionFilePath="$bashScriptsCurrentPath/$variablesDefinitionFileName"
+            if [ -f "$variablesDefinitionFilePath" ]; then
+                # echo "srouce $variablesDefinitionFilePath"
+                source "$variablesDefinitionFilePath"
+            fi
+        done
+    done
+
+    # delete this function itself after invokation
+    unset -f __wlc-bash-scripts-import-all-defined-variables
+}
+
+function __wlc-bash-scripts-import-functions-and-alias {
+    local categoryFolder
+
+    for categoryFolder in ${__wlcBashScriptsAllChosenPacakges}; do
+        alphabetically-run-all-shells-in-a-folder    "${wlcBashScriptsFolderPath}/${categoryFolder}/components"
+    done
+
+    # delete this function itself after invokation
+    unset -f __wlc-bash-scripts-import-functions-and-alias
+}
+
+function __wlc-bash-scripts-take-actions {
+    local categoryFolder
+    local bashScriptsCurrentPath
+
+    for categoryFolder in ${__wlcBashScriptsAllChosenPacakges}; do
+        bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${categoryFolder}"
+
+        if [ -f "$bashScriptsCurrentPath/init.sh" ]; then
+            source "$bashScriptsCurrentPath/init.sh"
+        fi
+    done
+
+    # delete this function itself after invokation
+    unset -f __wlc-bash-scripts-take-actions
+}
+
+
+
+
+
+# These are important and must be executed first.
 source "$wlcBashScriptsFolderPath/__utilities/detect-environment.sh"
 source "$wlcBashScriptsFolderPath/__utilities/ansi-colors.sh"
+source "$wlcBashScriptsFolderPath/__utilities/visual-elements.sh"
 source "$wlcBashScriptsFolderPath/__utilities/alphabetically-run-all-shells-in-a-folder.sh"
+source "$wlcBashScriptsFolderPath/__utilities/toolkit.sh"
 
 
-# This file will be automatically created during making process.
+# This file below will be automatically created during making process.
 source "$wlcBashScriptsFolderPath/packages.sh"
 
+# Now load variables, then functions and alias, and lastly take actions
+__wlc-bash-scripts-import-all-defined-variables
+__wlc-bash-scripts-import-functions-and-alias
+__wlc-bash-scripts-take-actions
 
 
-
-# ------------------------------------------------
-#     import all defined variables
-# ------------------------------------------------
-for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
-do
-    ___bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${___categoryFolder}"
-
-    if [ -f "$___bashScriptsCurrentPath/define-variables.sh" ]; then
-        source "${___bashScriptsCurrentPath}/define-variables.sh"
-    fi
-done
-unset ___bashScriptsCurrentPath
-unset ___categoryFolder
-
-
-
-
-
-# ------------------------------------------------
-#     import functions and aliases
-# ------------------------------------------------
-for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
-do
-    alphabetically-run-all-shells-in-a-folder "${wlcBashScriptsFolderPath}/${___categoryFolder}/components"
-done
-unset ___categoryFolder
-
-
-
-
-
-# ------------------------------------------------
-#     take some initial actions
-# ------------------------------------------------
-for ___categoryFolder in ${__wlcBashScriptsAllChosenPacakges}
-do
-    ___bashScriptsCurrentPath="${wlcBashScriptsFolderPath}/${___categoryFolder}"
-
-    if [ -f "$___bashScriptsCurrentPath/init.sh" ]; then
-        source "$___bashScriptsCurrentPath/init.sh"
-    fi
-done
-unset ___bashScriptsCurrentPath
-unset ___categoryFolder
-
-
-
-
-
-# ------------------------------------------------
-#     Finalization
-# ------------------------------------------------
-# unset wlcBashScriptsFolderPath # 不能删除该变量。加载动态变量时，该变量用于拼装源文件路径。
 unset __wlcBashScriptsAllChosenPacakges
+
+# unset wlcBashScriptsFolderPath # 不能删除该变量。加载动态变量时，该变量用于拼装源文件路径。

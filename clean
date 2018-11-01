@@ -52,5 +52,6 @@ function ___clean {
 ___here=$(dirname `readlink -f $0`)
 source "$___here/building-tools/_utilities/visual-elements.sh"
 source "$___here/building-tools/_utilities/ansi-colors.sh"
+source "$___here/building-tools/_utilities/detect-environment.sh"
 source "$___here/configurations.sh"
 ___clean

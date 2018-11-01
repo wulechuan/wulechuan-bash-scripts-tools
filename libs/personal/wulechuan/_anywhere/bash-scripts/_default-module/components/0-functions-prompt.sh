@@ -22,17 +22,17 @@ function wlc-setup-rainbow-prompt {
 	function build_rainbow_prompt_with_git_branch_info_in_256_colors_and_make_colors_in_background {
 		PS1=$clearColor'\n'                                                                    # New line
 
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color1}m$(date +"%m-%d")       # Month & Day
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color2}m' '                    # A <Space>
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color3}m$(date +"%H:%M:%S")    # Hour & Minute
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color4}m' '                    # A <space>
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color1}'m\]'$(date +"%m-%d")       # Month & Day
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color2}'m\]'' '                    # A <Space>
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color3}'m\]'$(date +"%H:%M:%S")    # Hour & Minute
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color4}'m\]'' '                    # A <space>
 
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color5}m$(getCurrentUserName)  # user
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color6}m'@'                    # @
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color7}m'\h'                   # host
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color8}m':'                    # :
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color9}m'\w'                   # current working directory
-		PS1=$PS1'\e[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color10}m' '                   # A <space>
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color5}'m\]'$(getCurrentUserName)  # user
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color6}'m\]''@'                    # @
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color7}'m\]''\h'                   # host
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color8}'m\]'':'                    # :
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color9}'m\]''\w'                   # current working directory
+		PS1=$PS1'\[\033[38;5;16;48;5;'${wlcRainbowPrompt_256Colored_color10}'m\]'' '                   # A <space>
 
 
 		local gitBranchInfo=`__git_ps1`
@@ -42,30 +42,30 @@ function wlc-setup-rainbow-prompt {
 
 		if [ ! -z "$gitBranchInfo" ]; then
 			PS1=$PS1$clearColor'\n'
-			PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoBracketsColor}'m''['
-			PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoColor1}'m'$gitBranchInfo
-			PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoBracketsColor}'m'']'
+			PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoBracketsColor}'m\]''['
+			PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoColor1}'m\]'$gitBranchInfo
+			PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoBracketsColor}'m\]'']'
 		fi
 
 
 		PS1=$PS1$clearColor'\n'   # New line
-		PS1=$PS1'> '                # last prompt sign: $<space>
+		PS1=$PS1'$ '              # last prompt sign: $<space>
 	}
 
 	function build_rainbow_prompt_with_git_branch_info_in_256_colors_and_make_colors_in_text {
 		PS1=$clearColor'\n'                                                            # New line
 
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color1}m$(date +"%m-%d")        # Month & Day
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color2}m' '                     # A <Space>
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color3}m$(date +"%H:%M:%S")     # Hour & Minute
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color4}m' '                     # A <space>
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color1}'m\]'$(date +"%m-%d")        # Month & Day
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color2}'m\]'' '                     # A <Space>
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color3}'m\]'$(date +"%H:%M:%S")     # Hour & Minute
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color4}'m\]'' '                     # A <space>
 
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color5}m$(getCurrentUserName)   # user
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color6}m'@'                     # @
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color7}m'\h'                    # host
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color8}m':'                     # :
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color9}m'\w'                    # current working directory
-		PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_color10}m' '                    # A <space>
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color5}'m\]'$(getCurrentUserName)   # user
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color6}'m\]''@'                     # @
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color7}'m\]''\h'                    # host
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color8}'m\]'':'                     # :
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color9}'m\]''\w'                    # current working directory
+		PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_color10}'m\]'' '                    # A <space>
 
 
 		local gitBranchInfo=`__git_ps1`
@@ -75,28 +75,28 @@ function wlc-setup-rainbow-prompt {
 
 		if [ ! -z "$gitBranchInfo" ]; then
 			PS1=$PS1$clearColor'\n'
-			PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoBracketsColor}'m''['
-			PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoColor2}'m'$gitBranchInfo
-			PS1=$PS1'\e[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoBracketsColor}'m'']'
+			PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoBracketsColor}'m\]''['
+			PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoColor2}'m\]'$gitBranchInfo
+			PS1=$PS1'\[\033[38;5;'${wlcRainbowPrompt_256Colored_gitBranchInfoBracketsColor}'m\]'']'
 		fi
 
 
 		PS1=$PS1$clearColor'\n'   # New line
-		PS1=$PS1'> '                # last prompt sign: $<space>
+		PS1=$PS1'$ '              # last prompt sign: $<space>
 	}
 
 	function build_rainbow_prompt_with_git_branch_info_in_16_colors_and_make_colors_in_background {
-		PS1=$clearColor'\n'                                              # New line
+		PS1=$clearColor'\n'                                                 # New line
 
 		local timestampe=$(date +"%m-%d %H:%M:%S")
-		PS1=$PS1`colorful -- "$timestampe " textBlack bgndRed`          # timestamp
+		PS1=$PS1'\['`colorful -- "$timestampe " textBlack bgndRed`'\]'      # timestamp
 
 		local userName=`getCurrentUserName`
-		PS1=$PS1`colorful -- "$userName"  textBlack  bgndYellow`    # user
-		PS1=$PS1`colorful -- '@'          textBlack  bgndGreen`     # @
-		PS1=$PS1`colorful -- '\h'         textBlack  bgndBlue`      # host
-		PS1=$PS1`colorful -- ':'          textBlack  bgndCyan`      # :
-		PS1=$PS1`colorful -- '\w'         textBlack  bgndMagenta`   # current working directory
+		PS1=$PS1'\['`colorful -- "$userName"  textBlack  bgndYellow`'\]'    # user
+		PS1=$PS1'\['`colorful -- '@'          textBlack  bgndGreen`'\]'     # @
+		PS1=$PS1'\['`colorful -- '\h'         textBlack  bgndBlue`'\]'      # host
+		PS1=$PS1'\['`colorful -- ':'          textBlack  bgndCyan`'\]'      # :
+		PS1=$PS1'\['`colorful -- '\w'         textBlack  bgndMagenta`'\]'   # current working directory
 
 
 		local gitBranchInfo=`__git_ps1`
@@ -106,28 +106,28 @@ function wlc-setup-rainbow-prompt {
 
 		if [ ! -z "$gitBranchInfo" ]; then
 			PS1=$PS1$clearColor'\n'
-			PS1=$PS1`colorful -- '['              textBrightBlack`
-			PS1=$PS1`colorful -- "$gitBranchInfo" textGreen`
-			PS1=$PS1`colorful -- ']'              textBrightBlack`
+			PS1=$PS1'\['`colorful -- '['              textBrightBlack`'\]'
+			PS1=$PS1'\['`colorful -- "$gitBranchInfo" textGreen`'\]'
+			PS1=$PS1'\['`colorful -- ']'              textBrightBlack`'\]'
 		fi
 
 
 		PS1=$PS1$clearColor'\n'
-		PS1=$PS1'> '                                                 # last prompt sign: $<space>
+		PS1=$PS1'$ '                                                        # last prompt sign: $<space>
 	}
 
 	function build_rainbow_prompt_with_git_branch_info_in_16_colors_and_make_colors_in_text {
-		PS1=$clearColor'\n'                                   # New line
+		PS1=$clearColor'\n'                                           # New line
 
 		local timestampe=$(date +"%m-%d %H:%M:%S")
-		PS1=$PS1`colorful -- "$timestampe " textRed`          # timestamp
+		PS1=$PS1'\['`colorful -- "$timestampe " textRed`'\]'          # timestamp
 
-		local userName=`getCurrentUserName`
-		PS1=$PS1`colorful -- "$userName"  textYellow`         # user
-		PS1=$PS1`colorful -- '@'          textGreen`          # @
-		PS1=$PS1`colorful -- '\h'         textBlue`           # host
-		PS1=$PS1`colorful -- ':'          textCyan`           # :
-		PS1=$PS1`colorful -- '\w'         textMagenta`        # current working directory
+		local us'\['erName=`getCurrentUserName`
+		PS1=$PS1'\['`colorful -- "$userName"  textYellow`'\]'         # user
+		PS1=$PS1'\['`colorful -- '@'          textGreen`'\]'          # @
+		PS1=$PS1'\['`colorful -- '\h'         textBlue`'\]'           # host
+		PS1=$PS1'\['`colorful -- ':'          textCyan`'\]'           # :
+		PS1=$PS1'\['`colorful -- '\w'         textMagenta`'\]'        # current working directory
 
 
 		local gitBranchInfo=`__git_ps1`
@@ -137,14 +137,14 @@ function wlc-setup-rainbow-prompt {
 
 		if [ ! -z "$gitBranchInfo" ]; then
 			PS1=$PS1$clearColor'\n'
-			PS1=$PS1`colorful -- '['              textBrightBlack`
-			PS1=$PS1`colorful -- "$gitBranchInfo" textGreen`
-			PS1=$PS1`colorful -- ']'              textBrightBlack`
+			PS1=$PS1'\['`colorful -- '['              textBrightBlack`'\]'
+			PS1=$PS1'\['`colorful -- "$gitBranchInfo" textGreen`'\]'
+			PS1=$PS1'\['`colorful -- ']'              textBrightBlack`'\]'
 		fi
 
 
 		PS1=$PS1$clearColor'\n'
-		PS1=$PS1'> '                                           # last prompt sign: $<space>
+		PS1=$PS1'$ '                                                   # last prompt sign: $<space>
 	}
 
 
@@ -173,8 +173,8 @@ function wlc-setup-rainbow-prompt {
 		function __git_ps1 { # This is a simplified version of __git_ps1 if we have no GNU source code.
 			git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 		}
-	else
-		echo "Use Detailed __git_ps1. Licensed under GNU GPL 2.0"
+	# else
+		# echo "Use Detailed __git_ps1. Licensed under GNU GPL 2.0"
 	fi
 
 

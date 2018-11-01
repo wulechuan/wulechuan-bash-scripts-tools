@@ -35,18 +35,17 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
         else
             logString=''
 
-            for coreLibBashScriptsContentName in `ls $coreLibBashScriptsFolderPath`; do
+            for coreLibBashScriptsContentName in `ls -A $coreLibBashScriptsFolderPath`; do
                 coreLibBashScriptsContentFullPath="$coreLibBashScriptsFolderPath/$coreLibBashScriptsContentName"
 
                 if [ -f "$coreLibBashScriptsContentFullPath" ]; then
 
                     if [[ $coreLibBashScriptsContentName =~ .filled-template$ ]]; then
                         # 是文件，而非文件夹，且文件扩展名为 `.filled-template`。
+
                         logString=$logString'         Found: '
                         append-colorful-string-to logString -n " $coreLibBashScriptsContentName "  textBlack bgndMagenta
-
                     fi
-
                 fi
             done
 
@@ -179,7 +178,7 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
                     mkdir "$distributionPath/$wlcBashScriptsRunningFolderName/"
                 fi
 
-                for libBashScriptsContentName in `ls $libBashScriptsFolderPath`; do
+                for libBashScriptsContentName in `ls -A $libBashScriptsFolderPath`; do
                     libBashScriptsContentFullPath="$libBashScriptsFolderPath/$libBashScriptsContentName"
 
                     # 如果遇到文件夹，则：
@@ -215,7 +214,7 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
 
 
 
-                        # 下面的小节中，并无实际动作，只是在命令行的标准输出设备上打印一些细节，供查阅。
+                        # 下面的小节并无实际动作，只是在命令行的标准输出设备上打印一些细节，供查阅。
                         logString='       Package: '
                         append-colorful-string-to logString -- "$libModuleDistributionName" textGreen
 
@@ -240,18 +239,23 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
                                     logString=$logString'         Found: '
                                     append-colorful-string-to logString -n " $itemNameInCurrentPackage "  textBlack bgndMagenta
                                 fi
-
                             fi
                         done
 
                         echo -en "$logString"
 
+
+
+
                     elif [ -f "$libBashScriptsContentFullPath" ]; then
                         # 遇到文件。
                         # 直接复制到 bash-scripts 文件夹内，因为这个源文件本身就位于该 lib 的 bash-scripts 文件夹内。
                         # 复制时无须更名，也不应更名。
-                        # 另，复制文件无须打印细节。
-                        cp "$libBashScriptsContentFullPath" "$distributionPath/$wlcBashScriptsRunningFolderName"
+
+                        cp "$libBashScriptsContentFullPath" "$distributionPath/$wlcBashScriptsRunningFolderName/"
+                        logString='          File: '
+                        append-colorful-string-to logString -- "$libBashScriptsContentName" textYellow
+                        echo -e "$logString"
                     fi
 
                 done
@@ -301,6 +305,11 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
             append-colorful-string-to logString -n "No actions to take after making this senario." textYellow
         fi
 
+
+
+        chmod -R 775 "$distributionPath"
+
+
         append-colorful-string-to logString -n "$VE_line_60"   textBlue
         echo -e "$logString"
     }
@@ -321,6 +330,10 @@ function ___wlc_bash_scripts_make_all_packages_for_all_senarios {
     do
         make_one_package_for_one_senario  $outputLocationOfBuilding  $senarioName
     done
+
+
+
+    unset -f ___wlc_bash_scripts_make_all_packages_for_all_senarios
 }
 
 

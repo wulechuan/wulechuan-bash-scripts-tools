@@ -1,6 +1,6 @@
 wlcBashScriptsRunningFolderName='bash-scripts'
-wlcLocalMachineFolderNameOfBashScriptsForDockers='bash-scripts-for-unnamed-organization-dockers'
-myCompanyLDPAUserName='wulechuan'
+wlcLocalMachineFolderNameOfBashScriptsForDockers='bash-scripts-for-unnamed-org-dockers'
+myLDPAUserName='wulechuan'
 
 
 

@@ -31,7 +31,7 @@ function colorful {
     elif [ ! -z "$color1" ] && [ ! -z "$color2" ]; then
         colorSetting='\e['${color1}';'${color2}'m'
     else
-        colorSetting='\e['${color1}'m'
+        colorSetting='\e['${color1}${color2}'m'
     fi
 
 
@@ -77,35 +77,43 @@ function append-string {
     # https://stackoverflow.com/questions/3236871/how-to-return-a-string-value-from-a-bash-function
 
     # --- Usage ---
+    #
+    # ---------------------------------------------
     # myVar='hello '
-
-    # append-string wulechuan to myVar
+    # append-string    'wulechuan'    to    myVar
+    # echo    $myVar
+    # ---------------------------------------------
     # Notice that the 3rd argument has **no** $ sign prefixed.
+    #
     # Also notice the 2nd argument, which is 'to' here,
     # Tt's just a dummy argument.
     # Basically you can use any word here.
+    # But using 'to' is a good choice for better readability.
 
-    # echo $myVar
+    if [ $# -ne 3 ]; then
+        return
+    fi
 
-	local old=${!3}
-	eval "$3=\"$old\"\"$1\""
+    local oldString=${!3}
+    eval "$3=\"${oldString}${1}\""
 }
 
 function get-color {
     # --- Usage ---
+    #
+    # ---------------------------------------------
     # color1=textRed
     # color2=bgndWhite
     # colorEscapeString=
-    #
-    # Below 2 are identical:
+    # get-color    $color1    $color2   colorEscapeString
+    # echo    $colorEscapeString
+    # ---------------------------------------------
     # Notice that the last argument has **no** $ sign prefixed.
-    #
-    # echo $colorEscapeString
 
     local color1=
     local color2=
 
-    if [ -z "$1" ]; then
+    if [ $# -lt 2 ]; then # Too few arguments. At least 2 arguments are required.
         return
     fi
 
@@ -113,11 +121,21 @@ function get-color {
     map-color-name-into-ansi-code       $1   color1
 
 
-    if [ -z "$3" ]; then
-        eval "$2='\\'\"e[${color1}m\""
+    if [ $# -eq 2 ]; then
+        if [ ! -z "$color1" ]; then
+            eval "$2='\\'\"e[${color1}m\""
+        fi
     else
         map-color-name-into-ansi-code   $2   color2
-        eval "$3='\\'\"e[${color1};${color2}m\""
+
+        local _colorEscapeString=
+        if [ ! -z "$color1" ] && [ ! -z "$color2" ]; then
+            eval "$3='\\'\"e[${color1};${color2}m\""
+
+        elif [ ! -z "$color1" ] || [ ! -z "$color2" ]; then
+            # There is no ';' below, because either of the colors will simply be empty.
+            eval "$3='\\'\"e[${color1}${color2}m\""
+        fi
     fi
 }
 
@@ -133,22 +151,40 @@ function set-echo-color {
 }
 
 function clear-echo-color {
-    echo -en "\e[0;0m"
+    echo -en '\e[0;0m'
 }
 
 function append-colorful-string-to {
-    local colorEscapeString=
-    get-color   $4   $5   colorEscapeString
+    # Usage:
+    # ---------------------------------------------
+    # append-colorful-string-to   <string to modified>   <-n or any non-empty string>   <string to append to $1>   [<text color name>]   [<bgnd color name>]
+    # ---------------------------------------------
+    # The second argument must be a non-empty one.
+    # And only the value '-n' means start a new line at the end of the new string.
+    #
+    # The 4th and 5th arguments are optional.
+
 
     local endChar=''
-    if [ "$2" = '-n' ]; then
+    if [ "$2" == '-n' ]; then
         endChar='\n'
     fi
 
-    local colorStringToAppend=
-    colorStringToAppend=$colorEscapeString$3'\e[0;0m'$endChar
+    local colorfulStringToAppend=''
+    if [ $# -ge 3 ]; then
+        colorfulStringToAppend="$3"
+    fi
 
-    append-string "$colorStringToAppend" to "$1"
+    if [ $# -gt 3 ]; then
+        local colorEscapeString=
+        get-color   $4   $5   colorEscapeString
+
+        if [ ! -z "$colorEscapeString" ]; then
+            colorfulStringToAppend="${colorEscapeString}$3\e[0;0m"
+        fi
+    fi
+
+    append-string "${colorfulStringToAppend}${endChar}" to "$1"
 }
 
 
@@ -171,10 +207,98 @@ function colorful2 {
 }
 
 function map-color-name-into-ansi-code {
+    # map-color-name-into-ansi-code-via-case-statements $*
+    map-color-name-into-ansi-code-via-if-statements $*
+}
+
+function map-color-name-into-ansi-code-via-case-statements {
     if [ -z "$1" ];                     then
         eval $2=''
+        return
+    fi
 
 
+    # The `expr` approach is accurate but very slow! Thus is abandoned.
+    # local colorCategory=`expr $1 : '^\(text\|textBright\|bgnd\|bgndBright\)\(Black\|Red\|Green\|Yellow\|Blue\|Magenta\|Cyan\|White\)$'`
+    # local     colorName=`expr $1 : '.*\(Black\|Red\|Green\|Yellow\|Blue\|Magenta\|Cyan\|White\)$'`
+
+
+    # The two-segmented approach used below is NOT accurate!
+    # For example: textABCDERed    text1Red   text_Red   textRed   are all treated as textRed.
+
+    # Besides, this case-statements approach is NOT faster than the if-statements one.
+
+
+    local colorCategoryValue=-1
+    local colorBaseValue=-1
+
+    case "$colorCategory" in
+        textBright*)
+            colorCategoryValue=90
+            ;;
+
+        bgndBright*)
+            colorCategoryValue=100
+            ;;
+
+        text*)
+            colorCategoryValue=30
+            ;;
+
+        bgnd*)
+            colorCategoryValue=40
+            ;;
+    esac
+
+    case "$1" in
+        *Black)
+            colorBaseValue=0
+            ;;
+
+        *Red)
+            colorBaseValue=1
+            ;;
+
+        *Green)
+            colorBaseValue=2
+            ;;
+
+        *Yellow)
+            colorBaseValue=3
+            ;;
+
+        *Blue)
+            colorBaseValue=4
+            ;;
+
+        *Magenta)
+            colorBaseValue=5
+            ;;
+
+        *Cyan)
+            colorBaseValue=6
+            ;;
+
+        *White)
+            colorBaseValue=7
+            ;;
+    esac
+
+    local colorValue=$((colorCategoryValue+colorBaseValue))
+
+    if [ $colorCategoryValue -ge 0 ] && [ $colorBaseValue -ge 0 ]; then
+        eval $2=$colorValue
+    else
+        eval $2=''
+    fi
+
+    return
+}
+
+function map-color-name-into-ansi-code-via-if-statements {
+
+    if [ -z "$1" ];                     then
+        eval $2=''
 
     # classical foreground colors
 

@@ -1,3 +1,3 @@
-if [ -f ~/.bashrc ]; then
+if [ -f ~/.bashrc ] && [ -z "$wlcBashScriptsFolderName" ]; then
     source ~/.bashrc
 fi

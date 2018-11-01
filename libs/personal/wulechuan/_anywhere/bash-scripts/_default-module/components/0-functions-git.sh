@@ -26,19 +26,31 @@ function git-enable-colors {
 function git-try-to-set-editor-as-ms-vscode {
     local succeeded=0
 
-    local codeOnLinux=/usr/bin/code
-    local codeOnWindows="c:/Program Files/Microsoft VS Code/Code.exe"
+    local VSCodeOnLinux=/usr/bin/code
+    local oldVSCodeOnWindows="c:/Program Files/Microsoft VS Code/Code.exe"
 
-    if [ -f $codeOnLinux ]; then
+    local userNameOnWindows="$USERNAME"  # Wrong in <Cygwin>; Empty in <Linux>
+    if [ -z "$userNameOnWindows" ]; then
+        userNameOnWindows="$USER" # empty in <Git Bash>
+    fi
 
-        git config --global core.editor $codeOnLinux
+    local newVSCodeOnWindows="c:/Users/$userNameOnWindows/AppData/Local/Programs/Microsoft VS Code/Code.exe"
+
+    if [ -f $VSCodeOnLinux ]; then
+
+        git config --global core.editor $VSCodeOnLinux
         succeeded=1
 
-    elif [ -f "$codeOnWindows" ]; then
+    elif [ -f "$oldVSCodeOnWindows" ]; then
 
-        git config --global core.editor "\"$codeOnWindows\""
+        git config --global core.editor "\"$oldVSCodeOnWindows\""
         succeeded=1
-    
+
+    elif [ -f "$newVSCodeOnWindows" ]; then
+
+        git config --global core.editor "\"$newVSCodeOnWindows\""
+        succeeded=1
+
     fi
 
     if [ $succeeded -eq 1 ]; then

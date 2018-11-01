@@ -37,6 +37,10 @@ function deploy-by-copying {
 
         # 如果遇到文件，则直接复制，-f 强迫覆盖旧有文件。
         if [    -f "$sourceItemPath" ]; then
+            if [ "$sourceItemName" == 'install' ]; then
+                continue
+            fi
+
             cp  -f "$sourceItemPath"   "$deploymentTargetLocation/"
         fi
 

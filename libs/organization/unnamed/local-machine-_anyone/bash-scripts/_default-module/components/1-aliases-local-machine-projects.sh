@@ -1,1 +1,0 @@
-alias cdSomewhereIGoEveryday="cd ${pathSomewhere1}"

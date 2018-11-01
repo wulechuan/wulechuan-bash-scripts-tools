@@ -5,6 +5,8 @@ function ___fill_variable_values_in_core_lib_templates {
 
     local fileToModify="$fileToModifyWithoutExt.filled-template"
     sed -i "s/dummyValueBashScriptsFolderName/$wlcBashScriptsRunningFolderName/g" "$fileToModify"
+
+    unset -f ___fill_variable_values_in_core_lib_templates
 }
 
 

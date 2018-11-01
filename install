@@ -11,6 +11,7 @@ ___senarioNamesToDeploy=$___senarioNamesToBuild
 
 source "$___here/building-tools/_utilities/visual-elements.sh"
 source "$___here/building-tools/_utilities/ansi-colors.sh"
+source "$___here/building-tools/_utilities/detect-environment.sh"
 source "$___here/building-tools/_utilities/deploy-by-copying.sh"
 source "$___here/building-tools/_utilities/deploy-by-s-copying.sh"
 source "$___here/configurations.sh"

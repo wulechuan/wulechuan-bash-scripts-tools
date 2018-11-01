@@ -1,1 +1,2 @@
-alias pgrep-useful="pgrep -vfl 'sgi|nginx|memcached|syslog|redis|samba|ssh|crond'"
+alias machine-nics='show-machine-nics'
+alias nics-promisc='batch-process-nics-promisc-mode'

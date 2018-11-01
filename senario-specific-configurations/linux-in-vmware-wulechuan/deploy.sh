@@ -1,6 +1,5 @@
-# ___virtualMachineHost1='192.168.12.34'
+___virtualMachineHost1='12.34.56.78'
 
-# deploy-by-s-copying  'linux-in-vmware-wulechuan'  "wulechuan@$___virtualMachineHost1"  
-# deploy-by-s-copying  'linux-in-vmware-wulechuan'       "root@$___virtualMachineHost1"
+deploy-by-s-copying  'linux-in-vmware-wulechuan'  "wulechuan@$___virtualMachineHost1"  
 
-# unset ___virtualMachineHost1
+unset ___virtualMachineHost1

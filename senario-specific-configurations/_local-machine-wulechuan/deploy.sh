@@ -1,6 +1,4 @@
 if [ -d ~/$wlcLocalMachineFolderNameOfBashScriptsForDockers ]; then
-	echo
-	echo
 	echo -e 'rm -rf ~/'$wlcLocalMachineFolderNameOfBashScriptsForDockers
 	rm -rf ~/$wlcLocalMachineFolderNameOfBashScriptsForDockers
 fi

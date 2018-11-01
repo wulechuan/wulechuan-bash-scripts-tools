@@ -1,8 +1,8 @@
 BoldAsFont=-1
 ThemeFile=base16-wulechuan.minttyrc
 FontHeight=10
-Columns=160
-Rows=60
+Columns=180
+Rows=64
 Term=xterm
 Locale=C
 Charset=UTF-8
@@ -11,4 +11,4 @@ FontSmoothing=default
 MiddleClickAction=paste
 RightClickAction=menu
 Font=PT Mono
-ScrollbackLines=100000
+ScrollbackLines=200000

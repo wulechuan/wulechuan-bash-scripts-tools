@@ -33,6 +33,9 @@ function ___wlc_bash_scripts_rename_dot_filled_template_into_dot_sh {
             mv "$foundFile" "$foundFileDirname/$foundFileBasename.sh"
         done
     fi
+
+
+    unset -f ___wlc_bash_scripts_rename_dot_filled_template_into_dot_sh
 }
 
 

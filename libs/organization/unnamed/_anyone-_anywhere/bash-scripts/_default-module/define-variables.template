@@ -1,8 +1,0 @@
-#!/bin/bash
-
-myCompanyLDPAUserName="dummyValuemyCompanyLDPAUserName"
-
-gitDefaultUserName="${myCompanyLDPAUserName}"
-gitDefaultUserEmail="${myCompanyLDPAUserName}@myCompanyEmailDomainName"
-
-ipSuffixForDockerForDeveloper='dummyValueDockerIpPrefix'
