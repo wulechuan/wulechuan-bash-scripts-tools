@@ -134,6 +134,7 @@ function comparingTwoVersions {
         elif   [ "$resultVS1s" == 'equal-numbers' ] \
             || [ "$resultVS1s" == 'equal-strings' ]
         then
+
             if [ "$resultVS2s" == 'number-A-is-smaller' ]; then
                 result='yes'
             elif   [ "$resultVS2s" == 'equal-numbers' ] \
@@ -152,7 +153,6 @@ function comparingTwoVersions {
         elif   [ "$resultVS1s" == 'equal-numbers' ] \
             || [ "$resultVS1s" == 'equal-strings' ]
         then
-            result='yes'
 
             if     [ "$resultVS2s" == 'number-A-is-larger' ] \
                 || [ "$resultVS2s" == 'B-absents' ] \
@@ -162,7 +162,6 @@ function comparingTwoVersions {
             elif   [ "$resultVS2s" == 'equal-numbers' ] \
                 || [ "$resultVS2s" == 'equal-strings' ]
             then
-                result='yes'
 
                 if     [ "$resultVS3s" == 'number-A-is-larger' ] \
                     || [ "$resultVS3s" == 'B-absents' ] \
