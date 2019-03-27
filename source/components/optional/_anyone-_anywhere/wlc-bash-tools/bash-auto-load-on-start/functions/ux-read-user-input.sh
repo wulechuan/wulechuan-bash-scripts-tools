@@ -44,8 +44,6 @@
 # 	echo
 
 # 	if [ "$result" == 'yes' ]; then
-# 		echo
-# 		colorful -n "Starting pktminer..." textGreen
-# 		bpc start pktminer
+# 		echo 'yes'
 # 	fi
 # }
