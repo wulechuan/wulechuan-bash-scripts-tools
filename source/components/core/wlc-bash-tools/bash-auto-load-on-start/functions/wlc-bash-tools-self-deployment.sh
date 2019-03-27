@@ -2,7 +2,7 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 	# $1 should be --from     for easier understanding, but it can actually be anything, as long as it's not absent.
 	# $3 should be --to-host  for easier understanding, but it can actually be anything, as long as it's not absent.
 	local sourceFolderPath="$2"
-	local targetHost="$4"
+	local remoteHost="$4"
 
 	local targetFolderPathAtRemote='~'
 
@@ -20,9 +20,9 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 		return 32
 	fi
 
-	if     [[ ! "$targetHost" =~ ^[_a-zA-Z0-9]+@[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] \
-	    && [[ ! "$targetHost" =~ ^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+$                  ]]; then
-		console.error    "Invalid targetHost \"\e[35m$targetHost\e[31m\""
+	if     [[ ! "$remoteHost" =~ ^[_a-zA-Z0-9]+@[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] \
+	    && [[ ! "$remoteHost" =~ ^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+$                  ]]; then
+		console.error    "Invalid remoteHost \"\e[35m$remoteHost\e[31m\""
 		echo
 		return 34
 	fi
@@ -35,31 +35,42 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 	colorful -n "$sourceFolderPath"    textGreen
 
 	colorful -- "Target host:   "
-	colorful -n "$targetHost"    textMagenta
+	colorful -n "$remoteHost"          textMagenta
 
 
 
 	local timeStamp=`date +%Y-%m-%d_%H-%M-%S`
 
+	# something like "wlc-bash-tools___new-one-to-deploy___1979-03-19_11-22-33"
 	local targetFolderNameAtRemote="${WLC_BASH_TOOLS___FOLDER_NAME_PREFIX___OF_NEW_INSTANCE_TO_DEPLOY}___${timeStamp}"
-	local duplicationContainerFolderNameInLocalMachineCache="${targetHost}___${timeStamp}"
+	local targetFolderNameAtRemoteTheVarNameLengthEqualsToContent="$targetFolderNameAtRemote"
 
-	local signalFilePathInLocalMachineCache="${WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE}/deployments-to-remote-machines/${duplicationContainerFolderNameInLocalMachineCache}/${WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_NEW_INSTANCE_TO_DEPLOY}"
-	local duplicationPathInLocalMachineCache="${WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE}/deployments-to-remote-machines/${duplicationContainerFolderNameInLocalMachineCache}/$targetFolderNameAtRemote"
+
+	local nameOfFolderAsContainerOfDuplicationsToCopyToRemote="${remoteHost}___${timeStamp}"
+
+	local __tempWorkingFolderPath="${WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE}/deployments-to-remote-machines/${nameOfFolderAsContainerOfDuplicationsToCopyToRemote}"
+	local signalFilePathInLocalMachineCache="$__tempWorkingFolderPath/${WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_NEW_INSTANCE_TO_DEPLOY}"
+	local duplicationPathInLocalMachineCache="$__tempWorkingFolderPath/$targetFolderNameAtRemote"
+
+
+	# ########################## MAKING DUPLICATIONS ########################## #
+	echo
+	echo
+	colorful -n "Making duplications, so that files can be put in correct folder at remote machine..."    textGreen
 
 	if [ -d "$duplicationPathInLocalMachineCache" ]; then
 		rm    -rf    "$duplicationPathInLocalMachineCache"
 	fi
+	mkdir    -p                             "$duplicationPathInLocalMachineCache"
+	cp       -r    "$sourceFolderPath"/.    "$duplicationPathInLocalMachineCache"
+	# ######################################################################### #
 
-	mkdir    -p    "$duplicationPathInLocalMachineCache"
-
-	cp    -r    "$sourceFolderPath"/.    "$duplicationPathInLocalMachineCache"
 
 
-	echo
-	echo
-	echo
-	colorful -n "Generating signal file to send to remote machine..."
+
+	# echo
+	# echo
+	# colorful -n "Generating signal file to send to remote machine..."    textGreen
 	echo $targetFolderNameAtRemote > "$signalFilePathInLocalMachineCache"
 
 
@@ -67,7 +78,7 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 	local sourceItemPath
 
 	echo
-	echo -e "Inside of \"\e[34m${WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE}/.../\e[32m${duplicationContainerFolderNameInLocalMachineCache}\e[0m\","
+	echo -e "Inside of \"\e[34m${WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE}/.../\e[32m${nameOfFolderAsContainerOfDuplicationsToCopyToRemote}\e[0m\","
 	echo -e "this file will be copied:"
 	echo "$VE_line_60"
 	echo -e "      File: \e[32m$WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_NEW_INSTANCE_TO_DEPLOY\e[0m"
@@ -102,7 +113,50 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 	echo
 	echo
 	colorful -n "Now s-copying..." textGreen
-	scp    -rq    "$signalFilePathInLocalMachineCache"    "$duplicationPathInLocalMachineCache"    $targetHost:$targetFolderPathAtRemote
+	scp    -rq    "$signalFilePathInLocalMachineCache"    "$duplicationPathInLocalMachineCache"    $remoteHost:$targetFolderPathAtRemote
+
+
+
+
+
+	
+    echo
+    echo
+    echo
+    print-header "Detecting remote ~/.bash_profile and ~/.bashrc"...
+    detect-remote-file    "$remoteHost"    '~'    ".bash_profile"    "$__tempWorkingFolderPath"
+    detect-remote-file    "$remoteHost"    '~'    ".bashrc"          "$__tempWorkingFolderPath"
+
+    local pathOfLocalCacheFileOfRemoteBashProfile="$__tempWorkingFolderPath/.bash_profile"
+    local pathOfLocalCacheFileOfRemoteBashRC="$__tempWorkingFolderPath/.bashrc"
+
+    touch    "$pathOfLocalCacheFileOfRemoteBashProfile"
+    touch    "$pathOfLocalCacheFileOfRemoteBashRC"
+
+	local tempStatementMarkerString='THIS_LINE_IS_ADDED_TEMPORARILY_BY_WLC_BASH_TOOLS'
+	local tempStatementMarkerStringVarNameLengthEquals2="$tempStatementMarkerString"
+
+    local remoteAutorunFileMentionedTempAutorunStatement=`cat   "$pathOfLocalCacheFileOfRemoteBashProfile"` | grep "$tempStatementMarkerString"
+    local remoteAutorunFileMentionedWLCBashToolsStartDotSH=`cat "$pathOfLocalCacheFileOfRemoteBashRC"`      | grep '"\$WLC_BASH_TOOLS___FOLDER_PATH/start.sh"'
+
+    if  [ -z "$remoteAutorunFileMentionedTempAutorunStatement" ] && [ -z "$remoteAutorunFileMentionedWLCBashToolsStartDotSH" ]; then
+		echo
+        colorful -n "Appending temp autorun statement to cache of remote \".bash_profile\"..."    textGreen
+
+        echo "if [[ \$- =~ i ]] && [ -d ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent ]; then # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "    cd ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent                           # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "    ./to-install-wlc-bash-tools-locally.sh                                                  # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "    sed -i '/${tempStatementMarkerStringVarNameLengthEquals2}/d' ~/.bash_profile            # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "fi                                                                                          # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+
+        colorful -n "Uploading modified \".bash_profile\" to remote..."    textGreen
+        scp    -q    "$pathOfLocalCacheFileOfRemoteBashProfile"    "$remoteHost:~"
+    fi
+
+
+
+
+
 
 	echo
 	print-DONE

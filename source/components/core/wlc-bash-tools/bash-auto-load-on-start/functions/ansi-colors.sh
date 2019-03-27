@@ -161,7 +161,7 @@ function append-colorful-string-to {
         evaluate-echo-color-into-variable   $4   $5   colorEscapeString
 
         if [ ! -z "$colorEscapeString" ]; then
-            colorfulStringToAppend="${colorEscapeString}$3\e[0m"
+            colorfulStringToAppend="${colorEscapeString}$3${clearColor}"
         fi
     fi
 

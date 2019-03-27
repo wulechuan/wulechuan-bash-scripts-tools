@@ -35,13 +35,12 @@ function console.error {
 
 	echo -en "\e[0;31m"
 	if [ -z "${allInfoSegments// /}" ]; then
-		echo -e "Details not provided."
+		echo -en "Details not provided."
 	else
-		echo -e $*
+		echo -en $*
 	fi
 
-
-	echo -en "\e[0m"
+	echo -e "\e[39;49m \e[0m"
 }
 
 function print-DONE {
