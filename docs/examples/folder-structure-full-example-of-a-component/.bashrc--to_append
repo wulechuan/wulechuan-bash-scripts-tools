@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# content of this file will be appended to an existing .bashrc,
+# according to the file name suffix "--to_append".
+
+cd    ~/my-favorite-folder

@@ -1,0 +1,1 @@
+wlc_rainbow_prompt--setup

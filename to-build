@@ -1,0 +1,64 @@
+#!/bin/bash
+
+
+
+# To build senarios.
+# Also, after building, try deploy some built senarios.
+
+
+
+function wlc_bash_tools--build_and_deploy {
+	source "$___here/_building-tools/_common_actions/detect-environment.sh"
+
+	source "$___here/_building-tools/_utilities/functions/ansi-colors.sh"
+	source "$___here/_building-tools/_utilities/functions/deploy-by-s-copying.sh"
+	source "$___here/_building-tools/_utilities/data/visual-elements.sh"
+
+	source "$___here/configurations-for-building-tools.sh"
+	source "$___here/_building-tools/_common_actions/parse-raw-configurations-for-building-tools.sh"
+
+	if [ "$___autoFoundSenarioCount" == '0' ]; then
+		return 0
+	fi
+
+
+	local senariosCommonConfigurationFilesPath="$___pathOf_sourceRootFolderOfAllSenarios/_common-configurations"
+	local senariosCommonConfigurationFileFullPath
+	for senariosCommonConfigurationFileFullPath in `ls "$senariosCommonConfigurationFilesPath"/*.sh`; do
+		source    "$senariosCommonConfigurationFileFullPath"
+	done
+
+    if [ -z "$___subPathOf_buildOutputRootFolder" ]; then
+        echo -e "\e[31mTemp global variable \e[33m\$___subPathOf_buildOutputRootFolder\e[31m is NOT defined.\e[0m"
+        return 1
+    fi
+
+	source "$___here/_building-tools/_common_actions/print-path-of-this-repository.sh"
+    source "$___here/_building-tools/_common_actions/core-of-removing-built-files.sh"
+
+	source "$___here/_building-tools/1-make-senarios/go-through-all-making-stages.sh"    $*
+	source "$___here/_building-tools/2-deploy-some-senarios-if-necessary/deploy.sh"      $___subPathsOf_senariosToDeploy
+
+
+	wlc_bash_tools--unset_all_variables_used_during_building_process
+
+
+	local wlcBashToolsForOtherMachines="$___pathOf_buildOutputRootFolder/wlc-bash-tools-for-other-machines"
+	if [ -d "$wlcBashToolsForOtherMachines" ]; then
+		cp -r "$wlcBashToolsForOtherMachines" "$HOME"
+	fi
+
+
+	echo
+    colorful  -n  ' All Done '  textBlack  bgndGreen
+	echo
+
+
+	unset -f wlc_bash_tools--build_and_deploy
+}
+
+
+
+___here=$(dirname `readlink -f "$0"`)
+wlc_bash_tools--build_and_deploy
+unset ___here

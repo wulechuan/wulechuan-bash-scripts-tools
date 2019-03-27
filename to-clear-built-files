@@ -1,0 +1,52 @@
+#!/bin/bash
+
+
+
+# To clean existing distribution if any.
+
+
+
+
+function wlc_bash_tools--remove_exisiting_built_files {
+    source "$___here/_building-tools/_common_actions/detect-environment.sh"
+
+    source "$___here/_building-tools/_utilities/functions/ansi-colors.sh"
+    source "$___here/_building-tools/_utilities/data/visual-elements.sh"
+
+
+
+    source "$___here/configurations-for-building-tools.sh"
+	source "$___here/_building-tools/_common_actions/parse-raw-configurations-for-building-tools.sh"
+
+
+
+    local senariosCommonConfigurationFilesPath="$___here/source/senarios-are-combinations-of-components/_common-configurations"
+    local senariosCommonConfigurationFile
+    for senariosCommonConfigurationFile in `ls "$senariosCommonConfigurationFilesPath"`; do
+        source "$senariosCommonConfigurationFilesPath/$senariosCommonConfigurationFile"
+    done
+
+    if [ -z "$___subPathOf_buildOutputRootFolder" ]; then
+        echo -e "\e[31mTemp global variable \e[33m\$___subPathOf_buildOutputRootFolder\e[31m is NOT defined.\e[0m"
+        return 1
+    fi
+
+	source "$___here/_building-tools/_common_actions/print-path-of-this-repository.sh"
+    source "$___here/_building-tools/_common_actions/core-of-removing-built-files.sh"
+
+
+
+
+
+    wlc_bash_tools--unset_all_variables_used_during_building_process
+
+
+    unset -f wlc_bash_tools--remove_exisiting_built_files
+}
+
+
+
+
+___here=$(dirname `readlink -f "$0"`)
+wlc_bash_tools--remove_exisiting_built_files
+unset ___here

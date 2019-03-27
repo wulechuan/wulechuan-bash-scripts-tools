@@ -1,1 +1,0 @@
-alias cdorg="cd ${pathMyLocalMachineOrgProjectsRoot}/"

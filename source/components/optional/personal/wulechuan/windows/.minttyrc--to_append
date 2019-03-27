@@ -1,0 +1,8 @@
+FontHeight=17
+Columns=180
+Rows=64
+Language=@
+MiddleClickAction=paste
+RightClickAction=menu
+Font=PT Mono
+ScrollbackLines=200000

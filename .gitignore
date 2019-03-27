@@ -1,2 +1,2 @@
-dist
-*.filled-template
+/built-senarios
+*.wlc-filled-bash-template

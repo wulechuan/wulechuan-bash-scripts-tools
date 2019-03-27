@@ -1,0 +1,6 @@
+BoldAsFont=-1
+ThemeFile=base16-wulechuan.minttyrc
+Term=xterm
+Locale=C
+Charset=UTF-8
+FontSmoothing=default

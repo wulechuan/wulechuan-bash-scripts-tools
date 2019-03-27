@@ -1,0 +1,17 @@
+alias rebash='exec bash -l' # reload bash scripts
+alias l1='ls -1   --color'
+alias ll='ls -l   --color'
+alias la='ls -lA  --color'
+alias lh='ls -lh  --color'
+alias lH='ls -lAh --color'
+alias up1='cd ../'
+alias up2='cd ../../'
+alias up3='cd ../../../'
+alias up4='cd ../../../../'
+alias p3='ping -c 3'
+
+alias now='date    "+%Y-%m-%d %H:%M:%S"'
+alias today='date  "+%Y-%m-%d"'
+alias today2='date "+%m-%d"'
+alias clock='date  "+%H:%M:%S"'
+alias clock2='date "+%H:%M"'

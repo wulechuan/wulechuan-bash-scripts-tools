@@ -1,1 +1,0 @@
-__welcome_for_non_root_user__

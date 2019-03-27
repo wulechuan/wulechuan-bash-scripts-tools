@@ -1,9 +1,0 @@
-___allChosenLibsFolder="
-    _anyone-_anywhere
-    organization/unnamed/_anyone-_anywhere
-    organization/unnamed/any-product-_running-linux-as-root
-    organization/unnamed/any-product-dev-linux-as-root
-    personal/wulechuan/_anywhere
-    personal/wulechuan/linux-in-vmware
-    organization/unnamed/linux-in-vmware-wulechuan
-"
