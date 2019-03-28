@@ -287,7 +287,7 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 			if [ "$itemName" == 'to-install-wlc-bash-tools-locally.sh' ]; then
 				echo -en "\e[33mDuring Deployment of wlc-bash-tools, the file \"\e[0m"
 				echo -en "\e[32mto-install-wlc-bash-tools-locally.sh\e[0m"
-				echo -e  "\e[33m is skipped.\e[0m"
+				echo -e  "\e[33m\" is skipped.\e[0m"
 				continue
 			fi
 		fi
