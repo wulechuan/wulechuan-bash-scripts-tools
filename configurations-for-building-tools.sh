@@ -49,7 +49,6 @@ ___senarioSpecificDeployActionFileName='deploy.sh'
 
 ___subPathsOf_senariosToBuild='
 	local-machine-wulechuan
-	linux-in-vmware-wulechuan
 '
 
 # ___subPathsOf_senariosToDeploy=
