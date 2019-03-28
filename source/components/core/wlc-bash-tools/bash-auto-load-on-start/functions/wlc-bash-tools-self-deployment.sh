@@ -21,7 +21,7 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 	fi
 
 	if     [[ ! "$remoteHost" =~ ^[_a-zA-Z0-9]+@[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] \
-	    && [[ ! "$remoteHost" =~ ^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+$                  ]]; then
+		&& [[ ! "$remoteHost" =~ ^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+$                  ]]; then
 		console.error    "Invalid remoteHost \"\e[35m$remoteHost\e[31m\""
 		echo
 		return 34
@@ -95,7 +95,7 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 		sourceItemPath="$sourceFolderPath/$itemName"
 
 		if [ -f "$sourceItemPath" ]; then
-            echo -e "      File: \e[32m$itemName\e[0m"
+			echo -e "      File: \e[32m$itemName\e[0m"
 		fi
 
 		if [ -d "$sourceItemPath" ]; then
@@ -120,41 +120,43 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 
 
 	
-    echo
-    echo
-    echo
-    print-header "Detecting remote ~/.bash_profile and ~/.bashrc"...
-    detect-remote-file    "$remoteHost"    '~'    ".bash_profile"    "$__tempWorkingFolderPath"
-    detect-remote-file    "$remoteHost"    '~'    ".bashrc"          "$__tempWorkingFolderPath"
+	echo
+	echo
+	echo
+	print-header "Detecting remote ~/.bash_profile and ~/.bashrc"...
+	detect-remote-file    "$remoteHost"    '~'    ".bash_profile"    "$__tempWorkingFolderPath"
+	detect-remote-file    "$remoteHost"    '~'    ".bashrc"          "$__tempWorkingFolderPath"
 
-    local pathOfLocalCacheFileOfRemoteBashProfile="$__tempWorkingFolderPath/.bash_profile"
-    local pathOfLocalCacheFileOfRemoteBashRC="$__tempWorkingFolderPath/.bashrc"
+	local pathOfLocalCacheFileOfRemoteBashProfile="$__tempWorkingFolderPath/.bash_profile"
+	local pathOfLocalCacheFileOfRemoteBashRC="$__tempWorkingFolderPath/.bashrc"
 
-    touch    "$pathOfLocalCacheFileOfRemoteBashProfile"
-    touch    "$pathOfLocalCacheFileOfRemoteBashRC"
+	touch    "$pathOfLocalCacheFileOfRemoteBashProfile"
+	touch    "$pathOfLocalCacheFileOfRemoteBashRC"
 
 	local tempStatementMarkerString='THIS_LINE_IS_ADDED_TEMPORARILY_BY_WLC_BASH_TOOLS'
 	local tempStatementMarkerStringVarNameLengthEquals2="$tempStatementMarkerString"
 
-    local remoteAutorunFileMentionedTempAutorunStatement=`cat   "$pathOfLocalCacheFileOfRemoteBashProfile"` | grep "$tempStatementMarkerString"
-    local remoteAutorunFileMentionedWLCBashToolsStartDotSH=`cat "$pathOfLocalCacheFileOfRemoteBashRC"`      | grep '"\$WLC_BASH_TOOLS___FOLDER_PATH/start.sh"'
+	local remoteAutorunFileMentionedTempAutorunStatement=`cat   "$pathOfLocalCacheFileOfRemoteBashProfile"` | grep "$tempStatementMarkerString"
+	local remoteAutorunFileMentionedWLCBashToolsStartDotSH=`cat "$pathOfLocalCacheFileOfRemoteBashRC"`      | grep '"\$WLC_BASH_TOOLS___FOLDER_PATH/start.sh"'
 
-    if  [ -z "$remoteAutorunFileMentionedTempAutorunStatement" ] && [ -z "$remoteAutorunFileMentionedWLCBashToolsStartDotSH" ]; then
+	if  [ -z "$remoteAutorunFileMentionedTempAutorunStatement" ] && [ -z "$remoteAutorunFileMentionedWLCBashToolsStartDotSH" ]; then
 		echo
-        colorful -n "Appending temp autorun statement to cache of remote \".bash_profile\"..."    textGreen
+		colorful -n "Appending temp autorun statement to cache of remote \".bash_profile\"..."    textGreen
 
-        echo "if [[ \$- =~ i ]] && [ -d ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent ]; then # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-		echo "    cd ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent                           # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-		echo "    ./to-install-wlc-bash-tools-locally.sh                                                  # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-		echo "    sed -i '/${tempStatementMarkerStringVarNameLengthEquals2}/d' ~/.bash_profile            # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-		echo "fi                                                                                          # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "if [ -d ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent ]; then        # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "    cd ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent                # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "    ./to-install-wlc-bash-tools-locally.sh                                       # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "    sed -i '/${tempStatementMarkerStringVarNameLengthEquals2}/d' ~/.bash_profile # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "    logout                                                                       # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "fi                                                                               # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
 
-        colorful -n "Uploading modified \".bash_profile\" to remote..."    textGreen
-        scp    -q    "$pathOfLocalCacheFileOfRemoteBashProfile"    "$remoteHost:~"
-    fi
+		colorful -n "Uploading modified \".bash_profile\" to remote..."    textGreen
+		scp    -q    "$pathOfLocalCacheFileOfRemoteBashProfile"    "$remoteHost:~"
+	fi
 
 
-
+	# 主动连接一次，以使【远程主机】上旧有的 wlc-bash-tools 版的 .bashrc，或者上方代码在【远程主机】留下的临时代码能够被执行。
+	ssh    "$remoteHost"
 
 
 

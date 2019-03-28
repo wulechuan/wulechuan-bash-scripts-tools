@@ -111,9 +111,15 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 		local insertingContentStartMark="# ───── contents inserted by wlc bash tools start here ─────"
 		local insertingContentEndMark="# ───── contents inserted by wlc bash tools end here ─────"
 
+		local fileName=`basename    "$sourceFilePath"`
+
 		if [ ! -f "$sourceFilePath" ]; then
-			echo -e "\e[31mNon existing source file: \"\e[31m${sourceFilePath}\"\e[0m"
-			return 1
+			if [ "$fileName" == '.bash_profile' ]; then
+				echo -e "\e[33mNo source \"\e[32m.bash_profile\e[33m\" is provided. A new one will be generated automatically.\e[0m"
+			else
+				echo -e "\e[31mNon existing source file: \"\e[31m${sourceFilePath}\"\e[0m"
+				return 1
+			fi
 		fi
 
 		if [ ! -d "$_targetFolderPath" ]; then
@@ -121,7 +127,6 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 			return 2
 		fi
 
-		local fileName=`basename    "$sourceFilePath"`
 		local targetFilePath="$_targetFolderPath/$fileName"
 		local targetFileAlreadyExists='no'
 
@@ -133,23 +138,83 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 			mkdir    -p    "$_backupFolderPath"
 			cp       -f    "$targetFilePath"    "$_backupFolderPath"
 
+
 			sed -i "/$insertingContentStartMark/,/$insertingContentEndMark/d"    "$targetFilePath"
 
-			local targetFileOldContentTail=`tail "$targetFilePath" -n1`
+			if [ "$targetFolderPath" == "$HOME" ] && [ "$fileName" == '.bashrc' ]; then
+				local foundOldBashScriptsEntryPointInvocations=`awk '/^\s*if\s+\[\s+-f\s+~\/bash-scripts\/(after-)?start\.sh/' ~/.bashrc`
 
-
-			if [[ ! "$targetFileOldContentTail" =~ ^$ ]]; then
-				stringToAppend="${stringToAppend}\n"
+				if [ ! -z "$foundOldBashScriptsEntryPointInvocations" ]; then
+					local _newTempBashRCFileName='.bashrc_temp'
+					awk 'BEGIN {met=0} {if (met>0) met++; else if ($0 ~ /^\s*if\s+\[\s+-f\s+~\/bash-scripts\/(after-)?start\.sh/) met=1} {if (met==0) print $0; else print "# "$0 } {if (met>=3) met=0 }' ~/.bashrc > ~/${_newTempBashRCFileName}
+					
+					rm ~/.bashrc
+					mv ~/${_newTempBashRCFileName} ~/.bashrc
+				fi
 			fi
 
+
+
+
+			local targetFileOldContentLastLineTrimmed=`sed -n '${/\S/p}' "$targetFilePath"`
+
+			if [ -z "$targetFileOldContentLastLineTrimmed" ]; then
+				sed -i '$d' "$targetFilePath"
+			fi
+
+			stringToAppend="${stringToAppend}\n"
 		fi
+
+
+
 
 		stringToAppend=${stringToAppend}${insertingContentStartMark}
 		stringToAppend=${stringToAppend}'\n'
-		stringToAppend=${stringToAppend}`cat "$sourceFilePath"`
+
+		local sourceFileContentIsNotEmpty
+
+		if [ -f "$sourceFilePath" ]; then # .bash_profile 可能不存在源文件
+			sourceFileContentIsNotEmpty=`sed -n '/^\s*[^#]\S/p' "$sourceFilePath"`
+
+			if [ -z "$sourceFileContentIsNotEmpty" ]; then
+				echo -en "\e[33mSource file \"\e[32m$fileName\e[33m\" has zero statements.\e[0m"
+
+				if [ "$fileName" == '.bash_profile' ]; then
+					echo
+				else
+					echo -e "Skipped.\e[0m"
+					return 0
+				fi
+			else
+				stringToAppend=${stringToAppend}`cat "$sourceFilePath"`
+			fi
+		fi
+
+		if [ "$fileName" == '.bash_profile' ]; then
+			local sourceBashProfileIsInvokingBashRC
+			local oldTargetBashProfileIsInvokingBashRC
+
+			if [ -f "$targetFilePath" ]; then
+				oldTargetBashProfileIsInvokingBashRC=`sed -n "/\(source\|\.\)\s\+~\/.bashrc/p" "$targetFilePath"`
+			fi
+
+			if [ -f "$sourceFilePath" ]; then
+				sourceBashProfileIsInvokingBashRC=`   sed -n "/\(source\|\.\)\s\+~\/.bashrc/p" "$sourceFilePath"`
+			fi
+			
+			if [ -z "$oldTargetBashProfileIsInvokingBashRC" ] && [ -z "$sourceBashProfileIsInvokingBashRC" ]; then
+				stringToAppend=${stringToAppend}'if [ -f ~/.bashrc ]; then\n'
+				stringToAppend=${stringToAppend}'	source ~/.bashrc\n'
+				stringToAppend=${stringToAppend}'fi'
+			fi
+		fi
+
 		stringToAppend=${stringToAppend}'\n'
 		stringToAppend=${stringToAppend}${insertingContentEndMark}
-		stringToAppend=${stringToAppend}'\n'
+
+		# echo -e "deploy_one_bash_file:"
+		# echo -e "    from   $sourceFilePath"
+		# echo -e "    to     $targetFilePath"
 
 		echo -e "$stringToAppend" >> "$targetFilePath"
 
@@ -170,8 +235,8 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 
 
 	if [ $nonErrorInfoIsAllowed == 'yes' ]; then
-		local VE_line='──────────'
-		VE_line=${VE_line}${VE_line}${VE_line}${VE_line}${VE_line}${VE_line}${VE_line}
+		local VE_line='──────────' # 10 chars
+		VE_line=${VE_line}${VE_line}${VE_line}${VE_line}${VE_line}${VE_line}${VE_line} # 70 chars
 
 		echo
 		echo    $VE_line
@@ -184,16 +249,24 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 
 
 
-	deploy_one_bash_file \
-		--from-file="$sourceFolderPath/.bash_profile" \
-		--to-folder="$HOME" \
-		--backup-folder="$backupFolderPath"
+
+	if [ "$targetFolderPath" == "$HOME" ]; then
+		if [ -d ~/bash-scripts ]; then # 如果旧版本存在，它将干扰新版本
+			mv    ~/bash-scripts    ~/bash-scripts--old-version
+		fi
 
 
-	deploy_one_bash_file \
-		--from-file="$sourceFolderPath/.bashrc" \
-		--to-folder="$HOME" \
-		--backup-folder="$backupFolderPath"
+		deploy_one_bash_file \
+			--from-file="$sourceFolderPath/.bash_profile" \
+			--to-folder="$targetFolderPath" \
+			--backup-folder="$backupFolderPath"
+
+
+		deploy_one_bash_file \
+			--from-file="$sourceFolderPath/.bashrc" \
+			--to-folder="$targetFolderPath" \
+			--backup-folder="$backupFolderPath"
+	fi
 
 
 	local itemName
@@ -202,16 +275,21 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 	local oldTargetItemFound
 
 	for itemName in `ls -A "$sourceFolderPath"`; do
-		if [ "$itemName" == '.bash_profile' ]; then
-			continue
-		fi
+		if [ "$targetFolderPath" == "$HOME" ]; then
+			if [ "$itemName" == '.bash_profile' ]; then
+				continue
+			fi
 
-		if [ "$itemName" == '.bashrc' ]; then
-			continue
-		fi
+			if [ "$itemName" == '.bashrc' ]; then
+				continue
+			fi
 
-		if [ "$itemName" == 'to-install-wlc-bash-tools-locally.sh' ]; then
-			continue
+			if [ "$itemName" == 'to-install-wlc-bash-tools-locally.sh' ]; then
+				echo -en "\e[33mDuring Deployment of wlc-bash-tools, the file \"\e[0m"
+				echo -en "\e[32mto-install-wlc-bash-tools-locally.sh\e[0m"
+				echo -e  "\e[33m is skipped.\e[0m"
+				continue
+			fi
 		fi
 
 		sourceItemPath="$sourceFolderPath/$itemName"

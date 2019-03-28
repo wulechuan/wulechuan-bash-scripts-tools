@@ -15,11 +15,11 @@ function wlc_bash_tools--building--deploy_some_senarios {
         builtSenarioPath="$___pathOf_buildOutputRootFolder/$builtSenarioSubPath"
 
         if [ ! -d "$builtSenarioPath" ]; then
-            colorful -n "$VE_line_70"              textRed
+            colorful -n "$VE_line_80"              textRed
             colorful -- "Built senario \""         textRed
             colorful -- "$builtSenarioSubPath"     textYellow
             colorful -n "\" not found. Skipped"    textRed
-            colorful -n "$VE_line_70"              textRed
+            colorful -n "$VE_line_80"              textRed
 
             continue
         fi
@@ -29,11 +29,11 @@ function wlc_bash_tools--building--deploy_some_senarios {
 
         if [ -f "$senarioDeploymentScriptFile" ]; then
 
-            colorful -n "$VE_line_70"                  textMagenta
+            colorful -n "$VE_line_80"                  textMagenta
             colorful -- "Deploying "                   textMagenta
             colorful -- "$builtSenarioSubPath"         textGreen
             colorful -n " by its own $___senarioSpecificDeployActionFileName"    textMagenta
-            colorful -n "$VE_line_70"                  textMagenta
+            colorful -n "$VE_line_80"                  textMagenta
 
             source "$senarioDeploymentScriptFile"
 
@@ -42,11 +42,11 @@ function wlc_bash_tools--building--deploy_some_senarios {
 
         else
 
-            colorful -n "$VE_line_70"              textMagenta
+            colorful -n "$VE_line_80"              textMagenta
             colorful -- "Deploying "               textMagenta
             colorful -- "$builtSenarioSubPath"     textGreen
             colorful -n " to default location"     textMagenta
-            colorful -n "$VE_line_70"              textMagenta
+            colorful -n "$VE_line_80"              textMagenta
 
             mv \
                 "$___pathOf_buildOutputRootFolder/$builtSenarioSubPath/" \

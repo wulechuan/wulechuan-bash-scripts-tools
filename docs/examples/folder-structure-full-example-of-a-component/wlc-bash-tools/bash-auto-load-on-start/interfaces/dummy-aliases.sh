@@ -1,0 +1,1 @@
+alias sendGiftToMySon=buy_gift

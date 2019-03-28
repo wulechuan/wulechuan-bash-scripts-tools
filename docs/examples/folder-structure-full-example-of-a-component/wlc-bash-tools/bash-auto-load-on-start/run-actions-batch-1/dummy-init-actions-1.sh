@@ -1,0 +1,1 @@
+if [ ! -z "`alias | grep ' rm='`" ]; then unalias rm; fi
