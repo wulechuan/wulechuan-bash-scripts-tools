@@ -1,4 +1,4 @@
-wlc--ssh_tools--example_ssh_id='wulechuan@live.com'
+wlc_ssh_tools__example_ssh_id='wulechuan@live.com'
 
 mkdir    -p    ~/.ssh/
 mkdir    -p    ~/.ssh/backup/
@@ -94,7 +94,7 @@ function wlc--ssh_keygen {
 
 function wlc--ssh_copy_id {
     function print-help-1 {
-        local example1="~/.ssh/backup/${wlc--ssh_tools--example_ssh_id}.sshky"
+        local example1="~/.ssh/backup/${wlc_ssh_tools__example_ssh_id}.sshky"
         local example2="~/.ssh/id_rsa"
 
         if [ "$copywritingLanguage" = "zh_CN" ]; then
@@ -124,7 +124,7 @@ function wlc--ssh_copy_id {
             colorful -n 'Please provide an ID.'    textRed
             colorful -- '  Example: '
         fi
-        colorful -n "${wlc--ssh_tools--example_ssh_id}"    textBlue
+        colorful -n "${wlc_ssh_tools__example_ssh_id}"    textBlue
     }
 
 
