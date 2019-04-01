@@ -1,0 +1,10 @@
+to-build                eol=LF
+to-clear-built-files    eol=LF
+.bashrc*                eol=LF
+.bash_profile*          eol=LF
+*.sh                    eol=LF
+*.wlc-bash-template     eol=LF
+
+*.minttyrc*             eol=LF
+
+*.md                    eol=LF
