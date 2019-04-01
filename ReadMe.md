@@ -53,13 +53,11 @@ It's [here](./docs/ReadMe.en-US.md).
     每一个【单纯配置集】的文件夹代表着一个假想的 `~`
     文件夹。之后在【拼合】过程中，多个【单纯配置集】中的内容会被复制到一起，并最终作为整体复制到一台计算机真实的 `~` 文件夹下。
 
-    例如，`source/components/optional/_anyone-_anywhere` 下包含：
-    - `.mintty/`
+    例如，`source/components/optional/_anyone/_anywhere` 下包含：
     - `wlc-bash-tools/`
     - `.bashrc`
-    - `.minttyrc`
     
-    在最终部署时，上述四者作为一个【场景配置集】的一部分，连同该【场景配置集】中其余一切内容，均会被复制到一台计算机真实的 `~` 文件夹内。
+    在最终部署时，上述二者作为一个【场景配置集】的一部分，连同该【场景配置集】中其余一切内容，均会被复制到一台计算机真实的 `~` 文件夹内。
 
 
 
@@ -77,7 +75,8 @@ It's [here](./docs/ReadMe.en-US.md).
     >
     > ```sh
     > ___allChosenOptionalComponentsSubPath="
-    >     _anyone-_anywhere
+    >     _anyone/_anywhere
+    >     _anyone/windows
     >     personal/wulechuan/_anywhere
     >     personal/wulechuan/windows
     > "
@@ -101,7 +100,8 @@ It's [here](./docs/ReadMe.en-US.md).
         > 参见下例：
         > ```sh
         > ___allChosenOptionalComponentsSubPath="
-        >     _anyone-_anywhere
+        >     _anyone/_anywhere
+        >     _anyone/windows
         >     organization/the-greatest-company/_any-linux
         >     personal/wulechuan/_anywhere
         >     personal/wulechuan/windows
