@@ -5,20 +5,19 @@ function ___temp_func--wlc_bash_tools--deploy_locally--do_it {
 	# source    <this bash file>    [--no-interations | --do-not-reload-bash]    [--from-folder="<your source folder>"]    [--to-folder="<your target folder>"]
 	#
 	# Examples:
-	#    source    <...>/to-install-wlc-bash-tools-locally-stage-2.sh    --no-interations
-	#    source    <...>/to-install-wlc-bash-tools-locally-stage-2.sh    --do-not-reload-bash
-	#    source    <...>/to-install-wlc-bash-tools-locally-stage-2.sh    --do-not-reload-bash    --from-folder="/d/my-toolset/wlc-bash-tools-for-my-machine/"
-	#    source    <...>/to-install-wlc-bash-tools-locally-stage-2.sh    --no-interationc    --to-folder="/d/my-toolset-for-other-machines/"
+	#    source    <...>/to-install-wlc-bash-tools-locally.sh    --no-interations
+	#    source    <...>/to-install-wlc-bash-tools-locally.sh    --do-not-reload-bash
+	#    source    <...>/to-install-wlc-bash-tools-locally.sh    --do-not-reload-bash    --from-folder="/d/my-toolset/wlc-bash-tools-for-my-machine/"
+	#    source    <...>/to-install-wlc-bash-tools-locally.sh    --no-interationc    --to-folder="/d/my-toolset-for-other-machines/"
 
 
 
 	local WLC_BASH_TOOLS___FOLDER_NAME='wlc-bash-tools'
 	local defaultTargetFolderPath="$HOME"
-	local signalStatementInBashProfile='# THIS LINE IS ADDED BY to-install-wlc-bash-tools-locally-stage-1.sh'
 
 
 	if [[ $- =~ i ]]; then
-		echo -e "\e[32mTo install wlc bash tools locally: \e[35mStage 2\e[0m"
+		echo -e "\e[32mTo install wlc bash tools locally\e[0m"
 	fi
 
 
@@ -74,6 +73,9 @@ function ___temp_func--wlc_bash_tools--deploy_locally--do_it {
 	if [ -z "$sourceFolderPath" ]; then
 		sourceFolderPath="$currentFolder"
 		sourceFolderPath_forPrinting="./"
+		if [ `dirname "$sourceFolderPath"` == "$HOME" ]; then
+			sourceFolderPath_forPrinting="$sourceFolderPath"
+		fi
 	elif [[ "$sourceFolderPath" =~ $currentFolderMatchingRegExp ]]; then
 		local currentFolderStringLength=${#currentFolder}
 		sourceFolderPath_forPrinting="./${sourceFolderPath:$currentFolderStringLength}"
@@ -270,29 +272,6 @@ function ___temp_func--wlc_bash_tools--deploy_locally--do_it {
 
 
 	if [ "$targetFolderPath" == "$HOME" ]; then
-		if [ -f ~/.bash_profile ]; then
-			local signalStatementFoundInBashProfile=`grep "$signalStatementInBashProfile" ~/.bash_profile `
-
-			if [ ! -z "$signalStatementFoundInBashProfile" ]; then
-				if [[ $- =~ i ]]; then
-					echo -e "\e[32mDetected signal \"\e[35m$signalStatementInBashProfile\e[32m\" in \e[33m~/.bash_profile\e[32m.\nRemoving it...\e[0m"
-				fi
-
-				sed -i "/$signalStatementInBashProfile/d"    ~/.bash_profile
-
-				local nameOfTempFileOfBashProfileCopyForCheckingContent=".bash_profile_copy_for_checking_content_$RANDOM"
-				cp    ~/.bash_profile    ~/$nameOfTempFileOfBashProfileCopyForCheckingContent
-				sed -i '/^\s*$/d'    ~/$nameOfTempFileOfBashProfileCopyForCheckingContent
-				local cleanedBashProfileContent=`cat ~/$nameOfTempFileOfBashProfileCopyForCheckingContent`
-
-				if [ "${#cleanedBashProfileContent}" -eq 0 ]; then
-					rm    -f    ~/.bash_profile
-				fi
-
-				rm    -f    ~/$nameOfTempFileOfBashProfileCopyForCheckingContent
-			fi
-		fi
-
 
 		if [ -d ~/bash-scripts ]; then # 如果旧版本存在，它将干扰新版本
 			mv    ~/bash-scripts    ~/bash-scripts--old-version
@@ -327,16 +306,9 @@ function ___temp_func--wlc_bash_tools--deploy_locally--do_it {
 				continue
 			fi
 
-			if [ "$itemName" == 'to-install-wlc-bash-tools-locally-stage-1.sh' ]; then
+			if [ "$itemName" == 'to-install-wlc-bash-tools-locally.sh' ]; then
 				echo -en "\e[33mDuring deployment of \e[34mwlc-bash-tools\e[33m, the file \"\e[0m"
-				echo -en "\e[32mto-install-wlc-bash-tools-locally-stage-1.sh\e[0m"
-				echo -e  "\e[33m\" is skipped.\e[0m"
-				continue
-			fi
-
-			if [ "$itemName" == 'to-install-wlc-bash-tools-locally-stage-2.sh' ]; then
-				echo -en "\e[33mDuring deployment of \e[34mwlc-bash-tools\e[33m, the file \"\e[0m"
-				echo -en "\e[32mto-install-wlc-bash-tools-locally-stage-2.sh\e[0m"
+				echo -en "\e[32mto-install-wlc-bash-tools-locally.sh\e[0m"
 				echo -e  "\e[33m\" is skipped.\e[0m"
 				continue
 			fi
@@ -372,7 +344,9 @@ function ___temp_func--wlc_bash_tools--deploy_locally--do_it {
 			# *************************************************** #
 			# *************************************************** #
 			mkdir    -p                         "$backupFolderPath"
-			mv       -f    "$targetItemPath"    "$backupFolderPath"
+			cp       -r    "$targetItemPath"    "$backupFolderPath"
+			rm      -rf    "$targetItemPath"
+			# 此处采用先 cp 后 rm 的方法，而不是直接采用 mv 命令，是因为 mv 命令常常遭遇失败。
 			# *************************************************** #
 			# *************************************************** #
 			# *************************************************** #
@@ -441,7 +415,7 @@ function ___temp_func--wlc_bash_tools--deploy_locally--do_it {
 		echo
 		echo -e "\e[33mThe bash environment will NOT reload automatically. To apply\e[0m"
 		echo -e "\e[33mthe latest deployed toolset, you shall either create a new\e[0m"
-		echo -e "\e[33msession, or reload current session by '\e[35mexec bash -l\e[33m'.\e[0m"
+		echo -e "\e[33msession, or reload current session via '\e[35mexec bash -l\e[33m'.\e[0m"
 		echo
 		echo
 	fi

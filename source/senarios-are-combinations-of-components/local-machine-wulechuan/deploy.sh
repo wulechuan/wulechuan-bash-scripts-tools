@@ -1,4 +1,4 @@
-source    "$builtSenarioPath/to-install-wlc-bash-tools-locally-stage-1.sh" \
+source    "$builtSenarioPath/to-install-wlc-bash-tools-locally.sh" \
     --do-not-reload-bash \
 	--from-folder="$builtSenarioPath" \
 	--to-folder="$HOME"
