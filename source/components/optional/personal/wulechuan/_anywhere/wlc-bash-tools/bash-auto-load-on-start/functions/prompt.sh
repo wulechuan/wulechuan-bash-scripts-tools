@@ -220,13 +220,13 @@ function wlc_rainbow_prompt--setup {
 
 
 	if [ $shouldUse16ColorsPrompt -eq 1 ]; then
-		if [ "$WLC_RAINBOW_PROMPT___COLORS_ARE_IN_BACKGROUND_INSTEAD_OF_TEXTS" == 'yes' ]; then
+		if [ "$WLC_RAINBOW_PROMPT___COLORS_ARE_IN_BACKGROUNDS_INSTEAD_OF_TEXTS" == 'yes' ]; then
 			export PROMPT_COMMAND='build_rainbow_prompt_with_git_branch_info--in_16_colored_mode--and_set_colors_to_background';
 		else
 			export PROMPT_COMMAND='build_rainbow_prompt_with_git_branch_info--in_16_colored_mode--and_set_colors_to_text';
 		fi
 	else
-		if [ "$WLC_RAINBOW_PROMPT___COLORS_ARE_IN_BACKGROUND_INSTEAD_OF_TEXTS" == 'yes' ]; then
+		if [ "$WLC_RAINBOW_PROMPT___COLORS_ARE_IN_BACKGROUNDS_INSTEAD_OF_TEXTS" == 'yes' ]; then
 			export PROMPT_COMMAND='build_rainbow_prompt_with_git_branch_info--in_256_colored_mode--and_set_colors_to_background'
 		else
 			export PROMPT_COMMAND='build_rainbow_prompt_with_git_branch_info--in_256_colored_mode--and_set_colors_to_text'
