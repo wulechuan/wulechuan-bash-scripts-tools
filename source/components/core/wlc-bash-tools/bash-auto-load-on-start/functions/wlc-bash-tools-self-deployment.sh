@@ -161,7 +161,7 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 
 		echo "if [ -d ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent ]; then       # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
 		echo "    cd ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent                # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-		echo "    ./to-install-wlc-bash-tools-locally.sh    --no-interactions                  # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "    ./to-install-wlc-bash-tools-locally-stage-1.sh    --no-interactions          # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
 		echo "    sed -i '/${tempStatementMarkerStringVarNameLengthEquals2}/d' ~/.bash_profile # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
 		echo "    logout                                                                       # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
 		echo "fi                                                                               # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"

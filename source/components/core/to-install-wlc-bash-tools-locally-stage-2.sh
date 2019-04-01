@@ -1,13 +1,32 @@
 #!/bin/bash
 
-function ___temp_func--wlc_bash_tools--deploy_locally {
+function ___temp_func--wlc_bash_tools--deploy_locally--do_it {
+	# Usage:
+	# source    <this bash file>    [--no-interations | --do-not-reload-bash]    [--from-folder="<your source folder>"]    [--to-folder="<your target folder>"]
+	#
+	# Examples:
+	#    source    <...>/to-install-wlc-bash-tools-locally-stage-2.sh    --no-interations
+	#    source    <...>/to-install-wlc-bash-tools-locally-stage-2.sh    --do-not-reload-bash
+	#    source    <...>/to-install-wlc-bash-tools-locally-stage-2.sh    --do-not-reload-bash    --from-folder="/d/my-toolset/wlc-bash-tools-for-my-machine/"
+	#    source    <...>/to-install-wlc-bash-tools-locally-stage-2.sh    --no-interationc    --to-folder="/d/my-toolset-for-other-machines/"
+
+
+
 	local WLC_BASH_TOOLS___FOLDER_NAME='wlc-bash-tools'
 	local defaultTargetFolderPath="$HOME"
+	local signalStatementInBashProfile='# THIS LINE IS ADDED BY to-install-wlc-bash-tools-locally-stage-1.sh'
+
+
+	if [[ $- =~ i ]]; then
+		echo -e "\e[32mTo install wlc bash tools locally: \e[35mStage 2\e[0m"
+	fi
+
 
 
 	local shouldRunWithoutAnyInteractions='no'
 	local shouldReloadBash='ask user'
 	local nonErrorInfoIsAllowed='yes'
+
 
 	if [ "$1" == '--no-interactions' ]; then
 
@@ -49,7 +68,7 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 	local sourceFolderPath_forPrinting="$sourceFolderPath"
 
 	local currentFolder=`pwd`'/'
-	local currentFolderMatchingRegExp="^${currentFolder// /\\ }"
+	local currentFolderMatchingRegExp="^${currentFolder// /\\ }" # 空格前增加转义符，即【反斜杠号】。
 
 
 	if [ -z "$sourceFolderPath" ]; then
@@ -251,6 +270,30 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 
 
 	if [ "$targetFolderPath" == "$HOME" ]; then
+		if [ -f ~/.bash_profile ]; then
+			local signalStatementFoundInBashProfile=`grep "$signalStatementInBashProfile" ~/.bash_profile `
+
+			if [ ! -z "$signalStatementFoundInBashProfile" ]; then
+				if [[ $- =~ i ]]; then
+					echo -e "\e[32mDetected signal \"\e[35m$signalStatementInBashProfile\e[32m\" in \e[33m~/.bash_profile\e[32m.\nRemoving it...\e[0m"
+				fi
+
+				sed -i "/$signalStatementInBashProfile/d"    ~/.bash_profile
+
+				local nameOfTempFileOfBashProfileCopyForCheckingContent=".bash_profile_copy_for_checking_content_$RANDOM"
+				cp    ~/.bash_profile    ~/$nameOfTempFileOfBashProfileCopyForCheckingContent
+				sed -i '/^\s*$/d'    ~/$nameOfTempFileOfBashProfileCopyForCheckingContent
+				local cleanedBashProfileContent=`cat ~/$nameOfTempFileOfBashProfileCopyForCheckingContent`
+
+				if [ "${#cleanedBashProfileContent}" -eq 0 ]; then
+					rm    -f    ~/.bash_profile
+				fi
+
+				rm    -f    ~/$nameOfTempFileOfBashProfileCopyForCheckingContent
+			fi
+		fi
+
+
 		if [ -d ~/bash-scripts ]; then # 如果旧版本存在，它将干扰新版本
 			mv    ~/bash-scripts    ~/bash-scripts--old-version
 		fi
@@ -284,9 +327,16 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 				continue
 			fi
 
-			if [ "$itemName" == 'to-install-wlc-bash-tools-locally.sh' ]; then
+			if [ "$itemName" == 'to-install-wlc-bash-tools-locally-stage-1.sh' ]; then
 				echo -en "\e[33mDuring deployment of \e[34mwlc-bash-tools\e[33m, the file \"\e[0m"
-				echo -en "\e[32mto-install-wlc-bash-tools-locally.sh\e[0m"
+				echo -en "\e[32mto-install-wlc-bash-tools-locally-stage-1.sh\e[0m"
+				echo -e  "\e[33m\" is skipped.\e[0m"
+				continue
+			fi
+
+			if [ "$itemName" == 'to-install-wlc-bash-tools-locally-stage-2.sh' ]; then
+				echo -en "\e[33mDuring deployment of \e[34mwlc-bash-tools\e[33m, the file \"\e[0m"
+				echo -en "\e[32mto-install-wlc-bash-tools-locally-stage-2.sh\e[0m"
 				echo -e  "\e[33m\" is skipped.\e[0m"
 				continue
 			fi
@@ -318,8 +368,14 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 
 
 		if [ "$oldTargetItemFound" == 'yes' ]; then
-			mkdir    -p    "$backupFolderPath"
-			mv    "$targetItemPath"    "$backupFolderPath"
+			# *************************************************** #
+			# *************************************************** #
+			# *************************************************** #
+			mkdir    -p                         "$backupFolderPath"
+			mv       -f    "$targetItemPath"    "$backupFolderPath"
+			# *************************************************** #
+			# *************************************************** #
+			# *************************************************** #
 		fi
 
 
@@ -332,7 +388,13 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 		fi
 
 
+		# ***************************************************** #
+		# ***************************************************** #
+		# ***************************************************** #
 		cp    -rf    "$sourceItemPath"    "$targetFolderPath"
+		# ***************************************************** #
+		# ***************************************************** #
+		# ***************************************************** #
 	done
 
 
@@ -385,8 +447,8 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 	fi
 
 
-	unset -f ___temp_func--wlc_bash_tools--deploy_locally
+	unset -f ___temp_func--wlc_bash_tools--deploy_locally--do_it
 }
 
 
-___temp_func--wlc_bash_tools--deploy_locally    $*
+___temp_func--wlc_bash_tools--deploy_locally--do_it    $*
