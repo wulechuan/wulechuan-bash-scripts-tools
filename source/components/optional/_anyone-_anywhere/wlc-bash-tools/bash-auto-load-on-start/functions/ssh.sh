@@ -86,43 +86,46 @@ function wlc--ssh_keygen {
 
 
 function wlc--ssh_copy_id {
-    function print-help-1 {
-        local example1="~/.ssh/backup/wulechuan@live.com.sshky"
-        local example2="~/.ssh/id_rsa"
+    function print-examples {
+        local exampleFile1="~/.ssh/backup/wulechuan@live.com.sshkey"
+        local exampleFile2="~/.ssh/id_rsa                          "
+        local exampleHost="wulechuan@github.com"
 
-        echo
 
         if [ "$copywritingLanguage" = "zh_CN" ]; then
-            colorful -n '请指明ssh密钥文件。'    textRed
-
-            colorful -- '    范例1： '
-            colorful -n "${example1}"    textCyan
-
-            colorful -- '    范例2： '
-            colorful -n "${example2}"    textCyan
+            colorful -n "范例：${example1}"
         else
-            colorful -n 'Please provide an ssh key file.'    textRed
-
-            colorful -- '    Example 1: '
-            colorful -n "${example1}"    textCyan
-
-            colorful -- '    Example 2: '
-            colorful -n "${example2}"    textCyan
+            colorful -n "Examples:${example2}"
         fi
 
+        colorful -- "    wlc--ssh_copy_id"    textGreen
+        colorful -- "    $exampleFile1"       textBlue
+        colorful -n "    $exampleHost"        textMagenta
+
+        colorful -- "    wlc--ssh_copy_id"    textGreen
+        colorful -- "    $exampleFile2"       textBlue
+        colorful -n "    $exampleHost"        textMagenta
+    }
+
+    function print-help-1 {
+        echo
+        if [ "$copywritingLanguage" = "zh_CN" ]; then
+            colorful -n '请指明ssh密钥文件。'    textRed
+        else
+            colorful -n 'Please provide an ssh key file.'    textRed
+        fi
+        print-examples
         echo
     }
 
     function print-help-2 {
         echo
         if [ "$copywritingLanguage" = "zh_CN" ]; then
-            colorful -n '请指明完整的用户ID。用户ID应依次包含用户名和域名两部分，以@符号连接。'    textRed
-            colorful -- '  范例：'
+            colorful -n '请指明完整的用户ID。用户ID应依次包含用户名和域名两部分，以 @ 符号连接。'    textRed
         else
             colorful -n 'Please provide an ID.'    textRed
-            colorful -- '  Example: '
         fi
-        colorful -n "wulechuan@live.com"    textBlue
+        print-examples
         echo
     }
 
