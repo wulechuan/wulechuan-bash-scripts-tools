@@ -1,29 +1,22 @@
-wlc_ssh_tools__example_ssh_id='wulechuan@live.com'
-
 mkdir    -p    ~/.ssh/
 mkdir    -p    ~/.ssh/backup/
 
-
 function wlc--ssh_keygen {
     function print-help {
-        colorful -n $VE_line_60
-
+        echo
         if [ "$copywritingLanguage" = "zh_CN" ]; then
             colorful -n "欲创建一个ssh密钥，请指明完整的用户ID。用户ID应依次包含用户名和域名两部分，以@符号连接。"    textRed
-            colorful -n $VE_line_30
-            colorful -- "范例："
+            colorful -- "    范例： "
         else
             colorful -n "Please provide an ID."    textRed
-            colorful -n $VE_line_30
-            colorful -- "Example: "
+            colorful -- "    Example: "
         fi
 
         colorful -- 'sshkg '                textGreen
         colorful -- '"'                     textBrightBlack
         colorful -- "wulechuan@live.com"    textCyan
         colorful -n '"'                     textBrightBlack
-
-        colorful -n $VE_line_60
+        echo
     }
 
 
@@ -94,29 +87,34 @@ function wlc--ssh_keygen {
 
 function wlc--ssh_copy_id {
     function print-help-1 {
-        local example1="~/.ssh/backup/${wlc_ssh_tools__example_ssh_id}.sshky"
+        local example1="~/.ssh/backup/wulechuan@live.com.sshky"
         local example2="~/.ssh/id_rsa"
+
+        echo
 
         if [ "$copywritingLanguage" = "zh_CN" ]; then
             colorful -n '请指明ssh密钥文件。'    textRed
 
-            colorful -- '  范例1：'
+            colorful -- '    范例1： '
             colorful -n "${example1}"    textCyan
 
-            colorful -- '  范例2：'
+            colorful -- '    范例2： '
             colorful -n "${example2}"    textCyan
         else
             colorful -n 'Please provide an ssh key file.'    textRed
 
-            colorful -- '  Example 1: '
+            colorful -- '    Example 1: '
             colorful -n "${example1}"    textCyan
 
-            colorful -- '  Example 2: '
+            colorful -- '    Example 2: '
             colorful -n "${example2}"    textCyan
         fi
+
+        echo
     }
 
     function print-help-2 {
+        echo
         if [ "$copywritingLanguage" = "zh_CN" ]; then
             colorful -n '请指明完整的用户ID。用户ID应依次包含用户名和域名两部分，以@符号连接。'    textRed
             colorful -- '  范例：'
@@ -124,7 +122,8 @@ function wlc--ssh_copy_id {
             colorful -n 'Please provide an ID.'    textRed
             colorful -- '  Example: '
         fi
-        colorful -n "${wlc_ssh_tools__example_ssh_id}"    textBlue
+        colorful -n "wulechuan@live.com"    textBlue
+        echo
     }
 
 
