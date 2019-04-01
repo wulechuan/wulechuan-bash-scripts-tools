@@ -319,7 +319,7 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 
 		if [ "$oldTargetItemFound" == 'yes' ]; then
 			mkdir    -p    "$backupFolderPath"
-			mv     "$targetItemPath"    "$backupFolderPath"
+			mv    "$targetItemPath"    "$backupFolderPath"
 		fi
 
 
@@ -375,6 +375,13 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 
 	if [ "$shouldReloadBash" == 'yes' ]; then
 		exec bash -l
+	elif [[ $- =~ i ]]; then
+		echo
+		echo -e "\e[33mThe bash environment will NOT reload automatically. To apply\e[0m"
+		echo -e "\e[33mthe latest deployed toolset, you shall either create a new\e[0m"
+		echo -e "\e[33msession, or reload current session by '\e[35mexec bash -l\e[33m'.\e[0m"
+		echo
+		echo
 	fi
 
 

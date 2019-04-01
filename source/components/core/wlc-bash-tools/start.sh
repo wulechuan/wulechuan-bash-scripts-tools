@@ -72,7 +72,15 @@ function ___temp_func--wlc_bash_tools--start {
 
         if [ -d "$folderPathOfNewInstanceToDeploy" ]; then
             cd        "$folderPathOfNewInstanceToDeploy"
-            source    ./'to-install-wlc-bash-tools-locally.sh'
+
+            if [ -f ~/.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself ]; then
+                rm  ~/.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself
+                echo -e '\e[33mFound signal file: \e[32m~/.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself\e[0m'
+                source    ./'to-install-wlc-bash-tools-locally.sh'    --no-interactions
+            else
+                echo 'file not found: ~/.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself'
+                source    ./'to-install-wlc-bash-tools-locally.sh'
+            fi
 
             unset    -f    ___temp_func--wlc_bash_tools--start
 
@@ -186,6 +194,9 @@ function ___temp_func--wlc_bash_tools--start {
 
     unset    -f    ___temp_func--wlc_bash_tools--start
 }
+
+
+
 
 
 

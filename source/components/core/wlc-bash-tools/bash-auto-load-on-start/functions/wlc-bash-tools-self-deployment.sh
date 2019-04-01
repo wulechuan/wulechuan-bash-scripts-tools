@@ -126,6 +126,7 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 	print-header "Detecting remote ~/.bash_profile and ~/.bashrc"...
 	detect-remote-file    "$remoteHost"    '~'    ".bash_profile"    "$__tempWorkingFolderPath"
 	detect-remote-file    "$remoteHost"    '~'    ".bashrc"          "$__tempWorkingFolderPath"
+	echo
 
 	local pathOfLocalCacheFileOfRemoteBashProfile="$__tempWorkingFolderPath/.bash_profile"
 	local pathOfLocalCacheFileOfRemoteBashRC="$__tempWorkingFolderPath/.bashrc"
@@ -136,14 +137,29 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 	local tempStatementMarkerString='THIS_LINE_IS_ADDED_TEMPORARILY_BY_WLC_BASH_TOOLS'
 	local tempStatementMarkerStringVarNameLengthEquals2="$tempStatementMarkerString"
 
-	local remoteAutorunFileMentionedTempAutorunStatement=`cat   "$pathOfLocalCacheFileOfRemoteBashProfile"` | grep "$tempStatementMarkerString"
+	local remoteAutorunFileMentionedTempAutorunStatements=`cat   "$pathOfLocalCacheFileOfRemoteBashProfile"` | grep "$tempStatementMarkerString"
 	local remoteAutorunFileMentionedWLCBashToolsStartDotSH=`cat "$pathOfLocalCacheFileOfRemoteBashRC"`      | grep '"\$WLC_BASH_TOOLS___FOLDER_PATH/start.sh"'
 
-	if  [ -z "$remoteAutorunFileMentionedTempAutorunStatement" ] && [ -z "$remoteAutorunFileMentionedWLCBashToolsStartDotSH" ]; then
+
+	echo -en "Remote autorun file mentioned \e[32mtemp autorun statements\e[0m: "
+	if [ -z "$remoteAutorunFileMentionedTempAutorunStatements" ]; then
+		echo -e "\e[31mno\e[0m"
+	else
+		echo -e "\e[35myes\e[0m"
+	fi
+
+	echo -en "Remote autorun file mentioned \e[32m~/wlc-bash-tools/start.sh\e[0m: "
+	if [ -z "$remoteAutorunFileMentionedWLCBashToolsStartDotSH" ]; then
+		echo -e "\e[31mno\e[0m"
+	else
+		echo -e "\e[35myes\e[0m"
+	fi
+
+	if  [ -z "$remoteAutorunFileMentionedTempAutorunStatements" ] && [ -z "$remoteAutorunFileMentionedWLCBashToolsStartDotSH" ]; then
 		echo
 		colorful -n "Appending temp autorun statement to cache of remote \".bash_profile\"..."    textGreen
 
-		echo "if [ -d ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent ]; then        # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+		echo "if [ -d ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent ]; then       # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
 		echo "    cd ~/$targetFolderNameAtRemoteTheVarNameLengthEqualsToContent                # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
 		echo "    ./to-install-wlc-bash-tools-locally.sh    --no-interactions                  # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
 		echo "    sed -i '/${tempStatementMarkerStringVarNameLengthEquals2}/d' ~/.bash_profile # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
@@ -155,12 +171,32 @@ function wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote {
 	fi
 
 
+	echo $VE_line_60
+	local nameOfTempSignalFileForPreventingRemoteMachineFromInteractionsDuringUpComingSelfDeployment='.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself'
+	touch    "$__tempWorkingFolderPath/$nameOfTempSignalFileForPreventingRemoteMachineFromInteractionsDuringUpComingSelfDeployment"
+	scp    -q    "$__tempWorkingFolderPath/$nameOfTempSignalFileForPreventingRemoteMachineFromInteractionsDuringUpComingSelfDeployment"    "$remoteHost:~"
+	echo -e "\e[32mSent a signal file. At remote it's:\n    \e[33m~/$nameOfTempSignalFileForPreventingRemoteMachineFromInteractionsDuringUpComingSelfDeployment\e[0m"
+	echo $VE_line_60
+
+	echo
+	echo
+	echo
+	echo
+	echo
+
+
+
 	# 主动连接一次，以使【远程主机】上旧有的 wlc-bash-tools 版的 .bashrc，或者上方代码在【远程主机】留下的临时代码能够被执行。
 	ssh    "$remoteHost"
 
 
 
 	echo
+	echo
+	echo
+	echo
+	echo
+
 	print-DONE
 	echo
 }
