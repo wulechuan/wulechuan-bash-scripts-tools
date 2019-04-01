@@ -10,6 +10,11 @@ if [ -d "$WLC_BASH_TOOLS___FOLDER_PATH" ]; then
     if [ -f "$WLC_BASH_TOOLS___FOLDER_PATH/start.sh" ]; then
 
 
+        if [ ! -z "`alias | grep ' cp='`" ]; then unalias cp; fi
+        if [ ! -z "`alias | grep ' mv='`" ]; then unalias mv; fi
+        if [ ! -z "`alias | grep ' rm='`" ]; then unalias rm; fi
+
+
         # ************************************************* #
         # ************************************************* #
         # ************************************************* #
