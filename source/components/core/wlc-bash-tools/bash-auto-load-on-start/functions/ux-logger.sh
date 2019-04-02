@@ -1,3 +1,43 @@
+function echo3 {
+	echo
+	echo
+	echo
+}
+
+function echo4 {
+	echo
+	echo
+	echo
+	echo
+}
+
+function echo5 {
+	echo
+	echo
+	echo
+	echo
+	echo
+}
+
+function echo6 {
+	echo
+	echo
+	echo
+	echo
+	echo
+	echo
+}
+
+function echo7 {
+	echo
+	echo
+	echo
+	echo
+	echo
+	echo
+	echo
+}
+
 function print-date {
 	date +"%Y-%m-%d"
 }

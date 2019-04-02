@@ -26,21 +26,13 @@ function load_all_shell_scripts_in_a_folder--alphabetically {
 
 function ___temp_func--wlc_bash_tools--start {
     if [[ ! $- =~ i ]]; then
-        unset    -f    ___temp_func--wlc_bash_tools--start
-
         return 0
     fi
 
 
     if [ ! -z "$WLC_BASH_TOOLS___STATE___HAVE_LOADED" ]; then
-        unset    -f    ___temp_func--wlc_bash_tools--start
-
         return 0
     fi
-
-
-
-
 
     local coreGlobalConstantsFileName='core-global-constants.sh'
     local coreGlobalConstantsFilePath="${WLC_BASH_TOOLS___FOLDER_PATH}/$coreGlobalConstantsFileName"
@@ -50,8 +42,6 @@ function ___temp_func--wlc_bash_tools--start {
         echo -e "\e[31mERROR: File \"\e[33m${coreGlobalConstantsFilePath}\e[31m\" not found.\e[0m"
         echo -e "\e[31mWLC Bash tools failed to start.\e[0m"
         echo
-
-        unset    -f    ___temp_func--wlc_bash_tools--start
 
         return 127
 
@@ -63,67 +53,34 @@ function ___temp_func--wlc_bash_tools--start {
 
 
 
+    mkdir    -p    "$WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE"
+    mkdir    -p    "$WLC_BASH_TOOLS___FOLDER_PATH___OF_SIGNALS"
 
-    local pathOfMarkFileOfInstallationOfNewInstance="$HOME/$WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_NEW_INSTANCE_TO_DEPLOY"
 
-    if [ -f "$pathOfMarkFileOfInstallationOfNewInstance" ]; then
-        local folderNameOfNewInstanceToDeploy=`cat "$pathOfMarkFileOfInstallationOfNewInstance"`
+
+
+
+    local pathOfSignalFileOfDeploymentOfNewInstance="$WLC_BASH_TOOLS___FOLDER_PATH___OF_SIGNALS/$WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_NEW_INSTANCE_TO_DEPLOY"
+
+    if [ -f "$pathOfSignalFileOfDeploymentOfNewInstance" ]; then
+        local folderNameOfNewInstanceToDeploy=`cat "$pathOfSignalFileOfDeploymentOfNewInstance"`
         local folderPathOfNewInstanceToDeploy="$HOME/$folderNameOfNewInstanceToDeploy"
 
-        if [ -d "$folderPathOfNewInstanceToDeploy" ]; then
-            cd        "$folderPathOfNewInstanceToDeploy"
+        if [ -f       "$folderPathOfNewInstanceToDeploy/to-install-wlc-bash-tools-locally.sh" ]; then
+            source    "$folderPathOfNewInstanceToDeploy/to-install-wlc-bash-tools-locally.sh"    --should-accord-to-standard-auto-deployment-signal-file
 
-            if [ -f ~/.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself ]; then
-                rm  ~/.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself
-                echo -e '\e[33mFound signal file: \e[32m~/.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself\e[0m'
-                source    ./'to-install-wlc-bash-tools-locally.sh'    --no-interactions
-            else
-                echo 'Signal file not found: ~/.wlc-bash-tools___should-not-allow-interations-during-up-coming-deployment-of-itself'
-                source    ./'to-install-wlc-bash-tools-locally.sh'
-            fi
 
-            unset    -f    ___temp_func--wlc_bash_tools--start
-
-            return 0
-        else
-            echo -e "\e[31mERROR: Folder \"\e[33m${folderPathOfNewInstanceToDeploy}\e[31m\" not found.\e[0m"
-            echo -e "\e[31mFailed to deploy new instance of wlc bash tools.\e[0m"
-            echo
-
-            local shouldRemoveMarkFileOfInstallationOfNewInstance
-            local userInput
-
-            while true; do
-                echo -en "Shall we remove the installation mark? [y/n]"
-                read    -n 1    -t 5    userInput
-
-                if [ $? -gt 0 ]; then
-                    echo
-                    shouldRemoveMarkFileOfInstallationOfNewInstance='no'
-                    break
+            local logoutSignalFilePath="$HOME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS/$WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_AUTO_LOGGING_OUT"
+            if [ -f "$logoutSignalFilePath" ]; then
+                rm    -f    "$logoutSignalFilePath"
+                if [ $? -eq 0 ] && [[ $- =~ i ]]; then
+                    echo -e "\e[33mSignal file \"\e[35m$logoutSignalFilePath\e[33m\" has been removed.\e[0m"
                 fi
 
-                echo
-
-                case $userInput in
-                    [yY])
-						shouldRemoveMarkFileOfInstallationOfNewInstance='yes'
-						break
-						;;
-
-                    [nN])
-						shouldRemoveMarkFileOfInstallationOfNewInstance='no'
-						break
-						;;
-                esac
-
-            done
-
-            if [ $shouldRemoveMarkFileOfInstallationOfNewInstance == 'yes' ]; then
-                rm    -f    "$pathOfMarkFileOfInstallationOfNewInstance"
-
-                echo -e "Mark file \"\e[33m$pathOfMarkFileOfInstallationOfNewInstance\e[0m\" has been removed."
+                logout
             fi
+
+            return 0
         fi
     fi
 
@@ -179,9 +136,6 @@ function ___temp_func--wlc_bash_tools--start {
 
 
 
-    mkdir    -p    "$WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE"
-
-
 
     load_all_shell_scripts--of_category    'functions'              --category-is-optional
     load_all_shell_scripts--of_category    'data'                   --category-is-optional
@@ -201,3 +155,4 @@ function ___temp_func--wlc_bash_tools--start {
 
 
 ___temp_func--wlc_bash_tools--start
+unset    -f    ___temp_func--wlc_bash_tools--start

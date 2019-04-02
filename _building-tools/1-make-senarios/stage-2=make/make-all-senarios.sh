@@ -279,11 +279,9 @@ function wlc_bash_tools--building--make_all_senarios {
             if [ ! -d "$componentSource_wlcBashToolsFolder_fullPath" ]; then
 
                 colorful -- '             '
-                colorful -- 'the folder'       textRed
-                colorful -- ' "'
+                colorful -- 'the folder "'       textRed
                 colorful -- "$___wlcBashToolsRunningFolderName"    textYellow
-                colorful -- '" '
-                colorful -n "was not found"    textRed
+                colorful -n '" was not found'    textRed
 
             else
 

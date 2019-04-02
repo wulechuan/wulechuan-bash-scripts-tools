@@ -9,6 +9,7 @@ function wlc_bash_tools--building--make {
 
 	pathOfCurrentMakingStage="$pathOfBuildingToolsForMaking/stage-1=before-making"
 	source "$pathOfCurrentMakingStage/0-fill-variable-values-in-templates-for-core-component.sh"    $*
+	source "$pathOfCurrentMakingStage/1-fill-variable-values-in-templates-for-netis-components.sh"  $*
 
 
 
