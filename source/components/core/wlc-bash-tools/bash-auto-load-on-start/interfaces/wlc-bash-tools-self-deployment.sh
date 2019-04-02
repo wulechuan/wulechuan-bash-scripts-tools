@@ -1,2 +1,2 @@
-alias w2remote='                       wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote'
-alias wlc-bash-tools-deploy-to-remote='wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote'
+alias w2remote='                       wlc_bash_tools--easy_self_deploy_to_remote'
+alias wlc-bash-tools-deploy-to-remote='wlc_bash_tools--easy_self_deploy_to_remote'
