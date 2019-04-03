@@ -165,18 +165,17 @@ function wlc-print-direct-children {
 		return 1
 	fi
 
-	local __itemName__
-	local __itemPath__
+	local __itemName__wlc_print_direct_children__
+	local __itemPath__wlc_print_direct_children__
 
 	echo "$VE_line_60"
-	for __itemName__ in `ls -A "$pathOfFolderToListChildrenOf"`; do
-		__itemPath__="$_sourceFolderPath/$__itemName__"
-		echo "\"__itemPath__=$__itemPath__\""
+	for __itemName__wlc_print_direct_children__ in `ls -A "$pathOfFolderToListChildrenOf"`; do
+		__itemPath__wlc_print_direct_children__="$_sourceFolderPath/$__itemName__wlc_print_direct_children__"
 
-		if   [ -f "$__itemPath__" ]; then
-			echo -e "  File: \e[32m$__itemName__\e[0m"
-		elif [ -d "$__itemPath__" ]; then
-			echo -e "Folder: \e[35m$__itemName__\e[0m"
+		if   [ -f "$__itemPath__wlc_print_direct_children__" ]; then
+			echo -e "  File: \e[32m$__itemName__wlc_print_direct_children__\e[0m"
+		elif [ -d "$__itemPath__wlc_print_direct_children__" ]; then
+			echo -e "Folder: \e[35m$__itemName__wlc_print_direct_children__\e[0m"
 		fi
 	done
 	echo "$VE_line_60"
