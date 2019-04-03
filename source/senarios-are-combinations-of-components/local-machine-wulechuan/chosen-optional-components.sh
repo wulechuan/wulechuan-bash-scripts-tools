@@ -2,6 +2,7 @@ ___allChosenOptionalComponentsSubPath="
     _anyone/_anywhere
     _anyone/windows
     personal/wulechuan/_anywhere
+    personal/wulechuan/local-machine-_any-os
     personal/wulechuan/windows-_common
 "
 
