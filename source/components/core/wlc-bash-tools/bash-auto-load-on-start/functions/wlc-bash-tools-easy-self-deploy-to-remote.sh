@@ -9,7 +9,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     #     <this function>    --to-host="192.168.3.19"    --source-package-folder-name="my-personal-data-server"
     #     <this function>    --to-host="192.168.3.19"    --source-package-folder-path="/d/backup/my-old-data-server-in-1979"
 
-    local duplicatedArgumentEncountered=0
+    local duplicatedArgumentEncountered
 
     local remoteHostNameOrIPAddressIsProvided=0
     local remoteUserNameIsProvededSeparately=0
@@ -32,7 +32,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
         shift
 
         case "$currentArgument" in
-            ^--to-host=.*)
+            --to-host=*)
                 if [ $remoteHostNameOrIPAddressIsProvided -gt 0 ]; then
                     duplicatedArgumentEncountered='--to-host='
                     break
@@ -41,7 +41,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
                 remoteHostNameOrIPAddressIsProvided=1
                 ;;
 
-            ^--remote-user-name=.*)
+            --remote-user-name=*)
                 if [ $remoteUserNameIsProvededSeparately -gt 0 ]; then
                     duplicatedArgumentEncountered='--remote-user-name='
                     break
@@ -50,7 +50,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
                 remoteUserNameIsProvededSeparately=1
                 ;;
 
-            ^--source-package-folder-name=.*)
+            --source-package-folder-name=*)
                 if [ $sourceFolderNameIsProvided -gt 0 ]; then
                     duplicatedArgumentEncountered='--source-package-folder-name='
                     break
@@ -59,7 +59,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
                 sourceFolderNameIsProvided=1
                 ;;
 
-            ^--source-package-folder-path=.*)
+            --source-package-folder-path=*)
                 if [ $sourceFolderPathIsProvided -gt 0 ]; then
                     duplicatedArgumentEncountered='--source-package-folder-path='
                     break
@@ -72,17 +72,18 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     done
 
 
-    echo -e "\e[30;42mDEBUG\e[0m\n    remoteHostRawValue=\"\e[33m${remoteHostRawValue}\e[0m\"\n    remoteUserName=\"\e[33m${remoteUserName}\e[0m\"\n    sourceFolderName=\"\e[33m${sourceFolderName}\e[0m\"\n    sourceFolderPath=\"\e[33m${sourceFolderPath}\e[0m\""
+    # echo -e "\e[30;42mDEBUG\e[0m\n    remoteHostRawValue=\"\e[33m${remoteHostRawValue}\e[0m\"\n    remoteUserName=\"\e[33m${remoteUserName}\e[0m\"\n    sourceFolderName=\"\e[33m${sourceFolderName}\e[0m\"\n    sourceFolderPath=\"\e[33m${sourceFolderPath}\e[0m\""
 
     if [ ! -z "$duplicatedArgumentEncountered" ]; then
-        console.error "Duplicated argument \"\e[33m${duplicatedArgumentEncountered}\e[31m\"."
+        echo
+        print-error    "Duplicated argument \"\e[33m${duplicatedArgumentEncountered}\e[31m\"."
         return 99
     fi
 
-	if     [[ ! "$remoteHostRawValue" =~ ^[_a-zA-Z0-9]+@[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] \
-		&& [[ ! "$remoteHostRawValue" =~ ^[_a-zA-Z0-9]+@[_a-zA-Z][_a-zA-Z0-9]*$         ]] \
-		&& [[ ! "$remoteHostRawValue" =~               ^[_a-zA-Z][_a-zA-Z0-9]*$         ]]; then
-		console.error    "Invalid value for \"\e[33m--to-host=\e[31m\""
+	if     [[ ! "$remoteHostRawValue" =~ ^([_a-zA-Z]+[\._a-zA-Z0-9@]*)?@?[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] \
+		&& [[ ! "$remoteHostRawValue" =~ ^([_a-zA-Z]+[\._a-zA-Z0-9@]*)?@?[_a-zA-Z]+[\._a-zA-Z0-9]*$      ]]; then
+        echo
+		print-error    "Invalid value \"\e[33m$remoteHostRawValue\e[31m\" for argument \"\e[32m--to-host=\e[31m\"."
 		return 1
 	fi
 
@@ -94,10 +95,11 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
         remoteHostNameOrIPAddress=${remoteHostRawValue##*@}
     fi
 
-    echo -e "\e[30;42mDEBUG\e[0m\n    remoteHostNameOrIPAddress=\"\e[33m${remoteHostNameOrIPAddress}\e[0m\"\n    remoteUserNameInRemoteHostRawValue=\"\e[33m${remoteUserNameInRemoteHostRawValue}\e[0m\""
+    # echo -e "\e[30;42mDEBUG\e[0m\n    remoteHostNameOrIPAddress=\"\e[33m${remoteHostNameOrIPAddress}\e[0m\"\n    remoteUserNameInRemoteHostRawValue=\"\e[33m${remoteUserNameInRemoteHostRawValue}\e[0m\""
 
     if [ $remoteUserNameIsProvededSeparately -gt 0 ] && [ ! -z "$remoteUserNameInRemoteHostRawValue" ] && [ "$remoteUserName" != "$remoteUserNameInRemoteHostRawValue" ]; then
-        console.error "Remote user name was provided both in \e[33m--to-host=\"${remoteHostRawValue}\"\e[31m and \e[33m--remote-user-name=\"${remoteUserName}\"\e[31m."
+        echo
+        print-error    "Remote user name was provided both in \e[33m--to-host=\"${remoteHostRawValue}\"\e[31m and \e[33m--remote-user-name=\"${remoteUserName}\"\e[31m."
         return 2
     fi
 
@@ -107,9 +109,12 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
 
     if [ -z "$remoteUserName" ]; then
         remoteUserName='root'
-        colorful -- "Remote user name was not provided. Thus \""    textYellow
-        colorful -- "root"    textMagenta
-        colorful -- "\" is assumed."    textYellow
+        echo
+        colorful -- 'Remote user name'    textGreen
+        colorful -- ' was not provided. Thus "'
+        colorful -- 'root'    textMagenta
+        colorful -n '" is assumed.'
+        echo
     fi
 
 
@@ -118,35 +123,54 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
 
 
     if [ $sourceFolderNameIsProvided -gt 0 ] && [ $sourceFolderPathIsProvided -gt 0 ]; then
-        console.error "Both \"\e[33m--source-package-folder-name\e[31m\" and \"\e[33m--source-package-folder-path\e[31m\" were provided."
-        return 3
+        print-error    "Both \"\e[33m--source-package-folder-name\e[31m\" and \"\e[33m--source-package-folder-path\e[31m\" were provided."
+        return 20
     fi
 
 
 
+    local sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine
 
+    if [ $sourceFolderNameIsProvided -eq 0 ] && [ $sourceFolderPathIsProvided -eq 0 ]; then
+        colorful -- 'Neither "'
+        colorful -- '--source-package-folder-name'    textGreen
+        colorful -- '" nor "'
+        colorful -- '--source-package-folder-path'    textGreen
+        colorful -n '" were provided.'
 
-    local sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine="$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES/$sourceFolderName"
+        colorful -- 'Thus the default "'
+        colorful -- "$WLC_BASH_TOOLS___FOLDER_NAME___OF_DEFAULT_PACKAGE_TO_DEPLOY_TO_REMOTE"    textMagenta
+        colorful -n '" is assumed.'
+
+        sourceFolderName="$WLC_BASH_TOOLS___FOLDER_NAME___OF_DEFAULT_PACKAGE_TO_DEPLOY_TO_REMOTE"
+    fi
+
+    if [ $sourceFolderPathIsProvided -gt 0 ]; then
+        sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine="$sourceFolderPath"
+    else
+        sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine="$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES/$sourceFolderName"
+    fi
+
 
     if [ ! -d "$sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine" ]; then
-        colorful -n 'Folder path of package to depoly to a remote machine is invalid.'    textRed
+        print-error    'The evaluated folder path of package to depoly to a remote machine is invalid, which is'
 
-        colorful -- 'The evaluated path is "'    textRed
+        colorful -- '    "'    textRed
         colorful -- "$sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine"    textYellow
-        colorful -n '".'    textRed
+        colorful -n '"'    textRed
         echo
 
         colorful -n 'Involved variables:'    textRed
 
-        colorful -- '    $WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES="'    textRed
+        colorful -- '$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES="'    textRed
         colorful -- "$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES"    textYellow
         colorful -n '"'    textRed
 
-        colorful -- '    $--source-package-folder-name="'    textRed
+        colorful -- 'argument: --source-package-folder-name="'    textRed
         colorful -- "$sourceFolderName"    textYellow
         colorful -n '"'    textRed
 
-        colorful -- '    $--source-package-folder-path="'    textRed
+        colorful -- 'argument: --source-package-folder-path="'    textRed
         colorful -- "$sourceFolderPath"    textYellow
         colorful -n '"'    textRed
 
@@ -158,8 +182,6 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     fi
 
 
-
-    echo -e "\n\ntest over"; return
 
 
 
@@ -173,10 +195,26 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     wlc-bash-tools-scopy-to-remote-for-later-deployment-at-remote \
         --from        "$sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine" \
         --to-host     "$remoteID"
+    stageReturnCode=$?
+    if [ $stageReturnCode -gt 0 ]; then
+        return $stageReturnCode
+    fi
 
 
 
+    # wlc_bash_tools--design_host_name_for_remote_machine    "$remoteHostNameOrIPAddress"
 
+    
+
+    echo3
+    echo -n "wlc bash tools auto deployment "; print-DONE
+    echo3
+}
+
+function wlc_bash_tools--design_host_name_for_remote_machine {
+    local remoteHostNameOrIPAddress="${1}"
+    local sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine="${2}"
+    local remoteHostNameDefaultPrefix='computer'
 
     local tempWorkingFolderName
     local tempWorkingFolderPath
@@ -195,9 +233,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
 
 
 
-    echo
-    echo
-    echo
+    echo3
     print-header "Design the hostname for the remote machine:"
 
 
@@ -205,7 +241,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     local preferredHostNameFileFolderPath="$sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS"
     local preferredHostNameFilePath="$preferredHostNameFileFolderPath/default-computer-name"
 
-    local computerNamePrefixForRemoteMachine='computer'
+    local computerNamePrefixForRemoteMachine="$remoteHostNameDefaultPrefix"
 
 
     if [ -f "$preferredHostNameFilePath" ]; then
@@ -275,9 +311,4 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     colorful -n "Removing folder:"    textRed
     colorful -n "    \"$tempWorkingFolderPath\""    textYellow
     rm    -rf    "$tempWorkingFolderPath"
-
-
-    echo3
-    echo -n "wlc bash tools auto deployment "; print-DONE
-    echo3
 }

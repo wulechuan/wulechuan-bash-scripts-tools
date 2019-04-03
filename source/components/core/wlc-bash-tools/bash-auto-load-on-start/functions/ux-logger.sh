@@ -58,7 +58,7 @@ function print-date-and-time {
 	date +"%Y-%m-%d %H:%M:%S"
 }
 
-function console.error {
+function print-error {
 	local allInfoSegments="$*"
 
 	echo
@@ -66,22 +66,22 @@ function console.error {
 
 	echo -en "\e[97;41m"
 	if [ "$copywritingLanguage" = "zh_CN" ]; then
-		echo -e "错误："
+		echo -en "错误："
 	else
-		echo -e "ERROR: "
+		echo -en "ERROR:"
 	fi
+	echo -e "\e[0m "
 
 
 
-	echo -en "\e[0;31m"
+	echo -en "\e[31m"
 	if [ -z "${allInfoSegments// /}" ]; then
-		echo -en "Details not provided."
+		echo -e "Details not provided.\e[0m"
 	else
-		echo -en $*
+		echo -e "$*\e[0m"
 	fi
-
-	echo -e "\e[39;49m \e[0m"
 }
+alias console.error='print-error'
 
 function print-DONE {
 	echo -en "\e[30;42m"
