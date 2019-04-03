@@ -112,27 +112,27 @@ function wlc_bash_tools--deploy_to_remote {
 
 		function try-to-setup-non-standard-trigger-for-deployment-on-a-brand-new-remote-machine {
 			# 下方用很长的名称，特别是尾部借助多个下划线进一步延长名称，仅仅是为了方便对齐由 echo 所书写的远程代码片段。
-			local wlcBashToolsRemotePreDeploymentFolderNameAtRemote______="${1:29}" # --pre-deployment-folder-name="..."
-			local localWorkingCacheFolderPath="${2:22}"                             # --working-folder-path="..."
+			local wlcBashToolsRemotePreDeploymentFolderName______________="${1:29}" # --pre-deployment-folder-name="..."
+			local __localWorkingCacheFolderPath__="${2:22}"                             # --working-folder-path="..."
 
 			wlc-print-header "Detecting remote \e[35m~/.bash_profile\e[32m and \e[35m~/.bashrc\e[32m..."
-			detect-remote-file    "$_remoteID"    '~'    ".bash_profile"    "$localWorkingCacheFolderPath"
-			detect-remote-file    "$_remoteID"    '~'    ".bashrc"          "$localWorkingCacheFolderPath"
+			detect-remote-file    "$_remoteID"    '~'    ".bash_profile"    "$__localWorkingCacheFolderPath__"
+			detect-remote-file    "$_remoteID"    '~'    ".bashrc"          "$__localWorkingCacheFolderPath__"
 
 			echo
 
-			local pathOfLocalCacheFileOfRemoteBashProfile="$localWorkingCacheFolderPath/.bash_profile"
-			local pathOfLocalCacheFileOfRemoteBashRC_____="$localWorkingCacheFolderPath/.bashrc"
+			local __pathOfLocalCacheFileOfRemoteBashProfile__="$__localWorkingCacheFolderPath__/.bash_profile"
+			local __pathOfLocalCacheFileOfRemoteBashRC_______="$__localWorkingCacheFolderPath__/.bashrc"
 
-			touch    "$pathOfLocalCacheFileOfRemoteBashProfile"
-			touch    "$pathOfLocalCacheFileOfRemoteBashRC_____"
+			touch    "$__pathOfLocalCacheFileOfRemoteBashProfile__"
+			touch    "$__pathOfLocalCacheFileOfRemoteBashRC_______"
 
 			local tempStatementMarkerString='THIS_LINE_IS_ADDED_TEMPORARILY_BY_WLC_BASH_TOOLS'
 			local tempStatementMarkerString____________________="$tempStatementMarkerString"
 
 
-			local remoteAutorunFileMentionedTempAutorunStatements_=`cat "$pathOfLocalCacheFileOfRemoteBashProfile" | grep "$tempStatementMarkerString"`
-			local remoteAutorunFileMentionedWLCBashToolsStartDotSH=`cat "$pathOfLocalCacheFileOfRemoteBashRC_____" | grep '"$WLC_BASH_TOOLS___FOLDER_PATH/start.sh"'`
+			local remoteAutorunFileMentionedTempAutorunStatements_=`cat "$__pathOfLocalCacheFileOfRemoteBashProfile__" | grep "$tempStatementMarkerString"`
+			local remoteAutorunFileMentionedWLCBashToolsStartDotSH=`cat "$__pathOfLocalCacheFileOfRemoteBashRC_______" | grep '"$WLC_BASH_TOOLS___FOLDER_PATH/start.sh"'`
 
 			echo -en "Remote autorun file mentioned \e[32mtemp autorun statements\e[0m:   "
 			if [ -z "$remoteAutorunFileMentionedTempAutorunStatements_" ]; then
@@ -149,22 +149,22 @@ function wlc_bash_tools--deploy_to_remote {
 			fi
 
 
-			rm    -f    "$pathOfLocalCacheFileOfRemoteBashRC_____"
+			rm    -f    "$__pathOfLocalCacheFileOfRemoteBashRC_______"
 
 
 			if  [ -z "$remoteAutorunFileMentionedTempAutorunStatements_" ] && [ -z "$remoteAutorunFileMentionedWLCBashToolsStartDotSH" ]; then
 				echo
 				colorful -n "Appending temp autorun statements to locally cached \".bash_profile\"..."    textGreen
 
-				echo "if [ -d ~/$wlcBashToolsRemotePreDeploymentFolderNameAtRemote______ ]; then       # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-				echo "    cd ~/$wlcBashToolsRemotePreDeploymentFolderNameAtRemote______                # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-				echo "    ./to-install-wlc-bash-tools-locally.sh    --no-interactions                  # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-				echo "    sed -i '/${tempStatementMarkerString____________________}/d' ~/.bash_profile # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-				echo "    logout                                                                       # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
-				echo "fi                                                                               # $tempStatementMarkerString" >> "$pathOfLocalCacheFileOfRemoteBashProfile"
+				echo "if [ -d ~/$wlcBashToolsRemotePreDeploymentFolderName______________ ]; then       # $tempStatementMarkerString" >> "$__pathOfLocalCacheFileOfRemoteBashProfile__"
+				echo "    cd ~/$wlcBashToolsRemotePreDeploymentFolderName______________                # $tempStatementMarkerString" >> "$__pathOfLocalCacheFileOfRemoteBashProfile__"
+				echo "    ./to-install-wlc-bash-tools-locally.sh    --no-interactions                  # $tempStatementMarkerString" >> "$__pathOfLocalCacheFileOfRemoteBashProfile__"
+				echo "    sed -i '/${tempStatementMarkerString____________________}/d' ~/.bash_profile # $tempStatementMarkerString" >> "$__pathOfLocalCacheFileOfRemoteBashProfile__"
+				echo "    logout                                                                       # $tempStatementMarkerString" >> "$__pathOfLocalCacheFileOfRemoteBashProfile__"
+				echo "fi                                                                               # $tempStatementMarkerString" >> "$__pathOfLocalCacheFileOfRemoteBashProfile__"
 
 
-				itemListToSend+=("$pathOfLocalCacheFileOfRemoteBashProfile")
+				listOfItemsToSend+=("$__pathOfLocalCacheFileOfRemoteBashProfile__")
 
 
 
@@ -174,7 +174,7 @@ function wlc_bash_tools--deploy_to_remote {
 			fi
 
 
-			rm    -f    "$pathOfLocalCacheFileOfRemoteBashProfile"
+			rm    -f    "$__pathOfLocalCacheFileOfRemoteBashProfile__"
 
 
 
@@ -199,7 +199,7 @@ function wlc_bash_tools--deploy_to_remote {
 			local remoteSignalFile2PathAtLocalCache="$remoteSignalFilesContainingFolderPathAtLocal/${WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_AUTO_LOGGING_OUT}"
 			touch    "$remoteSignalFile2PathAtLocalCache"
 
-			itemListToSend+=("$remoteSignalFilesContainingFolderPathAtLocal")
+			listOfItemsToSend+=("$remoteSignalFilesContainingFolderPathAtLocal")
 
 			echo
 			echo -e "Inside of \"\e[34m${WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE}/.../\e[32m${WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS}\e[0m\","
@@ -226,7 +226,7 @@ function wlc_bash_tools--deploy_to_remote {
 		local timeStamp=`date +%Y-%m-%d_%H-%M-%S`
 
 		# something like "wlc-bash-tools___new-one-to-deploy___1979-03-19_12-34-56"
-		local wlcBashToolsRemotePreDeploymentFolderNameAtRemote="${WLC_BASH_TOOLS___FOLDER_NAME_PREFIX___OF_NEW_INSTANCE_TO_DEPLOY}___${timeStamp}"
+		local wlcBashToolsRemotePreDeploymentFolderName="${WLC_BASH_TOOLS___FOLDER_NAME_PREFIX___OF_NEW_INSTANCE_TO_DEPLOY}___${timeStamp}"
 		local localTempWorkingFolderName="${_remoteID}___${timeStamp}"
 		local localTempWorkingFolderPath="${WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE}/deployments-to-remote-machines/${localTempWorkingFolderName}"
 		mkdir    -p    "$localTempWorkingFolderPath"
@@ -237,13 +237,13 @@ function wlc_bash_tools--deploy_to_remote {
 		echo3
 
 		try-to-setup-non-standard-trigger-for-deployment-on-a-brand-new-remote-machine \
-			--pre-deployment-folder-name="$wlcBashToolsRemotePreDeploymentFolderNameAtRemote" \
+			--pre-deployment-folder-name="$wlcBashToolsRemotePreDeploymentFolderName" \
 				--working-folder-path="$localTempWorkingFolderPath"
 
 		local valueOfOneMeansShouldTakeStandardWay=$?
 		if [ "$valueOfOneMeansShouldTakeStandardWay" -eq 1 ]; then
 			setup-standard-signal-file-for-remote-auto-deployment \
-				--pre-deployment-folder-name="$wlcBashToolsRemotePreDeploymentFolderNameAtRemote" \
+				--pre-deployment-folder-name="$wlcBashToolsRemotePreDeploymentFolderName" \
 					--working-folder-path="$localTempWorkingFolderPath"
 		fi
 
@@ -261,7 +261,7 @@ function wlc_bash_tools--deploy_to_remote {
 		# echo
 		# colorful -n "Making duplications, so that files can be put in correct folder at remote machine..."    textGreen
 
-		local wlcBashToolsRemotePreDeploymentFolderPathAtLocal="$localTempWorkingFolderPath/$wlcBashToolsRemotePreDeploymentFolderNameAtRemote"
+		local wlcBashToolsRemotePreDeploymentFolderPathAtLocal="$localTempWorkingFolderPath/$wlcBashToolsRemotePreDeploymentFolderName"
 
 		if [ -d "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal" ]; then
 			rm    -rf    "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
@@ -270,7 +270,7 @@ function wlc_bash_tools--deploy_to_remote {
 		mkdir    -p                             "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
 		cp       -r    "$_sourceFolderPath"/.    "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
 
-		itemListToSend+=("$wlcBashToolsRemotePreDeploymentFolderPathAtLocal")
+		listOfItemsToSend+=("$wlcBashToolsRemotePreDeploymentFolderPathAtLocal")
 		# ######################################################################### #
 
 
@@ -278,12 +278,12 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 
-		# local sourceItemPath
-		# 	if   [ -f "$sourceItemPath" ]; then
-		# echo; echo; for sourceItemPath in ${itemListToSend[@]}; do
-		# 		echo -e "\e[30;42mDEBUG\e[0m   File: \e[32m$sourceItemPath\e[0m"
-		# 	elif [ -d "$sourceItemPath" ]; then
-		# 		echo -e "\e[30;42mDEBUG\e[0m Folder: \e[35m$sourceItemPath\e[0m"
+		# local __debug_sourceItemPath__
+		# echo; echo; for __debug_sourceItemPath__ in ${listOfItemsToSend[@]}; do
+		# 	if   [ -f "$__debug_sourceItemPath__" ]; then
+		# 		echo -e "\e[30;42mDEBUG\e[0m \${listOfItemsToSend[@]}   File: \e[32m$__debug_sourceItemPath__\e[0m"
+		# 	elif [ -d "$__debug_sourceItemPath__" ]; then
+		# 		echo -e "\e[30;42mDEBUG\e[0m \${listOfItemsToSend[@]} Folder: \e[35m$__debug_sourceItemPath__\e[0m"
 		# 	fi
 		# done; echo
 
@@ -301,7 +301,7 @@ function wlc_bash_tools--deploy_to_remote {
 		echo
 
 
-		echo -e "Inside of \"\e[34m${WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE}/.../\e[32m${wlcBashToolsRemotePreDeploymentFolderNameAtRemote}\e[0m\","
+		echo -e "Inside of \"\e[34m${WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE}/.../\e[32m${wlcBashToolsRemotePreDeploymentFolderName}\e[0m\","
 		echo -e "these items will be s-copied:"
 		wlc-print-direct-children    "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
 
@@ -309,10 +309,10 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 		echo3
-		colorful -- 'Now s-copying '           textGreen
-		colorful -- "wlc bash tools"           textMagenta
-		colorful -n ' to remote machine...'    textGreen
-		scp    -rq    ${itemListToSend[@]}    $_remoteID:~    # $itemListToSend 不可以有引号！
+		colorful -- 'Now s-copying '             textGreen
+		colorful -- "wlc bash tools"             textMagenta
+		colorful -n ' to remote machine...'      textGreen
+		scp    -rq    ${listOfItemsToSend[@]}    $_remoteID:~    # $listOfItemsToSend 不可以有引号！
 
 
 
