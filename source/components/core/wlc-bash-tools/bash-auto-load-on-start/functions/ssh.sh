@@ -167,17 +167,26 @@ function wlc--ssh_copy_id {
     function print-tip-of-default-ssh-key-file-used {
         echo
         if [ "$copywritingLanguage" = "zh_CN" ]; then
-            colorful -n "函数 wlc--ssh_copy_id："    textYellow
+            colorful -- "函数"
+            colorful -- "wlc--ssh_copy_id"    textYellow
+            colorful -n "："
 
-            colorful -- "    【参数2】未给出。故将采用默认的 SSH 密钥文件，即“"    textYellow
+            colorful -- '    【参数2】'    textBrightCyan
+            colorful -n '未给出。'    textGreen
+
+            colorful -- '    故采用默认的 SSH 密钥文件，即“'    textGreen
             colorful -- "~/.ssh/id_rsa"    textMagenta
-            colorful -n "”。"    textYellow
+            colorful -n '”。'    textGreen
         else
-            colorful -n "function wlc--ssh_copy_id:"    textYellow
+            colorful -- "function "
+            colorful -- "wlc--ssh_copy_id"    textYellow
+            colorful -n ":"
 
-            colorful -- "    \$2 was not provided. Thus the default \""    textYellow
+            colorful -- '    \$2'    textBrightCyan
+            colorful -n ' was not provided.'    textGreen
+            colorful -- '    Thus the default key file "'    textGreen
             colorful -- "~/.ssh/id_rsa"    textMagenta
-            colorful -- "\" will be used instead."    textYellow
+            colorful -- '" is used instead.'    textGreen
         fi
         echo
     }
