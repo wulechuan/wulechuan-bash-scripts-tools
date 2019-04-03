@@ -9,6 +9,76 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     #     <this function>    --to-host="19.79.3.19"    --source-package-folder-name="my-personal-data-server"
     #     <this function>    --to-host="19.79.3.19"    --source-package-folder-path="/d/backup/my-old-data-server-in-1979"
 
+    function print-help {
+        local nameOfThisFunction='wlc_bash_tools--easy_self_deploy_to_remote'
+        local colorOfArgumentName='textGreen'
+        local colorOfArgumentValue='textMagenta'
+        local colorOfMarkers='textBlue'
+
+        echo
+
+        colorful -n 'Usage:'
+
+        colorful -- "    --to-host="    $colorOfArgumentName
+        colorful -n "\"<remote host name or ip, user name is optional>\""    $colorOfArgumentValue
+
+        colorful -- "    [ "    $colorOfMarkers
+        colorful -- "--remote-user-name="    $colorOfArgumentName
+        colorful -- "\"<user name used at remote>\""    $colorOfArgumentValue
+        colorful -n " ]"    $colorOfMarkers
+
+        colorful -- "    [ "    $colorOfMarkers
+        colorful -- "--source-package-folder-name="    $colorOfArgumentName
+        colorful -- "\"<package folder name>\""    $colorOfArgumentValue
+        colorful -- " | "    $colorOfMarkers
+        colorful -- "--source-package-folder-path="    $colorOfArgumentName
+        colorful -- "\"<package folder path>\""    $colorOfArgumentValue
+        colorful -n " ]"    $colorOfMarkers
+
+        echo
+
+        colorful -n 'Examples:'
+
+        colorful -- "    $nameOfThisFunction"
+        colorful -- "    --to-host="    $colorOfArgumentName
+        colorful -- "19.79.3.19"    $colorOfArgumentValue
+        echo
+
+        colorful -- "    $nameOfThisFunction"
+        colorful -- "    --to-host="    $colorOfArgumentName
+        colorful -- "wulechuan@19.79.3.19"    $colorOfArgumentValue
+        echo
+
+        colorful -- "    $nameOfThisFunction"
+        colorful -- "    --to-host="    $colorOfArgumentName
+        colorful -- "19.79.3.19"    $colorOfArgumentValue
+        colorful -- "    --remote-user-name="    $colorOfArgumentName
+        colorful -- "\"wulechuan\""    $colorOfArgumentValue
+        echo
+
+        echo
+        colorful -- "    $nameOfThisFunction"
+        colorful -n ' \\'
+        colorful -- "        --to-host="    $colorOfArgumentName
+        colorful -- "19.79.3.19"    $colorOfArgumentValue
+        colorful -n ' \\'
+        colorful -- "        --source-package-folder-name="    $colorOfArgumentName
+        colorful -- "\"my-wlc-bash-tools-for-data-server\""    $colorOfArgumentValue
+        echo
+
+        echo
+        colorful -- "    $nameOfThisFunction"
+        colorful -n ' \\'
+        colorful -- "        --to-host="    $colorOfArgumentName
+        colorful -- "19.79.3.19"    $colorOfArgumentValue
+        colorful -n ' \\'
+        colorful -- "        --source-package-folder-path="    $colorOfArgumentName
+        colorful -- "~/backup/my-wlc-bash-tools-for-old-data-server-in-1979"    $colorOfArgumentValue
+        echo
+
+        echo
+    }
+
     local duplicatedArgumentEncountered
 
     local remoteHostNameOrIPAddressIsProvided=0
@@ -22,6 +92,11 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     local sourceFolderPath
 
     local currentArgument
+
+    if [ $# -eq 0 ]; then
+        print-help
+        return 0
+    fi
 
     while true; do
         if [ $# -eq 0 ]; then
@@ -77,6 +152,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     if [ ! -z "$duplicatedArgumentEncountered" ]; then
         echo
         print-error    "Duplicated argument \"\e[33m${duplicatedArgumentEncountered}\e[31m\"."
+        print-help
         return 99
     fi
 
@@ -84,6 +160,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
 		&& [[ ! "$remoteHostRawValue" =~ ^([_a-zA-Z]+[\._a-zA-Z0-9@]*)?@?[_a-zA-Z]+[\._a-zA-Z0-9]*$      ]]; then
         echo
 		print-error    "Invalid value \"\e[33m$remoteHostRawValue\e[31m\" for argument \"\e[32m--to-host=\e[31m\"."
+        print-help
 		return 1
 	fi
 
@@ -100,6 +177,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     if [ $remoteUserNameIsProvededSeparately -gt 0 ] && [ ! -z "$remoteUserNameInRemoteHostRawValue" ] && [ "$remoteUserName" != "$remoteUserNameInRemoteHostRawValue" ]; then
         echo
         print-error    "Remote user name was provided both in \e[33m--to-host=\"${remoteHostRawValue}\"\e[31m and \e[33m--remote-user-name=\"${remoteUserName}\"\e[31m."
+        print-help
         return 2
     fi
 
@@ -124,6 +202,7 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
 
     if [ $sourceFolderNameIsProvided -gt 0 ] && [ $sourceFolderPathIsProvided -gt 0 ]; then
         print-error    "Both \"\e[33m--source-package-folder-name\e[31m\" and \"\e[33m--source-package-folder-path\e[31m\" were provided."
+        print-help
         return 20
     fi
 
