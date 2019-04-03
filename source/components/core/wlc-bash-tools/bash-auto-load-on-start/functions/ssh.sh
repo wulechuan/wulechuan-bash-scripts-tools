@@ -1,40 +1,146 @@
 mkdir    -p    ~/.ssh/
 mkdir    -p    ~/.ssh/backup/
 
-function wlc--ssh_keygen {
-    function print-help {
+function wlc-validate-host-id-or-ip-address-with-optional-user-name {
+    # $1: the string to check
+    # $2: <output> the host name or ip address (IPv4)
+    # $3: <output> the user name
+    #
+    # Example:
+    #     remoteHost=
+    #     remoteUser=
+    #     <this function>    "wulechuan@19.79.3.19"    remoteHost    remoteUser
+    #     # remoteHost should be "19.79.3.19"
+    #     # remoteUser should be "wulechuan"
+    #     # Note that there are NO $ signs before either remoteHoost or remoteUser in the invocation line.
+
+    function wlc-validate-host-id-or-ip-address-with-optional-user-name--print-help {
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            colorful -n '有效的【连接 ID】形如：'
+        else
+            colorful -n 'A valid ID should look like any of:'    textRed
+        fi
+
+        colorful -n '    19.79.3.19'     textBrightCyan
+        colorful -n '    @19.79.3.19'    textBrightCyan
+
+        colorful -n '    lovely-computer.com'     textBrightCyan
+        colorful -n '    @lovely-computer.com'    textBrightCyan
+
+        colorful -n '    wulechuan@19.79.3.19'    textBrightCyan
+        colorful -n '    wulechuan@lovely-computer.com'    textBrightCyan
+    }
+
+
+
+    local __remoteHostRawValue__="$1"
+    local __is_invalid__=0
+
+    local __hostNameOrIPAddress__
+    local __userName__
+
+    if     [[ ! "$__remoteHostRawValue__" =~ ^([_a-zA-Z]+[\._a-zA-Z0-9@]*)?@?[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] \
+		&& [[ ! "$__remoteHostRawValue__" =~ ^([_a-zA-Z]+[\._a-zA-Z0-9@]*)?@?[_a-zA-Z]+[\._a-zA-Z0-9]*$                      ]]; then
+
+		__is_invalid__=1
+
+        wlc-print-message-of-source    'function'    'wlc-validate-host-id-or-ip-address-with-optional-user-name'
+
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            wlc-print-error    --    "【连接 ID】无效。 "
+
+            colorful -- "给出的值为“"    textRed
+            colorful -- "${remoteHost}"    textYellow
+            colorful -n "”。"    textRed
+        else
+            wlc-print-error    --    "Invalid host ID. "
+            colorful -- "The provided value was \""    textRed
+            colorful -- "${remoteHost}"    textYellow
+            colorful -n '".'    textRed
+        fi
+
+        wlc-validate-host-id-or-ip-address-with-optional-user-name--print-help
         echo
-        if [ "$copywritingLanguage" = "zh_CN" ]; then
-            colorful -n "欲创建一个ssh密钥，请指明完整的用户ID。用户ID应依次包含用户名和域名两部分，以 @ 符号连接。"    textRed
+
+    else
+
+        if [[ "$__remoteHostRawValue__" =~ @ ]]; then
+            __userName__=${__remoteHostRawValue__%@*}
+            __hostNameOrIPAddress__=${__remoteHostRawValue__##*@}
+        else
+            __hostNameOrIPAddress__="$__remoteHostRawValue__"
+        fi
+
+	fi
+
+
+
+    if [ $# -ge 2 ]; then
+        eval "$2=$__hostNameOrIPAddress__"
+    fi
+
+    if [ $# -ge 3 ]; then
+        eval "$3=$__userName__"
+    fi
+
+
+
+    return $__is_invalid__
+}
+
+function wlc--ssh_keygen {
+    local nameOfThisFunction='wlc--ssh_keygen'
+
+    function wlc--ssh_keygen--print-help {
+        echo
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
             colorful -n "范例： "
         else
-            colorful -n "Please provide an ID."    textRed
             colorful -n "Example: "
         fi
 
-        colorful -- '    wlc--ssh_keygen'   textGreen
-        colorful -- '    "'                 textBrightBlack
-        colorful -- "wulechuan@live.com"    textCyan
-        colorful -n '"'                     textBrightBlack
+        colorful -- "    $nameOfThisFunction"    textGreen
+        colorful -- "    wulechuan@live.com"     textBrightCyan
+        echo
+
+        colorful -- "    $nameOfThisFunction"    textGreen
+        colorful -- "    wulechuan@live.com"     textBrightCyan
+        colorful -- "    my-home-computer"       textMagenta
         echo
     }
 
 
-    local newId=$1
-    local newIdHumanReadableName=$2
+    if [ $# -eq 0 ]; then
+        wlc--ssh_keygen--print-help
+        return 0
+    fi
 
-    if [ -z "$newId" ]; then
-        console.error    "Invalid \$1. The provided value was \"\e[33m${newId}\e[31m\"."
-        print-help
+
+
+    local newId="$1"
+    local newIdHumanReadableName="$2"
+
+
+    local stageReturnCode
+
+
+    wlc-validate-host-id-or-ip-address-with-optional-user-name    "$newId"
+    stageReturnCode=$?
+
+    if [ $stageReturnCode -gt 1 ]; then
+        wlc--ssh_keygen--print-help
         return 1
     fi
 
+
+
     if [ -z "$newIdHumanReadableName" ]; then
-        colorful -- "\$2, aka the human readable name is not provided. "    textYellow
-        colorful -- "The default value \""    textYellow
-        colorful -- "$newId"                  textMagenta
-        colorful -n "\" is used."             textYellow
         newIdHumanReadableName="$newId"
+
+        colorful -- "\$2, aka the human readable name is not provided. "    textYellow
+        colorful -- "The \$1 \""     textYellow
+        colorful -- "$newId"         textMagenta
+        colorful -n "\" is used."    textYellow
     fi
 
 
@@ -46,7 +152,7 @@ function wlc--ssh_keygen {
 
     echo
 
-    if [ "$copywritingLanguage" = "zh_CN" ]; then
+    if [ "$copywritingLanguage" == "zh_CN" ]; then
         colorful -- "针对ID"
         colorful -- "${newIdHumanReadableName}($newId)"    textMagenta
         colorful -n "："
@@ -69,7 +175,7 @@ function wlc--ssh_keygen {
     echo
     colorful -n $VE_line_60
 
-    if [ "$copywritingLanguage" = "zh_CN" ]; then
+    if [ "$copywritingLanguage" == "zh_CN" ]; then
         colorful -- '人类易读版本为：“'                   textBlue
         colorful -- "$newIdHumanReadableName"          textMagenta
         colorful -n '”'                                textBlue
@@ -81,24 +187,19 @@ function wlc--ssh_keygen {
 
     colorful -n $VE_line_60
     echo
-
-
-
-
-    wlc--ssh_copy_id    $newId    "$backupKeyFilePath"
-    echo
 }
 
-
 function wlc--ssh_copy_id {
-    function print-examples {
+    local nameOfThisFunction='wlc--ssh_copy_id' # for printing messages
+
+    function wlc--ssh_copy_id--print-examples {
         # local exampleFile1="~/.ssh/id_rsa                          "
-        local exampleFile2="~/.ssh/backup/wulechuan@live.com.sshkey"
-        local exampleHost="wulechuan@github.com"
+        local exampleFile2="~/.ssh/backup/wulechuan-for-all-dockers.sshkey"
+        local exampleHost="wulechuan@19.79.3.19"
 
         echo
 
-        if [ "$copywritingLanguage" = "zh_CN" ]; then
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
             colorful -n "范例：${example1}"
         else
             colorful -n "Examples:${example2}"
@@ -115,62 +216,54 @@ function wlc--ssh_copy_id {
         echo
     }
 
-    function print-help-1 {
+    function wlc--ssh_copy_id--print-help-2 {
         echo
-        if [ "$copywritingLanguage" = "zh_CN" ]; then
-            console.error    "函数 wlc--ssh_copy_id: 无效的【参数1】。得到的值为“\e[33m${remoteHost}\e[31m”"
-            colorful -n '请指明完整的用户ID。用户ID应依次包含用户名和域名两部分，以 @ 符号连接。'    textRed
-        else
-            console.error    "function wlc--ssh_copy_id: Invalid \$1. The provided value was \"\e[33m${remoteHost}\e[31m\"."
-            colorful -n 'Please provide an ID.'    textRed
-        fi
-        print-examples
-        echo
-    }
+        wlc-print-message-of-source    'function'    "$nameOfThisFunction"
 
-    function print-help-2 {
-        echo
-        if [ "$copywritingLanguage" = "zh_CN" ]; then
-            console.error    "函数 wlc--ssh_copy_id："
-
-            colorful -- "    【参数2】得到的值为“"    textRed
-            colorful -- "${localSSHKeyFile}"       textYellow
-            colorful -n "”。该文件不存在。"           textRed
-        else
-            console.error    "function wlc--ssh_copy_id:"
-
-            colorful -- "    \$2 was \""    textRed
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            wlc-print-error    "【参数2】所指文件不存在。"
+            colorful -- "【参数2】得到的值为“"    textRed
             colorful -- "${localSSHKeyFile}"    textYellow
-            colorful -n "\", which is invalid."    textRed
+            colorful -n "”。"    textRed
+        else
+            wlc-print-error    "\$2 mentioned an invalid file."
+            colorful -- "The value of \$2 was \""    textRed
+            colorful -- "${localSSHKeyFile}"    textYellow
+            colorful -n "\"."    textRed
         fi
         echo
     }
 
-    function print-help-3 {
+    function wlc--ssh_copy_id--print-help-3 {
         echo
-        if [ "$copywritingLanguage" = "zh_CN" ]; then
-            console.error    "函数 wlc--ssh_copy_id："
+        wlc-print-message-of-source    'function'    "$nameOfThisFunction"
 
-            colorful -- "    默认的 SSH 密钥文件“"    textRed
-            colorful -- "${localSSHKeyFile}"       textYellow
-            colorful -n "”亦不存在。"                textRed
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            colorful -n "    命令中未指明密钥文件。而默认的 SSH 密钥文件"    textRed
+
+            colorful -- '        “'             textRed
+            colorful -- "${localSSHKeyFile}"    textYellow
+            colorful -n '”'                     textRed
+
+            colorful -n "    亦不存在。"          textRed
         else
-            console.error    "function wlc--ssh_copy_id:"
+            colorful -n "    The command didn't specified any SSH key file."    textRed
+            colorful -n "    while the default SSH key file"                    textRed
 
-            colorful -- "    The default SSH key file \""    textRed
-            colorful -- "${localSSHKeyFile}"                 textYellow
-            colorful -n "\" does not exist either."          textRed
+            colorful -- '        "'             textRed
+            colorful -- "${localSSHKeyFile}"    textYellow
+            colorful -n '"'                     textRed
+
+            colorful -n "    does not exist either."          textRed
         fi
         echo
     }
 
     function print-tip-of-default-ssh-key-file-used {
         echo
-        if [ "$copywritingLanguage" = "zh_CN" ]; then
-            colorful -- "函数"
-            colorful -- "wlc--ssh_copy_id"    textYellow
-            colorful -n "："
+        wlc-print-message-of-source    'function'    "$nameOfThisFunction"
 
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
             colorful -- '    【参数2】'    textBrightCyan
             colorful -n '未给出。'    textGreen
 
@@ -178,10 +271,6 @@ function wlc--ssh_copy_id {
             colorful -- "~/.ssh/id_rsa"    textMagenta
             colorful -n '”。'    textGreen
         else
-            colorful -- "function "
-            colorful -- "wlc--ssh_copy_id"    textYellow
-            colorful -n ":"
-
             colorful -- '    \$2'    textBrightCyan
             colorful -n ' was not provided.'    textGreen
             colorful -- '    Thus the default key file "'    textGreen
@@ -193,27 +282,63 @@ function wlc--ssh_copy_id {
 
 
 
+    if [ $# -eq 0 ]; then
+        wlc--ssh_copy_id--print-examples
+        return 0
+    fi
 
 
 
-    local remoteHost="$1"
+    local _remoteHostRawValue_="$1"
     local localSSHKeyFile="$2"
 
-    if [ -z "$remoteHost" ]; then
-        print-help-1
+    local stageReturnCode
+
+
+    local _remoteHost_scid_
+    local _remoteUser_scid_
+
+
+    wlc-validate-host-id-or-ip-address-with-optional-user-name    "$_remoteHostRawValue_"    _remoteHost_scid_    _remoteUser_scid_
+    stageReturnCode=$?
+
+
+
+    wlc-print-message-of-source    'function'    "$nameOfThisFunction"
+    echo -e "    remote host: \"\e[33m${_remoteHost_scid_}\e[0m\""
+    echo -e "    remote user: \"\e[33m${_remoteUser_scid_}\e[0m\""
+
+    if [ $stageReturnCode -gt 0 ] || [ -z "$_remoteHost_scid_" ] || [ -z "$_remoteUser_scid_" ]; then
+
+        if [ -z "$_remoteHost_scid_" ]; then
+            colorful -n '    Remote host name or ip address is absent.'    textRed
+        fi
+
+        if [ -z "$_remoteUser_scid_" ]; then
+            colorful -n '    Remote user name is absent.'    textRed
+        fi
+
+        wlc--ssh_copy_id--print-examples
+
         return 1
     fi
 
+
+
+
     if [ -z "$localSSHKeyFile" ]; then
-        print-tip-of-default-ssh-key-file-used
+
         localSSHKeyFile=~/.ssh/id_rsa
 
         if [ ! -f $localSSHKeyFile ]; then
-            print-help-3
+            wlc--ssh_copy_id--print-help-3
             return 3
         fi
+
+        print-tip-of-default-ssh-key-file-used
+
     elif [ ! -f "$localSSHKeyFile" ]; then
-        print-help-2
+        wlc--ssh_copy_id--print-help-2
         return 2
     fi
 
@@ -221,13 +346,11 @@ function wlc--ssh_copy_id {
 
 
 
-    echo
-    echo
-    echo
-    if [ "$copywritingLanguage" = "zh_CN" ]; then
-        print-header "将 SSH 公钥复制到远程主机“${remoteHost}”……"
+    echo3
+    if [ "$copywritingLanguage" == "zh_CN" ]; then
+        wlc-print-header "将 SSH 公钥复制到远程主机“\e[96m${_remoteUser_scid_}\e[32m@\e[35m${_remoteHost_scid_}\e[32m”……"
     else
-        print-header "Copying SSH pub key to \"${remoteHost}\"..."
+        wlc-print-header "Copying SSH pub key to \"\e[96m${_remoteUser_scid_}\e[32m@\e[35m${_remoteHost_scid_}\e[32m\"..."
     fi
-    ssh-copy-id    -i "$localSSHKeyFile"    "$remoteHost"
+    ssh-copy-id    -i "$localSSHKeyFile"    "${_remoteUser_scid_}@${_remoteHost_scid_}"
 }

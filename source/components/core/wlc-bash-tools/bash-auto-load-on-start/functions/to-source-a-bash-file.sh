@@ -5,7 +5,7 @@ function to-source-a-bash-file {
 		source    "$fileToLoad"
 		return $?
 	else
-		console.error    "While trying to\e[33m source \e[31ma bash file, the file was not found:\n    \"\e[33m$fileToLoad\e[31m\""
+		wlc-print-error    "While trying to\e[33m source \e[31ma bash file, the file was not found:\n    \"\e[33m$fileToLoad\e[31m\""
 		return 319
 	fi
 }

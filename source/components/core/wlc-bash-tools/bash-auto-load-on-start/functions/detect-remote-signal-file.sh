@@ -1,6 +1,6 @@
 function detect-remote-file {
 	if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
-		console.error    "function detect-remote-file {}: \$1, \$2, \$3 and \$4 are all required."
+		wlc-print-error    "function detect-remote-file {}: \$1, \$2, \$3 and \$4 are all required."
 		return 1
 	fi
 
