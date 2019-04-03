@@ -3,11 +3,11 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     #     <this function>    --to-host="<remote host name or ip>"    [ --source-package-folder-name="<package folder name>" | --source-package-folder-path="<package folder path>" ]    [ --remote-user-name="<user name used at remote>" ]
     #
     # Examples:
-    #     <this function>    --to-host="192.168.3.19"
-    #     <this function>    --to-host="wulechuan@192.168.3.19"
-    #     <this function>    --to-host="192.168.3.19"    --remote-user-name="wulechaun"
-    #     <this function>    --to-host="192.168.3.19"    --source-package-folder-name="my-personal-data-server"
-    #     <this function>    --to-host="192.168.3.19"    --source-package-folder-path="/d/backup/my-old-data-server-in-1979"
+    #     <this function>    --to-host="19.79.3.19"
+    #     <this function>    --to-host="wulechuan@19.79.3.19"
+    #     <this function>    --to-host="19.79.3.19"    --remote-user-name="wulechuan"
+    #     <this function>    --to-host="19.79.3.19"    --source-package-folder-name="my-personal-data-server"
+    #     <this function>    --to-host="19.79.3.19"    --source-package-folder-path="/d/backup/my-old-data-server-in-1979"
 
     local duplicatedArgumentEncountered
 
