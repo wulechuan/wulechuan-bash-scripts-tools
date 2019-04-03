@@ -110,10 +110,10 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     if [ -z "$remoteUserName" ]; then
         remoteUserName='root'
         echo
-        colorful -- 'Remote user name'    textGreen
-        colorful -- ' was not provided. Thus "'
+        colorful -- 'Remote user name'    textBrightCyan
+        colorful -- ' was not provided. Thus "'    textGreen
         colorful -- 'root'    textMagenta
-        colorful -n '" is assumed.'
+        colorful -n '" is assumed.'    textGreen
         echo
     fi
 
@@ -132,15 +132,15 @@ function wlc_bash_tools--easy_self_deploy_to_remote {
     local sourceFolderPathOfWLCBashToolDistributionToDeployToRemoteMachine
 
     if [ $sourceFolderNameIsProvided -eq 0 ] && [ $sourceFolderPathIsProvided -eq 0 ]; then
-        colorful -- 'Neither "'
-        colorful -- '--source-package-folder-name'    textGreen
-        colorful -- '" nor "'
-        colorful -- '--source-package-folder-path'    textGreen
-        colorful -n '" were provided.'
+        colorful -- 'Neither "'    textGreen
+        colorful -- '--source-package-folder-name'    textBrightCyan
+        colorful -- '" nor "'    textGreen
+        colorful -- '--source-package-folder-path'    textBrightCyan
+        colorful -n '" were provided.'    textGreen
 
-        colorful -- 'Thus the default "'
+        colorful -- 'Thus the default "'    textGreen
         colorful -- "$WLC_BASH_TOOLS___FOLDER_NAME___OF_DEFAULT_PACKAGE_TO_DEPLOY_TO_REMOTE"    textMagenta
-        colorful -n '" is assumed.'
+        colorful -n '" is assumed.'    textGreen
 
         sourceFolderName="$WLC_BASH_TOOLS___FOLDER_NAME___OF_DEFAULT_PACKAGE_TO_DEPLOY_TO_REMOTE"
     fi
