@@ -157,11 +157,11 @@ function wlc-print-header {
 }
 
 function wlc-print-direct-children {
-	local pathOfFolderToListChildrenOf="$1"
+	local __pathOfFolderToListChildrenOf__="$1"
 
-	if [ -z "$pathOfFolderToListChildrenOf" ] || [ ! -d "$pathOfFolderToListChildrenOf" ]; then
+	if [ -z "$__pathOfFolderToListChildrenOf__" ] || [ ! -d "$__pathOfFolderToListChildrenOf__" ]; then
 		wlc-print-message-of-source    'function'    'print-direct-children'
-		wlc-print-error    -1    "Folder not found: \"\e[33m$pathOfFolderToListChildrenOf\e[31m\""
+		wlc-print-error    -1    "Folder not found: \"\e[33m$__pathOfFolderToListChildrenOf__\e[31m\""
 		return 1
 	fi
 
@@ -169,8 +169,8 @@ function wlc-print-direct-children {
 	local __itemPath__wlc_print_direct_children__
 
 	echo "$VE_line_60"
-	for __itemName__wlc_print_direct_children__ in `ls -A "$pathOfFolderToListChildrenOf"`; do
-		__itemPath__wlc_print_direct_children__="$_sourceFolderPath/$__itemName__wlc_print_direct_children__"
+	for __itemName__wlc_print_direct_children__ in `ls -A "$__pathOfFolderToListChildrenOf__"`; do
+		__itemPath__wlc_print_direct_children__="$__pathOfFolderToListChildrenOf__/$__itemName__wlc_print_direct_children__"
 
 		if   [ -f "$__itemPath__wlc_print_direct_children__" ]; then
 			echo -e "  File: \e[32m$__itemName__wlc_print_direct_children__\e[0m"
