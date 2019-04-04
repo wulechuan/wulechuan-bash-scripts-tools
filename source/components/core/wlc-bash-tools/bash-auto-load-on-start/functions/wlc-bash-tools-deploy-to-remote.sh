@@ -556,6 +556,23 @@ function wlc_bash_tools--deploy_to_remote {
     echo3
 
 
+    local remoteComputerNameDefaultPrefix
+    local pathOfDefaultComputerNamePrefixFileInThePackage="$sourceFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS/default-computer-name-prefix"
+    if [ -f "$pathOfDefaultComputerNamePrefixFileInThePackage" ]; then
+        remoteComputerNameDefaultPrefix=`cat "$pathOfDefaultComputerNamePrefixFileInThePackage"`
+    fi
+
+    wlc--design_computer_name_for_remote_machine \
+        --remote-host-name-or-ip-address="$remoteHostNameOrIPAddress" \
+        --default-computer-name-prefix="$remoteComputerNameDefaultPrefix" \
+        --working-temp-folder-path="$localTempWorkingFolderPath"
+
+    stageReturnCode=$?
+    if [ $stageReturnCode -gt 0 ]; then
+        return $stageReturnCode
+    fi
+
+
 
     wlc-ssh-copy-id    "$remoteID"
     stageReturnCode=$?
@@ -566,23 +583,6 @@ function wlc_bash_tools--deploy_to_remote {
 
 
     wlc_bash_tools--deploy_to_remote--core    --from-source-package-folder-path="$sourceFolderPath"   --to-host="$remoteID"
-    stageReturnCode=$?
-    if [ $stageReturnCode -gt 0 ]; then
-        return $stageReturnCode
-    fi
-
-
-    local remoteComputerNameDefaultPrefix
-    local pathOfDefaultComputerNamePrefixFileInThePackage="$sourceFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS/default-computer-name-prefix"
-    if [ -f "$pathOfDefaultComputerNamePrefixFileInThePackage" ]; then
-        remoteComputerNameDefaultPrefix=`cat "$remoteComputerNameDefaultPrefix"`
-    fi
-
-    wlc--design_computer_name_for_remote_machine \
-        --remote-id="$remoteID" \
-        --default-computer-name-prefix="$remoteComputerNameDefaultPrefix" \
-        --working-temp-folder-path="$localTempWorkingFolderPath"
-
     stageReturnCode=$?
     if [ $stageReturnCode -gt 0 ]; then
         return $stageReturnCode
@@ -601,7 +601,7 @@ function wlc--design_computer_name_for_remote_machine {
     local REMOTE_COMPUTER_NAME_DEFAULT_PREFIX='computer'
 
 
-    local ___remote_id___="${1:12}"                       # --remote-id="..."
+    local ___remote_raw_name___="${1:33}"                 # --remote-host-name-or-ip-address="..."
     local ___remoteComputerNameDefaultPrefix___="${2:31}" # --default-computer-name-prefix="..."
     local ___localWorkingTempFolderPath___="${3:27}"      # --working-temp-folder-path="..."
 
@@ -611,8 +611,8 @@ function wlc--design_computer_name_for_remote_machine {
     local ___remoteComputerNamePrefix___
     local ___remoteComputerName___
 
-    if [[ "$___remote_id___" =~ [0-9\.]+ ]]; then
-        local ___safeStringOfIPAddressToUseInComputerName___=$___remote_id___
+    if [[ "$___remote_raw_name___" =~ [0-9\.]+ ]]; then
+        local ___safeStringOfIPAddressToUseInComputerName___=$___remote_raw_name___
         ___safeStringOfIPAddressToUseInComputerName___=${___safeStringOfIPAddressToUseInComputerName___//./-}
         ___safeStringOfIPAddressToUseInComputerName___="-ip-${___safeStringOfIPAddressToUseInComputerName___}"
 
@@ -625,7 +625,7 @@ function wlc--design_computer_name_for_remote_machine {
         ___remoteComputerName___="${___remoteComputerNamePrefix___}${___safeStringOfIPAddressToUseInComputerName___}"
 
     else
-        ___remoteComputerName___="$___remote_id___"
+        ___remoteComputerName___="$___remote_raw_name___"
     fi
 
 
@@ -667,7 +667,7 @@ function wlc--design_computer_name_for_remote_machine {
 
     echo
     colorful -- 'The computer name of the remote machine ('
-    colorful -- "$___remote_id___"    textYellow
+    colorful -- "$___remote_raw_name___"    textYellow
     colorful -n ') will be:'
     colorful -n "$___remoteComputerName___"        textGreen
 
