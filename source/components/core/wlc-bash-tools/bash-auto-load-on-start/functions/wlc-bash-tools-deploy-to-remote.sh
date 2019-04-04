@@ -105,8 +105,8 @@ function wlc_bash_tools--deploy_to_remote {
         # Examples:
         #     wlc_bash_tools--deploy_to_remote--core    --from-source-package-folder-path="/d/backup/my-old-data-server-in-1979"    --to-host="wulechuan@19.79.3.19"
 
-        local _sourceFolderPath="${1:34}"
-        local _remoteID="${2:10}"
+        local _sourceFolderPath_="${1:34}"
+        local _remoteID_="${2:10}"
 
         local    -a    listOfItemsToSend
 
@@ -225,36 +225,60 @@ function wlc_bash_tools--deploy_to_remote {
 		wlc-print-header "Deploy \"\e[35mwlc bash tools\e[32m\" to another machine"
 
 		colorful -- "Source folder: "
-		colorful -n "$_sourceFolderPath"    textGreen
+		colorful -n "$_sourceFolderPath_"    textGreen
 
 		colorful -- "Target host:   "
-		colorful -n "$_remoteID"            textMagenta
+		colorful -n "$_remoteID_"            textMagenta
 
 
 
 		local timeStamp=`date +%Y-%m-%d_%H-%M-%S`
 
+        local stageReturnCode
+
 		# something like "wlc-bash-tools___new-one-to-deploy___1979-03-19_12-34-56"
 		local wlcBashToolsRemotePreDeploymentFolderName="${WLC_BASH_TOOLS___FOLDER_NAME_PREFIX___OF_NEW_INSTANCE_TO_DEPLOY}___${timeStamp}"
-		local localTempWorkingFolderName="${_remoteID}___${timeStamp}"
-		local localTempWorkingFolderPath="${WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE}/deployments-to-remote-machines/${localTempWorkingFolderName}"
-		mkdir    -p    "$localTempWorkingFolderPath"
+		local localTempWorkingFolderName="${_remoteID_}___${timeStamp}"
+		local _localTempWorkingFolderPath_="${WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE}/deployments-to-remote-machines/${localTempWorkingFolderName}"
+		mkdir    -p    "$_localTempWorkingFolderPath_"
 
 
 
 
 		echo3
 
+
+
+
+        local _remoteComputerNameDefaultPrefix_
+        local pathOfDefaultComputerNamePrefixFileInThePackage="$sourceFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS/default-computer-name-prefix"
+        if [ -f "$pathOfDefaultComputerNamePrefixFileInThePackage" ]; then
+            _remoteComputerNameDefaultPrefix_=`cat "$pathOfDefaultComputerNamePrefixFileInThePackage"`
+        fi
+        wlc--design_computer_name_for_remote_machine \
+            --remote-host-name-or-ip-address="$remoteHostNameOrIPAddress" \
+            --default-computer-name-prefix="$_remoteComputerNameDefaultPrefix_" \
+            --working-temp-folder-path="$_localTempWorkingFolderPath_"
+
+        stageReturnCode=$?
+        if [ $stageReturnCode -gt 0 ]; then
+            return $stageReturnCode
+        fi
+
+
+
 		try-to-setup-non-standard-trigger-for-deployment-on-a-brand-new-remote-machine \
 			--pre-deployment-folder-name="$wlcBashToolsRemotePreDeploymentFolderName" \
-				   --working-folder-path="$localTempWorkingFolderPath" \
-                             --remote-id="$_remoteID"
+				   --working-folder-path="$_localTempWorkingFolderPath_" \
+                             --remote-id="$_remoteID_"
+
+
 
 		local valueOfOneMeansShouldTakeStandardWay=$?
 		if [ "$valueOfOneMeansShouldTakeStandardWay" -eq 1 ]; then
 			setup-standard-signal-file-for-remote-auto-deployment \
 				--pre-deployment-folder-name="$wlcBashToolsRemotePreDeploymentFolderName" \
-					   --working-folder-path="$localTempWorkingFolderPath"
+					   --working-folder-path="$_localTempWorkingFolderPath_"
 		fi
 
 
@@ -271,14 +295,14 @@ function wlc_bash_tools--deploy_to_remote {
 		# echo
 		# colorful -n "Making duplications, so that files can be put in correct folder at remote machine..."    textGreen
 
-		local wlcBashToolsRemotePreDeploymentFolderPathAtLocal="$localTempWorkingFolderPath/$wlcBashToolsRemotePreDeploymentFolderName"
+		local wlcBashToolsRemotePreDeploymentFolderPathAtLocal="$_localTempWorkingFolderPath_/$wlcBashToolsRemotePreDeploymentFolderName"
 
 		if [          -d "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal" ]; then
 			rm    -rf    "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
 		fi
 
-		mkdir    -p                              "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
-		cp       -r    "$_sourceFolderPath"/.    "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
+		mkdir    -p                               "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
+		cp       -r    "$_sourceFolderPath_"/.    "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
 
 		listOfItemsToSend+=("$wlcBashToolsRemotePreDeploymentFolderPathAtLocal")
 		# ######################################################################### #
@@ -304,7 +328,7 @@ function wlc_bash_tools--deploy_to_remote {
 
 		echo -e "Inside of \"\e[34m${WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE}/.../\e[32m${localTempWorkingFolderName}\e[0m\","
 		echo -e "these items will be s-copied:"
-		wlc-print-direct-children    "$localTempWorkingFolderPath"
+		wlc-print-direct-children    "$_localTempWorkingFolderPath_"
 
 
 		echo
@@ -319,10 +343,12 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 		echo3
+
 		colorful -- 'Now s-copying '             textGreen
 		colorful -- "wlc bash tools"             textMagenta
 		colorful -n ' to remote machine...'      textGreen
-		scp    -rq    ${listOfItemsToSend[@]}    $_remoteID:~    # $listOfItemsToSend 不可以有引号！
+
+		scp    -rq    ${listOfItemsToSend[@]}    $_remoteID_:~    # $listOfItemsToSend 不可以有引号！
 
 
 
@@ -336,7 +362,7 @@ function wlc_bash_tools--deploy_to_remote {
 		#    1) 旧有的 wlc-bash-tools 版的 .bashrc，
 		#    2) 或者上方 try-to-setup-non-standard-trigger-for-deployment-on-a-brand-new-remote-machine 代码在【远程主机】留下的临时代码
 		# 能够被执行。
-		ssh    "$_remoteID"
+		ssh    "$_remoteID_"
 		echo5
 	}
 
@@ -556,24 +582,6 @@ function wlc_bash_tools--deploy_to_remote {
     echo3
 
 
-    local remoteComputerNameDefaultPrefix
-    local pathOfDefaultComputerNamePrefixFileInThePackage="$sourceFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS/default-computer-name-prefix"
-    if [ -f "$pathOfDefaultComputerNamePrefixFileInThePackage" ]; then
-        remoteComputerNameDefaultPrefix=`cat "$pathOfDefaultComputerNamePrefixFileInThePackage"`
-    fi
-
-    wlc--design_computer_name_for_remote_machine \
-        --remote-host-name-or-ip-address="$remoteHostNameOrIPAddress" \
-        --default-computer-name-prefix="$remoteComputerNameDefaultPrefix" \
-        --working-temp-folder-path="$localTempWorkingFolderPath"
-
-    stageReturnCode=$?
-    if [ $stageReturnCode -gt 0 ]; then
-        return $stageReturnCode
-    fi
-
-
-
     wlc-ssh-copy-id    "$remoteID"
     stageReturnCode=$?
     if [ $stageReturnCode -gt 0 ]; then
@@ -604,6 +612,10 @@ function wlc--design_computer_name_for_remote_machine {
     local ___remote_raw_name___="${1:33}"                 # --remote-host-name-or-ip-address="..."
     local ___remoteComputerNameDefaultPrefix___="${2:31}" # --default-computer-name-prefix="..."
     local ___localWorkingTempFolderPath___="${3:27}"      # --working-temp-folder-path="..."
+
+    echo "___remote_raw_name___=$___remote_raw_name___"
+    echo "___remoteComputerNameDefaultPrefix___=$___remoteComputerNameDefaultPrefix___"
+    echo "___localWorkingTempFolderPath___=$___localWorkingTempFolderPath___"
 
     echo3
     wlc-print-header "Design the computer name for the remote machine:"
@@ -680,11 +692,10 @@ function wlc--design_computer_name_for_remote_machine {
 
 
 
-    echo3
+    echo
 
-    # wlc-print-header "Removing temp file..."
     rm       -f       "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"
-    if [ $? -gt 0 ]; then
+    if [ $? -eq 0 ]; then
         colorful -n 'Temp file:'    textRed
         colorful -- '    "'    textRed
         colorful -n "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    textYellow
