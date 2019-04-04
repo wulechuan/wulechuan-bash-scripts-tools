@@ -552,7 +552,7 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 
-    wlc--ssh_copy_id    "$remoteID"
+    wlc-ssh-copy-id    "$remoteID"
     stageReturnCode=$?
     if [ $stageReturnCode -gt 0 ]; then
         return $stageReturnCode

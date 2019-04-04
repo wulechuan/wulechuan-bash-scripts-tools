@@ -87,10 +87,10 @@ function wlc-validate-host-id-or-ip-address-with-optional-user-name {
     return $__is_invalid__
 }
 
-function wlc--ssh_keygen {
-    local nameOfThisFunction='wlc--ssh_keygen'
+function wlc-ssh-keygen {
+    local nameOfThisFunction='wlc-ssh-keygen'
 
-    function wlc--ssh_keygen--print-help {
+    function wlc-ssh-keygen--print-help {
         echo
         if [ "$copywritingLanguage" == "zh_CN" ]; then
             colorful -n "范例： "
@@ -110,7 +110,7 @@ function wlc--ssh_keygen {
 
 
     if [ $# -eq 0 ]; then
-        wlc--ssh_keygen--print-help
+        wlc-ssh-keygen--print-help
         return 0
     fi
 
@@ -126,8 +126,8 @@ function wlc--ssh_keygen {
     wlc-validate-host-id-or-ip-address-with-optional-user-name    "$newId"
     stageReturnCode=$?
 
-    if [ $stageReturnCode -gt 1 ]; then
-        wlc--ssh_keygen--print-help
+    if [ $stageReturnCode -gt 0 ]; then
+        wlc-ssh-keygen--print-help
         return 1
     fi
 
@@ -188,12 +188,12 @@ function wlc--ssh_keygen {
     echo
 }
 
-function wlc--ssh_copy_id {
-    local nameOfThisFunction='wlc--ssh_copy_id' # for printing messages
+function wlc-ssh-copy-id {
+    local nameOfThisFunction='wlc-ssh-copy-id' # for printing messages
     local defaultSSHPrivateKeyFile=~/.ssh/id_rsa
     local defaultSSHPublicKeyFile=${defaultSSHPrivateKeyFile}'.pub'
 
-    function wlc--ssh_copy_id--print-examples {
+    function wlc-ssh-copy-id--print-examples {
         # local exampleFile1="~/.ssh/id_rsa                          "
         local exampleFile2="~/.ssh/backup/wulechuan-for-all-dockers.sshkey"
         local exampleHost="wulechuan@19.79.3.19"
@@ -206,18 +206,18 @@ function wlc--ssh_copy_id {
             colorful -n "Examples:"
         fi
 
-        colorful -- "    wlc--ssh_copy_id"    textGreen
+        colorful -- "    wlc-ssh-copy-id"    textGreen
         colorful -- "    $exampleHost"        textMagenta
         # colorful -- "    $exampleFile1"       textBlue
         echo
 
-        colorful -- "    wlc--ssh_copy_id"    textGreen
+        colorful -- "    wlc-ssh-copy-id"    textGreen
         colorful -- "    $exampleHost"        textMagenta
         colorful -- "    $exampleFile2"       textBlue
         echo
     }
 
-    function wlc--ssh_copy_id--print-help-2 {
+    function wlc-ssh-copy-id--print-help-2 {
         echo
         wlc-print-message-of-source    'function'    "$nameOfThisFunction"
 
@@ -235,7 +235,7 @@ function wlc--ssh_copy_id {
         echo
     }
 
-    function wlc--ssh_copy_id--print-help-3 {
+    function wlc-ssh-copy-id--print-help-3 {
         echo
         wlc-print-message-of-source    'function'    "$nameOfThisFunction"
 
@@ -284,7 +284,7 @@ function wlc--ssh_copy_id {
 
 
     if [ $# -eq 0 ]; then
-        wlc--ssh_copy_id--print-examples
+        wlc-ssh-copy-id--print-examples
         return 0
     fi
 
@@ -319,7 +319,7 @@ function wlc--ssh_copy_id {
             colorful -n '    Remote user name is absent.'    textRed
         fi
 
-        wlc--ssh_copy_id--print-examples
+        wlc-ssh-copy-id--print-examples
 
         return 21
     fi
@@ -331,15 +331,15 @@ function wlc--ssh_copy_id {
 
         # localSSHKeyFile=$defaultSSHPrivateKeyFile
 
-        if [ ! -f $defaultSSHPrivateKeyFile ] ||  [ ! -f $defaultSSHPublicKeyFile ]; then
-            wlc--ssh_copy_id--print-help-3
+        if [ ! -f $defaultSSHPrivateKeyFile ] || [ ! -f $defaultSSHPublicKeyFile ]; then
+            wlc-ssh-copy-id--print-help-3
             return 23
         fi
 
         print-tip-of-default-ssh-key-file-used
 
     elif [ ! -f "$localSSHKeyFile" ]; then
-        wlc--ssh_copy_id--print-help-2
+        wlc-ssh-copy-id--print-help-2
         return 22
     fi
 
