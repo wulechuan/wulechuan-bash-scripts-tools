@@ -17,6 +17,8 @@ function wlc_bash_tools--deploy_to_remote {
         local colorOfMarkers='textBlue'
 
         echo
+        colorful -n "$VE_line_60"
+        echo
 
         colorful -n 'Usage:'
 
@@ -501,6 +503,10 @@ function wlc_bash_tools--deploy_to_remote {
 
     if [ $sourceFolderPathIsProvided -eq 0 ]; then
         sourceFolderPath="$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES/$sourceFolderName"
+    fi
+
+    if [[ "$sourceFolderPath" =~ ^\ *~/ ]]; then
+        sourceFolderPath="$HOME/${sourceFolderPath#*~/}"
     fi
 
 

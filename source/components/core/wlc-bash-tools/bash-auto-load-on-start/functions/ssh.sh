@@ -1,4 +1,3 @@
-mkdir    -p    ~/.ssh/
 mkdir    -p    ~/.ssh/backup/
 
 function wlc-validate-host-id-or-ip-address-with-optional-user-name {
@@ -191,6 +190,8 @@ function wlc--ssh_keygen {
 
 function wlc--ssh_copy_id {
     local nameOfThisFunction='wlc--ssh_copy_id' # for printing messages
+    local defaultSSHPrivateKeyFile=~/.ssh/id_rsa
+    local defaultSSHPublicKeyFile=${defaultSSHPrivateKeyFile}'.pub'
 
     function wlc--ssh_copy_id--print-examples {
         # local exampleFile1="~/.ssh/id_rsa                          "
@@ -200,9 +201,9 @@ function wlc--ssh_copy_id {
         echo
 
         if [ "$copywritingLanguage" == "zh_CN" ]; then
-            colorful -n "范例：${example1}"
+            colorful -n "范例："
         else
-            colorful -n "Examples:${example2}"
+            colorful -n "Examples:"
         fi
 
         colorful -- "    wlc--ssh_copy_id"    textGreen
@@ -239,22 +240,22 @@ function wlc--ssh_copy_id {
         wlc-print-message-of-source    'function'    "$nameOfThisFunction"
 
         if [ "$copywritingLanguage" == "zh_CN" ]; then
-            colorful -n "    命令中未指明密钥文件。而默认的 SSH 密钥文件"    textRed
+            colorful -n "    命令中未指明 SSH 公开密钥文件。而默认的 SSH 公开密钥文件"    textRed
 
-            colorful -- '        “'             textRed
-            colorful -- "${localSSHKeyFile}"    textYellow
-            colorful -n '”'                     textRed
+            colorful -- '        “'                   textRed
+            colorful -- "$defaultSSHPublicKeyFile"    textYellow
+            colorful -n '”'                           textRed
 
-            colorful -n "    亦不存在。"          textRed
+            colorful -n "    亦不存在。"               textRed
         else
-            colorful -n "    The command didn't specified any SSH key file."    textRed
-            colorful -n "    while the default SSH key file"                    textRed
+            colorful -n "    The command didn't specified any SSH public key file."    textRed
+            colorful -n "    while the default SSH public key file"                    textRed
 
-            colorful -- '        "'             textRed
-            colorful -- "${localSSHKeyFile}"    textYellow
-            colorful -n '"'                     textRed
+            colorful -- '        "'                    textRed
+            colorful -- "$defaultSSHPublicKeyFile"     textYellow
+            colorful -n '"'                            textRed
 
-            colorful -n "    does not exist either."          textRed
+            colorful -n "    doesn't exist either."    textRed
         fi
         echo
     }
@@ -267,15 +268,15 @@ function wlc--ssh_copy_id {
             colorful -- '    【参数2】'    textBrightCyan
             colorful -n '未给出。'    textGreen
 
-            colorful -- '    故采用默认的 SSH 密钥文件，即“'    textGreen
-            colorful -- "~/.ssh/id_rsa"    textMagenta
+            colorful -- '    故采用默认的 SSH 公开密钥文件，即“'    textGreen
+            colorful -- "$defaultSSHPublicKeyFile"    textMagenta
             colorful -n '”。'    textGreen
         else
-            colorful -- '    \$2'    textBrightCyan
-            colorful -n ' was not provided.'    textGreen
-            colorful -- '    Thus the default key file "'    textGreen
-            colorful -- "~/.ssh/id_rsa"    textMagenta
-            colorful -- '" is used instead.'    textGreen
+            colorful -- '    \$2'                      textBrightCyan
+            colorful -n ' was not provided.'           textGreen
+            colorful -- '    Thus the default SSH public key file "'    textGreen
+            colorful -- "$defaultSSHPublicKeyFile"     textMagenta
+            colorful -- '" is used instead.'           textGreen
         fi
         echo
     }
@@ -320,7 +321,7 @@ function wlc--ssh_copy_id {
 
         wlc--ssh_copy_id--print-examples
 
-        return 1
+        return 21
     fi
 
 
@@ -328,18 +329,18 @@ function wlc--ssh_copy_id {
 
     if [ -z "$localSSHKeyFile" ]; then
 
-        localSSHKeyFile=~/.ssh/id_rsa
+        # localSSHKeyFile=$defaultSSHPrivateKeyFile
 
-        if [ ! -f $localSSHKeyFile ]; then
+        if [ ! -f $defaultSSHPrivateKeyFile ] ||  [ ! -f $defaultSSHPublicKeyFile ]; then
             wlc--ssh_copy_id--print-help-3
-            return 3
+            return 23
         fi
 
         print-tip-of-default-ssh-key-file-used
 
     elif [ ! -f "$localSSHKeyFile" ]; then
         wlc--ssh_copy_id--print-help-2
-        return 2
+        return 22
     fi
 
 
@@ -348,9 +349,14 @@ function wlc--ssh_copy_id {
 
     echo3
     if [ "$copywritingLanguage" == "zh_CN" ]; then
-        wlc-print-header "将 SSH 公钥复制到远程主机“\e[96m${_remoteUser_scid_}\e[32m@\e[35m${_remoteHost_scid_}\e[32m”……"
+        wlc-print-header    "将 SSH 公开密钥复制到远程主机“\e[96m${_remoteUser_scid_}\e[32m@\e[35m${_remoteHost_scid_}\e[32m”……"
     else
-        wlc-print-header "Copying SSH pub key to \"\e[96m${_remoteUser_scid_}\e[32m@\e[35m${_remoteHost_scid_}\e[32m\"..."
+        wlc-print-header    "Copying SSH public key to \"\e[96m${_remoteUser_scid_}\e[32m@\e[35m${_remoteHost_scid_}\e[32m\"..."
     fi
-    ssh-copy-id    -i "$localSSHKeyFile"    "${_remoteUser_scid_}@${_remoteHost_scid_}"
+
+    if [ -z "$localSSHKeyFile" ]; then
+        ssh-copy-id                             "${_remoteUser_scid_}@${_remoteHost_scid_}"
+    else
+        ssh-copy-id    -i "$localSSHKeyFile"    "${_remoteUser_scid_}@${_remoteHost_scid_}"
+    fi
 }
