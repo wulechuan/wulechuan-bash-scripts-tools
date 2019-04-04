@@ -108,18 +108,20 @@ function wlc_bash_tools--deploy_to_remote {
         local _sourceFolderPath="${1:34}"
         local _remoteID="${2:10}"
 
-
         local    -a    listOfItemsToSend
+
+
 
 
 		function try-to-setup-non-standard-trigger-for-deployment-on-a-brand-new-remote-machine {
 			# 下方用很长的名称，特别是尾部借助多个下划线进一步延长名称，仅仅是为了方便对齐由 echo 所书写的远程代码片段。
 			local wlcBashToolsRemotePreDeploymentFolderName______________="${1:29}" # --pre-deployment-folder-name="..."
-			local __localWorkingCacheFolderPath__="${2:22}"                             # --working-folder-path="..."
+			local __localWorkingCacheFolderPath__="${2:22}"                         # --working-folder-path="..."
+            local __remote_id_in_non_standard_trigger_function__="${3:12}"          # --remote-id="..."
 
 			wlc-print-header "Detecting remote \e[35m~/.bash_profile\e[32m and \e[35m~/.bashrc\e[32m..."
-			detect-remote-file    "$_remoteID"    '~'    ".bash_profile"    "$__localWorkingCacheFolderPath__"
-			detect-remote-file    "$_remoteID"    '~'    ".bashrc"          "$__localWorkingCacheFolderPath__"
+			detect-remote-file    "$__remote_id_in_non_standard_trigger_function__"    '~'    ".bash_profile"    "$__localWorkingCacheFolderPath__"
+			detect-remote-file    "$__remote_id_in_non_standard_trigger_function__"    '~'    ".bashrc"          "$__localWorkingCacheFolderPath__"
 
 			echo
 
@@ -189,19 +191,19 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 		function setup-standard-signal-file-for-remote-auto-deployment {
-			local remotePreDeploymentFolderName="${1:29}" # --pre-deployment-folder-name="..."
-			local localWorkingFolderPath="${2:22}"        # --working-folder-path="..."
+			local ___remotePreDeploymentFolderName___="${1:29}" # --pre-deployment-folder-name="..."
+			local ___localWorkingTempFolderPath__________="${2:22}" # --working-folder-path="..."
 
-			local remoteSignalFilesContainingFolderPathAtLocal="$localWorkingFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS"
-			mkdir    -p    "$remoteSignalFilesContainingFolderPathAtLocal"
+			local ___remoteSignalFilesContainingFolderPathAtLocal___="$___localWorkingTempFolderPath__________/$WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS"
+			mkdir    -p    "$___remoteSignalFilesContainingFolderPathAtLocal___"
 
-			local remoteSignalFile1PathAtLocalCache="$remoteSignalFilesContainingFolderPathAtLocal/${WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_NEW_INSTANCE_TO_DEPLOY}"
-			echo $remotePreDeploymentFolderName > "$remoteSignalFile1PathAtLocalCache"
+			local ___remoteSignalFile_1_pathAtLocalCache___="$___remoteSignalFilesContainingFolderPathAtLocal___/${WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_NEW_INSTANCE_TO_DEPLOY}"
+			echo $___remotePreDeploymentFolderName___ > "$___remoteSignalFile_1_pathAtLocalCache___"
 
-			local remoteSignalFile2PathAtLocalCache="$remoteSignalFilesContainingFolderPathAtLocal/${WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_AUTO_LOGGING_OUT}"
-			touch    "$remoteSignalFile2PathAtLocalCache"
+			local ___remoteSignalFile_2_pathAtLocalCache___="$___remoteSignalFilesContainingFolderPathAtLocal___/${WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_AUTO_LOGGING_OUT}"
+			touch    "$___remoteSignalFile_2_pathAtLocalCache___"
 
-			listOfItemsToSend+=("$remoteSignalFilesContainingFolderPathAtLocal")
+			listOfItemsToSend+=("$___remoteSignalFilesContainingFolderPathAtLocal___")
 
 			echo
 			echo -e "Inside of \"\e[34m${WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE}/.../\e[32m${WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS}\e[0m\","
@@ -211,6 +213,11 @@ function wlc_bash_tools--deploy_to_remote {
 			echo -e "    \e[32m$WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_AUTO_LOGGING_OUT\e[0m"
 			echo "$VE_line_60"
 		}
+
+
+
+
+
 
 
 
@@ -240,13 +247,14 @@ function wlc_bash_tools--deploy_to_remote {
 
 		try-to-setup-non-standard-trigger-for-deployment-on-a-brand-new-remote-machine \
 			--pre-deployment-folder-name="$wlcBashToolsRemotePreDeploymentFolderName" \
-				--working-folder-path="$localTempWorkingFolderPath"
+				   --working-folder-path="$localTempWorkingFolderPath" \
+                             --remote-id="$_remoteID"
 
 		local valueOfOneMeansShouldTakeStandardWay=$?
 		if [ "$valueOfOneMeansShouldTakeStandardWay" -eq 1 ]; then
 			setup-standard-signal-file-for-remote-auto-deployment \
 				--pre-deployment-folder-name="$wlcBashToolsRemotePreDeploymentFolderName" \
-					--working-folder-path="$localTempWorkingFolderPath"
+					   --working-folder-path="$localTempWorkingFolderPath"
 		fi
 
 
@@ -265,11 +273,11 @@ function wlc_bash_tools--deploy_to_remote {
 
 		local wlcBashToolsRemotePreDeploymentFolderPathAtLocal="$localTempWorkingFolderPath/$wlcBashToolsRemotePreDeploymentFolderName"
 
-		if [ -d "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal" ]; then
+		if [          -d "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal" ]; then
 			rm    -rf    "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
 		fi
 
-		mkdir    -p                             "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
+		mkdir    -p                              "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
 		cp       -r    "$_sourceFolderPath"/.    "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal"
 
 		listOfItemsToSend+=("$wlcBashToolsRemotePreDeploymentFolderPathAtLocal")
@@ -330,13 +338,6 @@ function wlc_bash_tools--deploy_to_remote {
 		# 能够被执行。
 		ssh    "$_remoteID"
 		echo5
-
-
-
-
-		echo
-		print-DONE
-		echo
 	}
 
 
@@ -444,14 +445,15 @@ function wlc_bash_tools--deploy_to_remote {
 
     wlc-validate-host-id-or-ip-address-with-optional-user-name    "$remoteHostRawValue"    remoteHostNameOrIPAddress    remoteUserNameInRemoteHostRawValue
     stageReturnCode=$?
-
 	if [ $stageReturnCode -gt 0 ]; then
 		wlc-print-error    "Invalid value \"\e[33m$remoteHostRawValue\e[31m\" for argument \"\e[32m--to-host=\e[31m\"."
         wlc_bash_tools--deploy_to_remote--print-help
 		return 1
 	fi
 
+
     # echo -e "\e[30;42mDEBUG\e[0m\n    remoteHostNameOrIPAddress=\"\e[33m${remoteHostNameOrIPAddress}\e[0m\"\n    remoteUserNameInRemoteHostRawValue=\"\e[33m${remoteUserNameInRemoteHostRawValue}\e[0m\""
+
 
     if [ $remoteUserNameIsProvededSeparately -gt 0 ] && [ ! -z "$remoteUserNameInRemoteHostRawValue" ] && [ "$remoteUserName" != "$remoteUserNameInRemoteHostRawValue" ]; then
         wlc-print-error    "Remote user name was provided both in \e[33m--to-host=\"${remoteHostRawValue}\"\e[31m and \e[33m--remote-user-name=\"${remoteUserName}\"\e[31m."
@@ -511,6 +513,12 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 
+    if [ "$sourceFolderPath" == "$HOME" ] || [ "$sourceFolderPath" == ~ ]; then
+        echo
+        wlc-print-error    "Cannot deploy \e[32m~\e[31m instance of \e[33m$WLC_BASH_TOOLS___FOLDER_NAME\e[31m to remote."
+        return 30
+    fi
+
     if [ ! -d "$sourceFolderPath" ]; then
         wlc-print-error    'The evaluated folder path of package to depoly to a remote machine is invalid, which is'
 
@@ -537,14 +545,11 @@ function wlc_bash_tools--deploy_to_remote {
         colorful -n 'Thus, the deployment to a remote machine is not possible.'    textRed
         echo
 
-        return 30
-    fi
-
-    if [ "$sourceFolderPath" == "$HOME" ] || [ "$sourceFolderPath" == ~ ]; then
-        echo
-        wlc-print-error    "Cannot deploy \e[32m~\e[31m instance of \e[33m$WLC_BASH_TOOLS___FOLDER_NAME\e[31m to remote."
         return 31
     fi
+
+
+
 
 
 
@@ -567,12 +572,21 @@ function wlc_bash_tools--deploy_to_remote {
     fi
 
 
+    local remoteComputerNameDefaultPrefix
+    local pathOfDefaultComputerNamePrefixFileInThePackage="$sourceFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS/default-computer-name-prefix"
+    if [ -f "$pathOfDefaultComputerNamePrefixFileInThePackage" ]; then
+        remoteComputerNameDefaultPrefix=`cat "$remoteComputerNameDefaultPrefix"`
+    fi
 
-    # wlc_bash_tools--design_host_name_for_remote_machine    "$remoteHostNameOrIPAddress"
-    # stageReturnCode=$?
-    # if [ $stageReturnCode -gt 0 ]; then
-    #     return $stageReturnCode
-    # fi
+    wlc--design_computer_name_for_remote_machine \
+        --remote-id="$remoteID" \
+        --default-computer-name-prefix="$remoteComputerNameDefaultPrefix" \
+        --working-temp-folder-path="$localTempWorkingFolderPath"
+
+    stageReturnCode=$?
+    if [ $stageReturnCode -gt 0 ]; then
+        return $stageReturnCode
+    fi
 
 
 
@@ -582,104 +596,103 @@ function wlc_bash_tools--deploy_to_remote {
     echo3
 }
 
-function wlc_bash_tools--design_host_name_for_remote_machine {
-    local remoteHostNameOrIPAddress="${1}"
-    local sourceFolderPath="${2}"
-    local remoteHostNameDefaultPrefix='computer'
 
-    local tempWorkingFolderName
-    local tempWorkingFolderPath
-
-    while true; do
-        tempWorkingFolderName="wlc-bash-tools-package-for-remote-installation--$RANDOM"
-        tempWorkingFolderPath="$WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE/$tempWorkingFolderName"
-
-        if [ ! -d "$tempWorkingFolderPath" ]; then
-            mkdir -p "$tempWorkingFolderPath"
-            break
-        fi
-    done
+function wlc--design_computer_name_for_remote_machine {
+    local REMOTE_COMPUTER_NAME_DEFAULT_PREFIX='computer'
 
 
-
-
+    local ___remote_id___="${1:12}"                       # --remote-id="..."
+    local ___remoteComputerNameDefaultPrefix___="${2:31}" # --default-computer-name-prefix="..."
+    local ___localWorkingTempFolderPath___="${3:27}"      # --working-temp-folder-path="..."
 
     echo3
-    wlc-print-header "Design the hostname for the remote machine:"
+    wlc-print-header "Design the computer name for the remote machine:"
 
+    local ___remoteComputerNamePrefix___
+    local ___remoteComputerName___
 
-    local safeStringToUseInHostName="ip-${remoteHostNameOrIPAddress//./-}"
-    local preferredHostNameFileFolderPath="$sourceFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS"
-    local preferredHostNameFilePath="$preferredHostNameFileFolderPath/default-computer-name"
+    if [[ "$___remote_id___" =~ [0-9\.]+ ]]; then
+        local ___safeStringOfIPAddressToUseInComputerName___=$___remote_id___
+        ___safeStringOfIPAddressToUseInComputerName___=${___safeStringOfIPAddressToUseInComputerName___//./-}
+        ___safeStringOfIPAddressToUseInComputerName___="-ip-${___safeStringOfIPAddressToUseInComputerName___}"
 
-    local computerNamePrefixForRemoteMachine="$remoteHostNameDefaultPrefix"
-
-
-    if [ -f "$preferredHostNameFilePath" ]; then
-        local computerNamePrefixViaFile=`cat "$preferredHostNameFilePath"`
-
-        if [ ! -z "$computerNamePrefixViaFile" ]; then
-            computerNamePrefixForRemoteMachine="$computerNamePrefixViaFile"
+        if [ ! -z "$___remoteComputerNameDefaultPrefix___" ]; then
+            ___remoteComputerNamePrefix___="$___remoteComputerNameDefaultPrefix___"
+        else
+            ___remoteComputerNamePrefix___="$REMOTE_COMPUTER_NAME_DEFAULT_PREFIX"
         fi
+
+        ___remoteComputerName___="${___remoteComputerNamePrefix___}${___safeStringOfIPAddressToUseInComputerName___}"
+
+    else
+        ___remoteComputerName___="$___remote_id___"
     fi
 
-    local computerNameForRemoteMachine="${computerNamePrefixForRemoteMachine}-${safeStringToUseInHostName}"
 
-    colorful -- 'Please input the '                                       textGreen
-    colorful -- 'hostname'                                                textMagenta
+
+    colorful -- 'I suggest you to input a descriptive '                   textGreen
+    colorful -- 'computer name'                                           textMagenta
     colorful -n ' for the remote machine, simply for easy recognition.'   textGreen
 
     colorful -n 'You may skip this by press the <ENTER> key directly.'
 
-    colorful -- '(60 seconds for decision, default is "'
-    colorful -- "$computerNameForRemoteMachine"   textGreen
+    colorful -- '(30 seconds for decision, default is "'
+    colorful -- "$___remoteComputerName___"   textGreen
     colorful -n '")'
 
-    colorful -- "hostname: "
+    colorful -- "The remote computer name: "
 
     local            userInputComputerNameForRemoteMachine
-    read    -t 60    userInputComputerNameForRemoteMachine
+    read    -t 30    userInputComputerNameForRemoteMachine
     stageReturnCode=$?
-    if [ "$stageReturnCode" -gt 0 ]; then
+    if [ $stageReturnCode -gt 0 ]; then
         echo
     fi
 
     if [ -z "$userInputComputerNameForRemoteMachine" ]; then
         echo '<Skipped>'
     else
-        computerNameForRemoteMachine="$userInputComputerNameForRemoteMachine"
+        ___remoteComputerName___="$userInputComputerNameForRemoteMachine"
     fi
 
 
 
 
 
-    local nameOfFileForCarryingComputerNameOfRemoteMachine='computer-name'
-    local pathOfFileForCarryingComputerNameOfRemoteMachine="$tempWorkingFolderPath/$nameOfFileForCarryingComputerNameOfRemoteMachine"
-    echo "$computerNameForRemoteMachine" > "$pathOfFileForCarryingComputerNameOfRemoteMachine"
+    local nameOfFileForCarryingComputerName='computer-name'
+    local pathOfLocalFileForCarryingComputerNameOfRemoteMachine="$___localWorkingTempFolderPath___/$nameOfFileForCarryingComputerName"
+    local pathOfRemoteFolderToPutTheFileForCarryingComputerName="~/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS"
+
+    echo "$___remoteComputerName___" > "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"
 
     echo
-    colorful -- 'The hostname of the remote machine('
-    colorful -- "$remoteHostNameOrIPAddress"    textYellow
+    colorful -- 'The computer name of the remote machine ('
+    colorful -- "$___remote_id___"    textYellow
     colorful -n ') will be:'
-    colorful -n "$computerNameForRemoteMachine"        textGreen
-    echo
-    echo
-
-
+    colorful -n "$___remoteComputerName___"        textGreen
 
 
 
     echo3
-    scp        -q    "$pathOfFileForCarryingComputerNameOfRemoteMachine"    "$remoteID:~/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS"
+    colorful -n 'Now trying to send the file of computer name to remote...'    textGreen
+    scp    -q    "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    "$remoteID:${pathOfRemoteFolderToPutTheFileForCarryingComputerName}"
 
 
 
 
     echo3
 
-    wlc-print-header "Removing temp folder..."
-    colorful -n "Removing folder:"    textRed
-    colorful -n "    \"$tempWorkingFolderPath\""    textYellow
-    rm    -rf    "$tempWorkingFolderPath"
+    # wlc-print-header "Removing temp file..."
+    rm       -f       "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"
+    if [ $? -gt 0 ]; then
+        colorful -n 'Temp file:'    textRed
+        colorful -- '    "'    textRed
+        colorful -n "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    textYellow
+        colorful -n '" has been deleted.'    textRed
+    else
+        wlc-print-error    "Failed to delete temp file:"
+        colorful -- '    "'    textRed
+        colorful -n "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    textYellow
+        colorful -n '"'    textRed
+    fi
 }
