@@ -364,10 +364,12 @@ function wlc_bash_tools--deploy_to_remote {
         return 0
     fi
 
-    if [ $# -eq 1 ] && [[ ! "$1" =~ ^--to-host=.+ ]]; then
-        remoteHostRawValue="$1"
-        remoteHostNameOrIPAddressIsProvided=1
-        shift
+    if [ $# -eq 1 ]; then
+        if [[ ! "$1" =~ ^-- ]] && [[ ! "$1" =~ ^-.$ ]]; then
+            remoteHostRawValue="$1"
+            remoteHostNameOrIPAddressIsProvided=1
+            shift
+        fi
     fi
 
     while true; do
@@ -426,9 +428,9 @@ function wlc_bash_tools--deploy_to_remote {
 
 
     # echo -e "\e[30;42mDEBUG\e[0m\n    remoteHostRawValue=\"\e[33m${remoteHostRawValue}\e[0m\"\n    remoteUserName=\"\e[33m${remoteUserName}\e[0m\"\n    sourceFolderName=\"\e[33m${sourceFolderName}\e[0m\"\n    sourceFolderPath=\"\e[33m${sourceFolderPath}\e[0m\""
+    echo
 
     if [ ! -z "$duplicatedArgumentEncountered" ]; then
-        echo
         wlc-print-error    "Duplicated argument \"\e[33m${duplicatedArgumentEncountered}\e[31m\"."
         wlc_bash_tools--deploy_to_remote--print-help
         return 99
@@ -442,7 +444,6 @@ function wlc_bash_tools--deploy_to_remote {
     stageReturnCode=$?
 
 	if [ $stageReturnCode -gt 0 ]; then
-        echo
 		wlc-print-error    "Invalid value \"\e[33m$remoteHostRawValue\e[31m\" for argument \"\e[32m--to-host=\e[31m\"."
         wlc_bash_tools--deploy_to_remote--print-help
 		return 1
@@ -451,7 +452,6 @@ function wlc_bash_tools--deploy_to_remote {
     # echo -e "\e[30;42mDEBUG\e[0m\n    remoteHostNameOrIPAddress=\"\e[33m${remoteHostNameOrIPAddress}\e[0m\"\n    remoteUserNameInRemoteHostRawValue=\"\e[33m${remoteUserNameInRemoteHostRawValue}\e[0m\""
 
     if [ $remoteUserNameIsProvededSeparately -gt 0 ] && [ ! -z "$remoteUserNameInRemoteHostRawValue" ] && [ "$remoteUserName" != "$remoteUserNameInRemoteHostRawValue" ]; then
-        echo
         wlc-print-error    "Remote user name was provided both in \e[33m--to-host=\"${remoteHostRawValue}\"\e[31m and \e[33m--remote-user-name=\"${remoteUserName}\"\e[31m."
         wlc_bash_tools--deploy_to_remote--print-help
         return 2
@@ -463,7 +463,6 @@ function wlc_bash_tools--deploy_to_remote {
 
     if [ -z "$remoteUserName" ]; then
         remoteUserName='root'
-        echo
         colorful -- 'Remote user name'    textBrightCyan
         colorful -- ' was not provided. Thus "'    textGreen
         colorful -- 'root'    textMagenta
@@ -530,7 +529,7 @@ function wlc_bash_tools--deploy_to_remote {
 
         echo
         colorful -n 'Thus, the deployment to a remote machine is not possible.'    textRed
-        echo3
+        echo
 
         return 30
     fi
@@ -549,9 +548,9 @@ function wlc_bash_tools--deploy_to_remote {
 
     wlc--ssh_copy_id    "$remoteID"
     stageReturnCode=$?
-    # if [ $stageReturnCode -gt 0 ]; then
-    #     return $stageReturnCode
-    # fi
+    if [ $stageReturnCode -gt 0 ]; then
+        return $stageReturnCode
+    fi
 
 
 
