@@ -91,15 +91,80 @@ function wlc-ssh-keygen {
     local nameOfThisFunction='wlc-ssh-keygen'
 
     function wlc-ssh-keygen--print-help {
+        local nameOfThisFunction='wlc_bash_tools--deploy_to_remote'
+        local colorOfArgumentName='textGreen'
+        local colorOfArgumentValue='textMagenta'
+        local colorOfMarkers='textBlue'
+
         echo
+
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            colorful -n "用法： "
+        else
+            colorful -n "Usage: "
+        fi
+
+        colorful -- "    $nameOfThisFunction"
+
+        colorful -n ' \\'
+
+        colorful -- "        \"<A descriptive name for the computer your are using now>\""    $colorOfArgumentValue
+
+        colorful -n ' \\'
+
+        colorful -- "        [ "                  $colorOfMarkers
+        colorful -- "--should-create-backups"     $colorOfArgumentName
+        colorful -- " | "                         $colorOfMarkers
+        colorful -- "--key-file-names-prefix="    $colorOfArgumentName
+        colorful -- "\"<file name prefix>\""      $colorOfArgumentValue
+        colorful -- " ]"                          $colorOfMarkers
+
+        colorful -n ' \\'
+
+        colorful -- "        [ "                                        $colorOfMarkers
+        colorful -- "--should-generate-new-ones-even-if-files-exist"    $colorOfArgumentName
+        colorful -- " ]"                                                $colorOfMarkers
+
+        echo
+        echo
+
+
+
+
         if [ "$copywritingLanguage" == "zh_CN" ]; then
             colorful -n "范例： "
         else
             colorful -n "Example: "
         fi
 
-        colorful -- "    $nameOfThisFunction"    textGreen
-        colorful -- "    my-home-computer"       textMagenta
+        colorful -- "    $nameOfThisFunction"
+        colorful -- "    my-home-i7-8700"             $colorOfArgumentValue
+        echo
+        echo
+
+        colorful -- "    $nameOfThisFunction"
+        colorful -n ' \\'
+        colorful -- "        my-home-i7-8700"                                   $colorOfArgumentValue
+        colorful -n ' \\'
+        colorful -- "        --should-generate-new-ones-even-if-files-exist"    $colorOfArgumentName
+        echo
+        echo
+
+        colorful -- "    $nameOfThisFunction"
+        colorful -- "    my-bedroom-i7-8700"          $colorOfArgumentValue
+        colorful -- "    --key-file-names-prefix="    $colorOfArgumentName
+        colorful -- "home-i7-8700-default"            $colorOfArgumentValue
+        echo
+        echo
+
+        colorful -- "    $nameOfThisFunction"
+        colorful -n ' \\'
+        colorful -- "        my-htpc-intel-pentium"       $colorOfArgumentValue
+        colorful -n ' \\'
+        colorful -- "        --should-create-backups"     $colorOfArgumentName
+        colorful -n ' \\'
+        colorful -- "        --should-generate-new-ones-even-if-files-exist"    $colorOfArgumentName
+        echo
         echo
     }
 
@@ -109,37 +174,117 @@ function wlc-ssh-keygen {
         return 0
     fi
 
+    local newId
 
-    local newId="$1"
+
+    if [[ ! "$1" =~ ^-- ]] && [[ ! "$1" =~ ^-.$ ]] && [ "$1" != - ]; then
+        newId="$1"
+        shift
+    fi
 
     if [ -z "$newId" ]; then
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            wlc-print-error    -1    "\e[33m【参数 1】\e[31m 必须为新 SSH 的 ID 或描述名称。"
+        else
+            wlc-print-error    -1    "The \e[33m\$1\e[31m must be the new SSH ID or desciptive name."
+        fi
+
         wlc-ssh-keygen--print-help
+
         return 1
     fi
 
-    local shouldCreateBackupFiles=0
+
+
+
+
+
+
+    local duplicatedArgumentEncountered
+
+    local switchOfUsingAutoBackupFileIsProvided=0
+    local backupFileNamesPrefixIsProvided=0
+    local switchOfSkippingExistingIsProvided=0
+
+    local shouldCreateCustomBackupFiles=0
     local keyFileNamesPrefix
+    local shouldNotGenerateNewKeysIfFilesAlreadyExist=1
 
-    if [ ! -z "$2" ]; then
-        shouldCreateBackupFiles=1
+    local currentArgument
 
-        if   [  "$2" == '--should-create-backups' ]; then
-            keyFileNamesPrefix="$newId"
+    while true; do
+        if [ $# -eq 0 ]; then
+            break
+        fi
 
-            keyFileNamesPrefix=${keyFileNamesPrefix// /_}
-            # keyFileNamesPrefix=${keyFileNamesPrefix//@/_at_}
+        currentArgument="$1"
+        shift
 
-        elif [[ "$2" =~ ^--key-file-names-prefix=.* ]]; then
-            keyFileNamesPrefix="${2:24}" # --key-file-names-prefix="..."
+        case "$currentArgument" in
+            --should-create-backups)
+                if [ $switchOfUsingAutoBackupFileIsProvided -gt 0 ]; then
+                    duplicatedArgumentEncountered='--should-create-backups'
+                    break
+                fi
+                shouldCreateCustomBackupFiles=1
+                switchOfUsingAutoBackupFileIsProvided=1
+                ;;
 
-            if [ -z "$keyFileNamesPrefix" ]; then
-                wlc-print-message-of-source    'function'    "$nameOfThisFunction"
-                wlc-print-error    -1    "Invalid file name provided by \"\e[33m--key-file-names-prefix\e[31m\""
-                return 21
-            fi
-        else
+            --key-file-names-prefix=*)
+                if [ $backupFileNamesPrefixIsProvided -gt 0 ]; then
+                    duplicatedArgumentEncountered='--key-file-names-prefix='
+                    break
+                fi
+                keyFileNamesPrefix=${currentArgument:24}
+                shouldCreateCustomBackupFiles=1
+                backupFileNamesPrefixIsProvided=1
+                ;;
+
+            --should-generate-new-ones-even-if-files-exist)
+                if [ $switchOfSkippingExistingIsProvided -gt 0 ]; then
+                    duplicatedArgumentEncountered='--should-generate-new-ones-even-if-files-exist'
+                    break
+                fi
+                shouldNotGenerateNewKeysIfFilesAlreadyExist=0
+                switchOfSkippingExistingIsProvided=1
+                ;;
+
+            *)
+                if [ "$copywritingLanguage" == "zh_CN" ]; then
+                    colorful -- 'Unknow argument "'    textYellow
+                    colorful -- "$currentArgument"     textRed
+                    colorful -n '" is skipped'         textYellow
+                else
+                    colorful -- '未知参数“'             textYellow
+                    colorful -- "$currentArgument"     textRed
+                    colorful -n '”已被忽略。'            textYellow
+                fi
+                ;;
+        esac
+    done
+
+
+    echo
+
+
+    if [ $switchOfUsingAutoBackupFileIsProvided -gt 0 ] && [ $backupFileNamesPrefixIsProvided -gt 0 ]; then
+        wlc-print-message-of-source    'function'    "$nameOfThisFunction"
+        wlc-print-error    "Both \"\e[33m--should-create-backups\e[31m\" and \"\e[33m--key-file-names-prefix\e[31m\" were provided."
+        wlc-ssh-keygen--print-help
+        return 20
+    fi
+
+
+
+    if [ $switchOfUsingAutoBackupFileIsProvided -gt 0 ]; then
+        keyFileNamesPrefix="$newId"
+        keyFileNamesPrefix=${keyFileNamesPrefix// /_}
+        # keyFileNamesPrefix=${keyFileNamesPrefix//@/_at_}
+    else
+        if [ $backupFileNamesPrefixIsProvided -gt 0 ] && [ -z "$keyFileNamesPrefix" ]; then
             wlc-print-message-of-source    'function'    "$nameOfThisFunction"
-            wlc-print-error    -1    "Invalid \$2."
+            wlc-print-error    -1    "Invalid file name provided by \"\e[33m--key-file-names-prefix\e[31m\"."
+            wlc-ssh-keygen--print-help
             return 21
         fi
     fi
@@ -163,7 +308,7 @@ function wlc-ssh-keygen {
     fi
 
 
-    if [ $shouldCreateBackupFiles -gt 0 ]; then
+    if [ $shouldCreateCustomBackupFiles -gt 0 ]; then
         privateKeyFilePath=~/.ssh/backup/${keyFileNamesPrefix}
         publicKeyFilePath_=~/.ssh/backup/${keyFileNamesPrefix}'.pub'
     else
@@ -172,58 +317,81 @@ function wlc-ssh-keygen {
     fi
 
 
-    if [ "$copywritingLanguage" == "zh_CN" ]; then
-        colorful -n "将会创建或覆盖以下密钥文件： “"
-    else
-        colorful -n 'Will create or overwrite these 2 files:'
-    fi
-    colorful -n "    $privateKeyFilePath"    textMagenta
-    colorful -n "    $publicKeyFilePath_"    textMagenta
-
-
-    if [   -f "$privateKeyFilePath" ]; then
-        rm -f "$privateKeyFilePath"
+    if     [ $shouldNotGenerateNewKeysIfFilesAlreadyExist -gt 0 ] \
+        && [ -f "$privateKeyFilePath" ] \
+        && [ -f "$publicKeyFilePath_" ]
+    then
 
         if [ "$copywritingLanguage" == "zh_CN" ]; then
-            colorful -- '已删除旧有文件“'          textYellow
-            colorful -- "$privateKeyFilePath"    textRed
-            colorful -n '”。'                    textYellow
+            colorful -n "以下密钥文件均已存在。不必重新创建 SSH 密钥对。"
         else
-            colorful -- 'Deleted an old file: "'    textYellow
-            colorful -- "$privateKeyFilePath"       textRed
-            colorful -n '"'                         textYellow
+            colorful -- 'Both key files already exist. '
+            colorful -n 'No new keys will be generated.'    textGreen
         fi
-    fi
 
-    if [   -f "$publicKeyFilePath_" ]; then
-        rm -f "$publicKeyFilePath_"
+        colorful -n "    $privateKeyFilePath"    textMagenta
+        colorful -n "    $publicKeyFilePath_"    textMagenta
+
+    else
 
         if [ "$copywritingLanguage" == "zh_CN" ]; then
-            colorful -- '已删除旧有文件“'          textYellow
-            colorful -- "$publicKeyFilePath_"    textRed
-            colorful -n '”。'                    textYellow
+            colorful -n "将会创建或覆盖以下密钥文件："
         else
-            colorful -- 'Deleted an old file: "'    textYellow
-            colorful -- "$publicKeyFilePath_"       textRed
-            colorful -n '"'                         textYellow
+            colorful -n 'Will create or overwrite these 2 files:'
         fi
+        colorful -n "    $privateKeyFilePath"    textMagenta
+        colorful -n "    $publicKeyFilePath_"    textMagenta
+
+
+        if [   -f "$privateKeyFilePath" ]; then
+            rm -f "$privateKeyFilePath"
+
+            if [ "$copywritingLanguage" == "zh_CN" ]; then
+                colorful -- '已删除旧有文件“'          textYellow
+                colorful -- "$privateKeyFilePath"    textRed
+                colorful -n '”。'                    textYellow
+            else
+                colorful -- 'Deleted an old file: "'    textYellow
+                colorful -- "$privateKeyFilePath"       textRed
+                colorful -n '"'                         textYellow
+            fi
+        fi
+
+        if [   -f "$publicKeyFilePath_" ]; then
+            rm -f "$publicKeyFilePath_"
+
+            if [ "$copywritingLanguage" == "zh_CN" ]; then
+                colorful -- '已删除旧有文件“'          textYellow
+                colorful -- "$publicKeyFilePath_"    textRed
+                colorful -n '”。'                    textYellow
+            else
+                colorful -- 'Deleted an old file: "'    textYellow
+                colorful -- "$publicKeyFilePath_"       textRed
+                colorful -n '"'                         textYellow
+            fi
+        fi
+
+        echo
+        colorful -n "$VE_line_60"
+        echo
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            colorful -n "现在开始创建密钥对"    textGreen
+        else
+            colorful -n "Now creating SSH key pair"    textGreen
+        fi
+
+        ssh-keygen    -C "$newId"    -f "$privateKeyFilePath"
+        local stageReturnCode=$?
+        echo "stageReturnCode=$stageReturnCode"
+        if [ $stageReturnCode -gt 0 ]; then
+            return $stageReturnCode
+        fi
+
     fi
 
-    echo
-    colorful -n "$VE_line_60"
-    echo
-    if [ "$copywritingLanguage" == "zh_CN" ]; then
-        colorful -n "现在开始创建密钥对"    textGreen
-    else
-        colorful -n "Now creating SSH key pair"    textGreen
-    fi
 
-    ssh-keygen    -C "$newId"    -f "$privateKeyFilePath"
-    local stageReturnCode=$?
-    echo "stageReturnCode=$stageReturnCode"
-    if [ $stageReturnCode -gt 0 ]; then
-        return $stageReturnCode
-    fi
+    
+
 
     echo
     colorful -n "${VE_line_30:6} PUBLIC KEY ${VE_line_30:6}"
