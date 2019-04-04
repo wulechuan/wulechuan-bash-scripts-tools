@@ -249,16 +249,16 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 
-
+        local _decidedRemoteComputerName_
         local _remoteComputerNameDefaultPrefix_
-        local pathOfDefaultComputerNamePrefixFileInThePackage="$sourceFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS/default-computer-name-prefix"
-        if [ -f "$pathOfDefaultComputerNamePrefixFileInThePackage" ]; then
-            _remoteComputerNameDefaultPrefix_=`cat "$pathOfDefaultComputerNamePrefixFileInThePackage"`
+        local pathOfPreferredComputerNamePrefixFileInThePackage="$sourceFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS/default-computer-name-prefix"
+        if [ -f "$pathOfPreferredComputerNamePrefixFileInThePackage" ]; then
+            _remoteComputerNameDefaultPrefix_=`cat "$pathOfPreferredComputerNamePrefixFileInThePackage"`
         fi
-        wlc--design_computer_name_for_remote_machine \
+        wlc--design_computer_name_for_remote_machine--core \
             --remote-host-name-or-ip-address="$remoteHostNameOrIPAddress" \
             --default-computer-name-prefix="$_remoteComputerNameDefaultPrefix_" \
-            --working-temp-folder-path="$_localTempWorkingFolderPath_"
+            _decidedRemoteComputerName_
 
         stageReturnCode=$?
         if [ $stageReturnCode -gt 0 ]; then
@@ -306,6 +306,15 @@ function wlc_bash_tools--deploy_to_remote {
 
 		listOfItemsToSend+=("$wlcBashToolsRemotePreDeploymentFolderPathAtLocal")
 		# ######################################################################### #
+
+
+
+
+        echo
+        colorful -- 'Saving decided computer name, which is "'    textGreen
+        colorful -- "$_decidedRemoteComputerName_"    textMagenta
+        colorful -n '", into file...'    textGreen
+        echo "$_decidedRemoteComputerName_" > "$wlcBashToolsRemotePreDeploymentFolderPathAtLocal/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS/computer-name"
 
 
 
@@ -606,16 +615,79 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 function wlc--design_computer_name_for_remote_machine {
+    local NAME_OF_FILE_FOR_CARRYING_COMPUTER_NAME='computer-name'
+
+
+    local ___remoteRawName___="${1:33}"                   # --remote-host-name-or-ip-address="..."
+    local ___remoteComputerNameDefaultPrefix___="${2:31}" # --default-computer-name-prefix="..."
+
+
+    loca
+    wlc--design_computer_name_for_remote_machine--core \
+        --remote-host-name-or-ip-address="$___remoteRawName___" \
+        --default-computer-name-prefix="$___remoteComputerNameDefaultPrefix___" \
+
+
+
+    local ___pathOfLocalWorkingTempFolder___="$WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE/design-computer-name-for-${___remoteRawName___}"
+    mkdir    -p    "$___pathOfLocalWorkingTempFolder___"
+
+    local pathOfLocalFileForCarryingComputerNameOfRemoteMachine="/$___pathOfLocalWorkingTempFolder___/$NAME_OF_FILE_FOR_CARRYING_COMPUTER_NAME"
+    local pathOfRemoteFolderToPutTheFileForCarryingComputerName="~/'$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS'"
+
+    echo "$ > "$pathOfLocalFileForCarryingComputerNameOfRemoteMachin
+
+
+    echo3
+    colorful -n 'Now trying to send the file of computer name to remote...'    textGreen
+    ssh    -p    "$___remoteRawName___"    "mkdir    -p    ${pathOfRemoteFolderToPutTheFileForCarryingComputerName}"
+    scp    -q    "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    "$___remoteRawName___:${pathOfRemoteFolderToPutTheFileForCarryingComputerName}"
+
+
+
+
+    echo
+
+    rm       -f       "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"
+    if [ $? -eq 0 ]; then
+        colorful -n 'Temp file:'    textRed
+        colorful -- '    "'    textRed
+        colorful -n "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    textYellow
+        colorful -n '" has been deleted.'    textRed
+    else
+        wlc-print-error    "Failed to delete temp file:"
+        colorful -- '    "'    textRed
+        colorful -n "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    textYellow
+        colorful -n '"'    textRed
+    fi
+}
+
+function wlc--design_computer_name_for_remote_machine--core {
+    # $1: -remote-host-name-or-ip-address="..."
+    # $2: --default-computer-name-prefix="..."
+    # $3: <output> the decided computer name.
+
     local REMOTE_COMPUTER_NAME_DEFAULT_PREFIX='computer'
 
 
-    local ___remote_raw_name___="${1:33}"                 # --remote-host-name-or-ip-address="..."
-    local ___remoteComputerNameDefaultPrefix___="${2:31}" # --default-computer-name-prefix="..."
-    local ___localWorkingTempFolderPath___="${3:27}"      # --working-temp-folder-path="..."
 
-    echo "___remote_raw_name___=$___remote_raw_name___"
-    echo "___remoteComputerNameDefaultPrefix___=$___remoteComputerNameDefaultPrefix___"
-    echo "___localWorkingTempFolderPath___=$___localWorkingTempFolderPath___"
+    if [ $# -ne 3 ]; then
+        wlc-print-message-of-source    'function'    "wlc--design_computer_name_for_remote_machine--core"
+        wlc-print-error    -1    "Must provide 3 arguments, and 3rd of which must be a variable reference."
+        return 3
+    fi
+
+
+
+
+
+
+    local ___remote_raw_name___="${1:33}"                     # --remote-host-name-or-ip-address="..."
+    local ___remote_computer_name_default_prefix___="${2:31}" # --default-computer-name-prefix="..."
+
+    # echo -e "\e[30;42mDEBUG\e[0m"
+    # echo  -e "   ___remote_raw_name___=\"\e[33m$___remote_raw_name___\e[0m\""
+    # echo  -e "   ___remote_computer_name_default_prefix___=\"\e[33m$___remote_computer_name_default_prefix___\e[0m\""
 
     echo3
     wlc-print-header "Design the computer name for the remote machine:"
@@ -628,8 +700,8 @@ function wlc--design_computer_name_for_remote_machine {
         ___safeStringOfIPAddressToUseInComputerName___=${___safeStringOfIPAddressToUseInComputerName___//./-}
         ___safeStringOfIPAddressToUseInComputerName___="-ip-${___safeStringOfIPAddressToUseInComputerName___}"
 
-        if [ ! -z "$___remoteComputerNameDefaultPrefix___" ]; then
-            ___remoteComputerNamePrefix___="$___remoteComputerNameDefaultPrefix___"
+        if [ ! -z "$___remote_computer_name_default_prefix___" ]; then
+            ___remoteComputerNamePrefix___="$___remote_computer_name_default_prefix___"
         else
             ___remoteComputerNamePrefix___="$REMOTE_COMPUTER_NAME_DEFAULT_PREFIX"
         fi
@@ -668,42 +740,15 @@ function wlc--design_computer_name_for_remote_machine {
     fi
 
 
-
-
-
-    local nameOfFileForCarryingComputerName='computer-name'
-    local pathOfLocalFileForCarryingComputerNameOfRemoteMachine="$___localWorkingTempFolderPath___/$nameOfFileForCarryingComputerName"
-    local pathOfRemoteFolderToPutTheFileForCarryingComputerName="~/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS"
-
-    echo "$___remoteComputerName___" > "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"
-
     echo
-    colorful -- 'The computer name of the remote machine ('
+    colorful -- 'The decided computer name of machine ('
     colorful -- "$___remote_raw_name___"    textYellow
-    colorful -n ') will be:'
-    colorful -n "$___remoteComputerName___"        textGreen
-
-
-
-    echo3
-    colorful -n 'Now trying to send the file of computer name to remote...'    textGreen
-    scp    -q    "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    "$remoteID:${pathOfRemoteFolderToPutTheFileForCarryingComputerName}"
-
-
-
-
+    colorful -- ') is "'
+    colorful -- "$___remoteComputerName___"        textGreen
+    colorful -- '"'
     echo
 
-    rm       -f       "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"
-    if [ $? -eq 0 ]; then
-        colorful -n 'Temp file:'    textRed
-        colorful -- '    "'    textRed
-        colorful -n "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    textYellow
-        colorful -n '" has been deleted.'    textRed
-    else
-        wlc-print-error    "Failed to delete temp file:"
-        colorful -- '    "'    textRed
-        colorful -n "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    textYellow
-        colorful -n '"'    textRed
-    fi
+
+
+    eval "$3=$___remoteComputerName___"
 }

@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # Usage:
-#    source    <this bash file>    --should-accord-to-standard-auto-deployment-signal-file
-#    source    <this bash file>    [--no-interations | --do-not-reload-bash]    [--from-folder="<your source folder>"]    [--to-folder="<your target folder>"]
+#     source    <this bash file>    --should-accord-to-standard-auto-deployment-signal-file
+#     source    <this bash file>    [--no-interations | --do-not-reload-bash]    [--from-folder="<your source folder>"]    [--to-folder="<your target folder>"]
 #
 # Examples:
-#    source    <...>/to-install-wlc-bash-tools-locally.sh    --should-accord-to-standard-auto-deployment-signal-file
-#    source    <...>/to-install-wlc-bash-tools-locally.sh    --no-interations
-#    source    <...>/to-install-wlc-bash-tools-locally.sh    --do-not-reload-bash
-#    source    <...>/to-install-wlc-bash-tools-locally.sh    --do-not-reload-bash    --from-folder="/d/my-toolset/wlc-bash-tools-for-my-machine/"
-#    source    <...>/to-install-wlc-bash-tools-locally.sh    --no-interationc    --to-folder="/d/my-toolset-for-other-machines/"
+#     source    <...>/to-install-wlc-bash-tools-locally.sh    --should-accord-to-standard-auto-deployment-signal-file
+#     source    <...>/to-install-wlc-bash-tools-locally.sh    --no-interations
+#     source    <...>/to-install-wlc-bash-tools-locally.sh    --do-not-reload-bash
+#     source    <...>/to-install-wlc-bash-tools-locally.sh    --do-not-reload-bash    --from-folder="/d/my-toolset/wlc-bash-tools-for-my-machine/"
+#     source    <...>/to-install-wlc-bash-tools-locally.sh    --no-interationc    --to-folder="/d/my-toolset-for-other-machines/"
 
 
 
@@ -30,13 +30,13 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 
 	function ___temp_func--wlc_bash_tools--deploy_locally--core {
 		# Usage:
-		#    ___temp_func--wlc_bash_tools--deploy_locally--core    [--no-interations | --do-not-reload-bash]    [--from-folder="<your source folder>"]    [--to-folder="<your target folder>"]
+		#     <this function>    [--no-interations | --do-not-reload-bash]    [--from-folder="<your source folder>"]    [--to-folder="<your target folder>"]
 		#
 		# Examples:
-		#    ___temp_func--wlc_bash_tools--deploy_locally--core    --no-interations
-		#    ___temp_func--wlc_bash_tools--deploy_locally--core    --do-not-reload-bash
-		#    ___temp_func--wlc_bash_tools--deploy_locally--core    --do-not-reload-bash    --from-folder="/d/my-toolset/wlc-bash-tools-for-my-machine/"
-		#    ___temp_func--wlc_bash_tools--deploy_locally--core    --no-interationc    --to-folder="/d/my-toolset-for-other-machines/"
+		#     <this function>    --no-interations
+		#     <this function>    --do-not-reload-bash
+		#     <this function>    --do-not-reload-bash    --from-folder="/d/my-toolset/wlc-bash-tools-for-my-machine/"
+		#     <this function>    --no-interationc    --to-folder="/d/my-toolset-for-other-machines/"
 
 
 		if [[ $- =~ i ]]; then
@@ -401,6 +401,12 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 			# ***************************************************** #
 		done
 
+
+
+		local folderToDisableExecution="$targetFolderPath/$WLC_BASH_TOOLS___FOLDER_NAME/$WLC_BASH_TOOLS___FOLDER_NAME___OF_ASSETS"
+		if [ -d "$folderToDisableExecution" ]; then
+			chmod    -x    -R    "$folderToDisableExecution"
+		fi
 
 
 
