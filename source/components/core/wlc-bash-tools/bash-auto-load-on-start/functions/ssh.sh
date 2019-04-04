@@ -99,11 +99,6 @@ function wlc-ssh-keygen {
         fi
 
         colorful -- "    $nameOfThisFunction"    textGreen
-        colorful -- "    wulechuan@live.com"     textBrightCyan
-        echo
-
-        colorful -- "    $nameOfThisFunction"    textGreen
-        colorful -- "    wulechuan@live.com"     textBrightCyan
         colorful -- "    my-home-computer"       textMagenta
         echo
     }
@@ -115,77 +110,127 @@ function wlc-ssh-keygen {
     fi
 
 
-
     local newId="$1"
-    local newIdHumanReadableName="$2"
 
-
-    local stageReturnCode
-
-
-    wlc-validate-host-id-or-ip-address-with-optional-user-name    "$newId"
-    stageReturnCode=$?
-
-    if [ $stageReturnCode -gt 0 ]; then
+    if [ -z "$newId" ]; then
         wlc-ssh-keygen--print-help
         return 1
     fi
 
+    local shouldCreateBackupFiles=0
+    local keyFileNamesPrefix
 
+    if [ ! -z "$2" ]; then
+        shouldCreateBackupFiles=1
 
-    if [ -z "$newIdHumanReadableName" ]; then
-        newIdHumanReadableName="$newId"
+        if   [  "$2" == '--should-create-backups' ]; then
+            keyFileNamesPrefix="$newId"
 
-        colorful -- "\$2, aka the human readable name is not provided. "    textYellow
-        colorful -- "The \$1 \""     textYellow
-        colorful -- "$newId"         textMagenta
-        colorful -n "\" is used."    textYellow
+            keyFileNamesPrefix=${keyFileNamesPrefix// /_}
+            # keyFileNamesPrefix=${keyFileNamesPrefix//@/_at_}
+
+        elif [[ "$2" =~ ^--key-file-names-prefix=.* ]]; then
+            keyFileNamesPrefix="${2:24}" # --key-file-names-prefix="..."
+
+            if [ -z "$keyFileNamesPrefix" ]; then
+                wlc-print-message-of-source    'function'    "$nameOfThisFunction"
+                wlc-print-error    -1    "Invalid file name provided by \"\e[33m--key-file-names-prefix\e[31m\""
+                return 21
+            fi
+        else
+            wlc-print-message-of-source    'function'    "$nameOfThisFunction"
+            wlc-print-error    -1    "Invalid \$2."
+            return 21
+        fi
     fi
 
 
 
-    local backupKeyFilePath=~/.ssh/backup/${newId//@/_at_}'.sshkey'
-
-
+    local privateKeyFilePath
+    local publicKeyFilePath_
 
 
     echo
 
     if [ "$copywritingLanguage" == "zh_CN" ]; then
-        colorful -- "针对ID"
-        colorful -- "${newIdHumanReadableName}($newId)"    textMagenta
-        colorful -n "："
+        colorful -- "创建名为“"
+        colorful -- "$newId"    textMagenta
+        colorful -n "”的 SSH 密钥对："
     else
-        colorful -- "For "
-        colorful -- "${newIdHumanReadableName}($newId)"    textMagenta
-        colorful -n ": "
-    fi
-
-    if [ -f "$backupKeyFilePath" ]; then
-        yes "n"  |  ssh-keygen    -q    -f  "$backupKeyFilePath"    -C  $newId
-    else
-        echo -n ''; ssh-keygen    -q    -f  "$backupKeyFilePath"    -C  $newId
+        colorful -- 'Create SSH key pair for ID "'
+        colorful -- "$newId"    textMagenta
+        colorful -n '": '
     fi
 
 
+    if [ $shouldCreateBackupFiles -gt 0 ]; then
+        privateKeyFilePath=~/.ssh/backup/${keyFileNamesPrefix}
+        publicKeyFilePath_=~/.ssh/backup/${keyFileNamesPrefix}'.pub'
+    else
+        privateKeyFilePath=~/.ssh/id_rsa
+        publicKeyFilePath_=~/.ssh/id_rsa.pub
+    fi
 
-
-
-    echo
-    colorful -n $VE_line_60
 
     if [ "$copywritingLanguage" == "zh_CN" ]; then
-        colorful -- '人类易读版本为：“'                   textBlue
-        colorful -- "$newIdHumanReadableName"          textMagenta
-        colorful -n '”'                                textBlue
+        colorful -n "将会创建或覆盖以下密钥文件： “"
     else
-        colorful -- 'Human readable name will be "'    textBlue
-        colorful -- "$newIdHumanReadableName"          textMagenta
-        colorful -n '".'                               textBlue
+        colorful -n 'Will create or overwrite these 2 files:'
+    fi
+    colorful -n "    $privateKeyFilePath"    textMagenta
+    colorful -n "    $publicKeyFilePath_"    textMagenta
+
+
+    if [   -f "$privateKeyFilePath" ]; then
+        rm -f "$privateKeyFilePath"
+
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            colorful -- '已删除旧有文件“'          textYellow
+            colorful -- "$privateKeyFilePath"    textRed
+            colorful -n '”。'                    textYellow
+        else
+            colorful -- 'Deleted an old file: "'    textYellow
+            colorful -- "$privateKeyFilePath"       textRed
+            colorful -n '"'                         textYellow
+        fi
     fi
 
-    colorful -n $VE_line_60
+    if [   -f "$publicKeyFilePath_" ]; then
+        rm -f "$publicKeyFilePath_"
+
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            colorful -- '已删除旧有文件“'          textYellow
+            colorful -- "$publicKeyFilePath_"    textRed
+            colorful -n '”。'                    textYellow
+        else
+            colorful -- 'Deleted an old file: "'    textYellow
+            colorful -- "$publicKeyFilePath_"       textRed
+            colorful -n '"'                         textYellow
+        fi
+    fi
+
     echo
+    colorful -n "$VE_line_60"
+    echo
+    if [ "$copywritingLanguage" == "zh_CN" ]; then
+        colorful -n "现在开始创建密钥对"    textGreen
+    else
+        colorful -n "Now creating SSH key pair"    textGreen
+    fi
+
+    ssh-keygen    -C "$newId"    -f "$privateKeyFilePath"
+    local stageReturnCode=$?
+    echo "stageReturnCode=$stageReturnCode"
+    if [ $stageReturnCode -gt 0 ]; then
+        return $stageReturnCode
+    fi
+
+    echo
+    colorful -n "${VE_line_30:6} PUBLIC KEY ${VE_line_30:6}"
+    set-echo-color    textGreen
+    cat "$publicKeyFilePath_"
+    clear-echo-color
+    colorful -n "$VE_line_60"
 }
 
 function wlc-ssh-copy-id {
