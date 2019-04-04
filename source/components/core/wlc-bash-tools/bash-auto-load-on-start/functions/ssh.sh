@@ -390,7 +390,20 @@ function wlc-ssh-keygen {
     fi
 
 
-    
+    if [ $shouldCreateCustomBackupFiles -gt 0 ]; then
+        echo
+        set-echo-color    textYellow
+        if [ "$copywritingLanguage" == "zh_CN" ]; then
+            echo "提醒："
+            echo "    新创建的 SSH ID 并不在默认的文件中。"
+            echo "    使用时须额外指明其密钥文件路径。"
+        else
+            echo "Remember that:"
+            echo "    The new SSH IDs are NOT stored in the default key files."
+            echo "    You have to explictly provide the private key file path while using them."
+        fi
+        clear-echo-color
+    fi
 
 
     echo
