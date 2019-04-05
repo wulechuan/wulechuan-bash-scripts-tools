@@ -11,4 +11,4 @@
 # So whenever you'd like to disable a configuration set,
 # simple change the file extension to something other than '.sh'.
 
-myLDPAUserName='lechuan.wu'
+myLDAPUserName='lechuan.wu'
