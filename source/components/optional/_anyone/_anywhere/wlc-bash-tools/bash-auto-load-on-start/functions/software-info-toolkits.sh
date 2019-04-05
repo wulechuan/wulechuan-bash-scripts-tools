@@ -54,7 +54,7 @@ function getVersionSegmentsFrom {
     fi
 }
 
-function comparingTwoVersions {
+function comparing_two_versions: {
     local versionA="$1"
     local versionB="$3"
     local mode="$2"
