@@ -1,4 +1,6 @@
 function wlc_bash_tools--deploy_to_remote {
+    local __wlcBashToolsDeployToRemote_nameOfThisFunction__='wlc_bash_tools--deploy_to_remote'
+
     # Usage:
     #     <this function>    "<remote host name or ip>"
     #     <this function>    --to-host="<remote host name or ip>"    [ --source-package-folder-name="<package folder name>" | --source-package-folder-path="<package folder path>" ]    [ --remote-user-name="<user name used at remote>" ]
@@ -10,44 +12,47 @@ function wlc_bash_tools--deploy_to_remote {
     #     <this function>    --to-host="19.79.3.19"    --source-package-folder-name="my-personal-data-server"
     #     <this function>    --to-host="19.79.3.19"    --source-package-folder-path="/d/backup/my-old-data-server-in-1979"
 
-    function wlc_bash_tools--deploy_to_remote--print-help {
-        local nameOfThisFunction='wlc_bash_tools--deploy_to_remote'
+    function wlc_bash_tools--deploy_to_remote--print_help {
         local colorOfArgumentName='textGreen'
         local colorOfArgumentValue='textMagenta'
         local colorOfMarkers='textBlue'
 
         echo
-        colorful -n "$VE_line_60"
-        echo
+
+        if [ "$1" == '--should-print-separation-line' ]; then
+            colorful -n "$VE_line_60"
+            echo
+        fi
+
 
         colorful -n 'Usage:'
 
-        colorful -- "    $nameOfThisFunction"
-        colorful -n "    \"<remote host name or ip, user name is optional>\""    $colorOfArgumentValue
+        colorful -- "    $__wlcBashToolsDeployToRemote_nameOfThisFunction__"
+        colorful -n "    <remote accessing id, user name is optional>"    $colorOfArgumentValue
         echo
 
 
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcBashToolsDeployToRemote_nameOfThisFunction__"
         colorful -n ' \\'
 
-        colorful -- "        --to-host="    $colorOfArgumentName
-        colorful -- "\"<remote host name or ip, user name is optional>\""    $colorOfArgumentValue
+        colorful -- "        --to-host="                              $colorOfArgumentName
+        colorful -- "<remote accessing id, user name is optional>"    $colorOfArgumentValue
         colorful -n ' \\'
 
-        colorful -- "        [ "    $colorOfMarkers
-        colorful -- "--remote-user-name="    $colorOfArgumentName
-        colorful -- "\"<user name used at remote>\""    $colorOfArgumentValue
-        colorful -- " ]"    $colorOfMarkers
+        colorful -- "        [ "                       $colorOfMarkers
+        colorful -- "--remote-user-name="              $colorOfArgumentName
+        colorful -- "<user name used at remote>"       $colorOfArgumentValue
+        colorful -- " ]"                               $colorOfMarkers
         colorful -n ' \\'
 
-        colorful -- "        [ "    $colorOfMarkers
+        colorful -- "        [ "                       $colorOfMarkers
         colorful -- "--source-package-folder-name="    $colorOfArgumentName
-        colorful -- "\"<package folder name>\""    $colorOfArgumentValue
-        colorful -- " | "    $colorOfMarkers
+        colorful -- "<package folder name>"            $colorOfArgumentValue
+        colorful -- " | "                              $colorOfMarkers
         colorful -- "--source-package-folder-path="    $colorOfArgumentName
-        colorful -- "\"<package folder path>\""    $colorOfArgumentValue
-        colorful -- " ]"    $colorOfMarkers
+        colorful -- "<package folder path>"            $colorOfArgumentValue
+        colorful -- " ]"                               $colorOfMarkers
         echo
         echo
 
@@ -56,43 +61,43 @@ function wlc_bash_tools--deploy_to_remote {
 
         colorful -n 'Examples:'
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcBashToolsDeployToRemote_nameOfThisFunction__"
         colorful -- "    --to-host="    $colorOfArgumentName
-        colorful -- "19.79.3.19"    $colorOfArgumentValue
+        colorful -- "19.79.3.19"        $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
-        colorful -- "    --to-host="    $colorOfArgumentName
+        colorful -- "    $__wlcBashToolsDeployToRemote_nameOfThisFunction__"
+        colorful -- "    --to-host="          $colorOfArgumentName
         colorful -- "wulechuan@19.79.3.19"    $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
-        colorful -- "    --to-host="    $colorOfArgumentName
-        colorful -- "19.79.3.19"    $colorOfArgumentValue
+        colorful -- "    $__wlcBashToolsDeployToRemote_nameOfThisFunction__"
+        colorful -- "    --to-host="             $colorOfArgumentName
+        colorful -- "19.79.3.19"                 $colorOfArgumentValue
         colorful -- "    --remote-user-name="    $colorOfArgumentName
-        colorful -- "\"wulechuan\""    $colorOfArgumentValue
+        colorful -- "\"wulechuan\""              $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcBashToolsDeployToRemote_nameOfThisFunction__"
         colorful -n ' \\'
         colorful -- "        --to-host="    $colorOfArgumentName
-        colorful -- "19.79.3.19"    $colorOfArgumentValue
+        colorful -- "19.79.3.19"            $colorOfArgumentValue
         colorful -n ' \\'
         colorful -- "        --source-package-folder-name="    $colorOfArgumentName
         colorful -- "\"my-wlc-bash-tools-for-data-server\""    $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcBashToolsDeployToRemote_nameOfThisFunction__"
         colorful -n ' \\'
-        colorful -- "        --source-package-folder-path="    $colorOfArgumentName
+        colorful -- "        --source-package-folder-path="                     $colorOfArgumentName
         colorful -- "~/backup/my-wlc-bash-tools-for-old-data-server-in-1979"    $colorOfArgumentValue
         colorful -n ' \\'
-        colorful -- "        --to-host="    $colorOfArgumentName
-        colorful -- "wulechuan@19.79.3.19"    $colorOfArgumentValue
+        colorful -- "        --to-host="                       $colorOfArgumentName
+        colorful -- "admin@old-data-in-1979.my-home.com"       $colorOfArgumentValue
         echo
         echo
     }
@@ -100,13 +105,14 @@ function wlc_bash_tools--deploy_to_remote {
 
 	function wlc_bash_tools--deploy_to_remote--core {
         # Usage:
-        #     <this function>    --from-source-package-folder-path="<package folder path>"    --to-host="<remote host name or ip>"
+        #     <this function>    --from-source-package-folder-path="<package folder path>"    --to-host="<remote host name or ip>"    --remote-host-format=('name'|'IPv4')
         #
         # Examples:
-        #     wlc_bash_tools--deploy_to_remote--core    --from-source-package-folder-path="/d/backup/my-old-data-server-in-1979"    --to-host="wulechuan@19.79.3.19"
+        #     <this function>    --from-source-package-folder-path="/d/backup/my-old-data-server-in-1979"    --to-host="wulechuan@19.79.3.19"    --remote-host-format=IPv4
 
         local _sourceFolderPath_="${1:34}"
         local _remoteID_="${2:10}"
+        local _remoteIDFormat_="${3:21}"
 
         local    -a    listOfItemsToSend
 
@@ -120,8 +126,8 @@ function wlc_bash_tools--deploy_to_remote {
             local __remote_id_in_non_standard_trigger_function__="${3:12}"          # --remote-id="..."
 
 			wlc-print-header "Detecting remote \e[35m~/.bash_profile\e[32m and \e[35m~/.bashrc\e[32m..."
-			detect-remote-file    "$__remote_id_in_non_standard_trigger_function__"    '~'    ".bash_profile"    "$__localWorkingCacheFolderPath__"
-			detect-remote-file    "$__remote_id_in_non_standard_trigger_function__"    '~'    ".bashrc"          "$__localWorkingCacheFolderPath__"
+			wlc_bash_tools--detect_signal_file_on_remote_machine    "$__remote_id_in_non_standard_trigger_function__"    '~'    ".bash_profile"    "$__localWorkingCacheFolderPath__"
+			wlc_bash_tools--detect_signal_file_on_remote_machine    "$__remote_id_in_non_standard_trigger_function__"    '~'    ".bashrc"          "$__localWorkingCacheFolderPath__"
 
 			echo
 
@@ -256,7 +262,8 @@ function wlc_bash_tools--deploy_to_remote {
             _remoteComputerNameDefaultPrefix_=`cat "$pathOfPreferredComputerNamePrefixFileInThePackage"`
         fi
         wlc--design_computer_name_for_remote_machine--core \
-            --remote-host-name-or-ip-address="$remoteHostNameOrIPAddress" \
+            --remote-host-name-or-ip-address="$__wlcDeployToRemote_resolvedRemoteHost__" \
+            --remote-host-format="$_remoteIDFormat_" \
             --default-computer-name-prefix="$_remoteComputerNameDefaultPrefix_" \
             _decidedRemoteComputerName_
 
@@ -379,6 +386,11 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 
+    if [ $# -eq 0 ]; then
+        wlc_bash_tools--deploy_to_remote--print_help
+        return 0
+    fi
+
     local stageReturnCode
 
 
@@ -396,11 +408,6 @@ function wlc_bash_tools--deploy_to_remote {
     local sourceFolderPath
 
     local currentArgument
-
-    if [ $# -eq 0 ]; then
-        wlc_bash_tools--deploy_to_remote--print-help
-        return 0
-    fi
 
     if [ $# -eq 1 ]; then
         if [[ ! "$1" =~ ^-- ]] && [[ ! "$1" =~ ^-.$ ]]; then
@@ -470,55 +477,45 @@ function wlc_bash_tools--deploy_to_remote {
 
     if [ ! -z "$duplicatedArgumentEncountered" ]; then
         wlc-print-error    "Duplicated argument \"\e[33m${duplicatedArgumentEncountered}\e[31m\"."
-        wlc_bash_tools--deploy_to_remote--print-help
+        wlc_bash_tools--deploy_to_remote--print_help    --should-print-separation-line
         return 99
     fi
 
 
-    local remoteHostNameOrIPAddress
-    local remoteUserNameInRemoteHostRawValue
+    local __wlcDeployToRemote_resolvedRemoteID__
+    local __wlcDeployToRemote_resolvedRemoteHost__
+    local __wlcDeployToRemote_resolvedRemoteUser__
+    local __wlcDeployToRemote_resolvedRemoteIDFormat__
 
-    wlc-validate-host-id-or-ip-address-with-optional-user-name    "$remoteHostRawValue"    remoteHostNameOrIPAddress    remoteUserNameInRemoteHostRawValue
+    wlc-validate-host-name-or-ip-address-with-optional-user-name \
+        --should-not-print-help-after-printing-error \
+        "$remoteHostRawValue" \
+        --default-user-name='root' \
+        __wlcDeployToRemote_resolvedRemoteID__ \
+        __wlcDeployToRemote_resolvedRemoteHost__ \
+        __wlcDeployToRemote_resolvedRemoteUser__ \
+        __wlcDeployToRemote_resolvedRemoteIDFormat__
+
     stageReturnCode=$?
 	if [ $stageReturnCode -gt 0 ]; then
 		wlc-print-error    "Invalid value \"\e[33m$remoteHostRawValue\e[31m\" for argument \"\e[32m--to-host=\e[31m\"."
-        wlc_bash_tools--deploy_to_remote--print-help
+        wlc_bash_tools--deploy_to_remote--print_help    --should-print-separation-line
 		return 1
 	fi
 
-
-    # echo -e "\e[30;42mDEBUG\e[0m\n    remoteHostNameOrIPAddress=\"\e[33m${remoteHostNameOrIPAddress}\e[0m\"\n    remoteUserNameInRemoteHostRawValue=\"\e[33m${remoteUserNameInRemoteHostRawValue}\e[0m\""
-
-
-    if [ $remoteUserNameIsProvededSeparately -gt 0 ] && [ ! -z "$remoteUserNameInRemoteHostRawValue" ] && [ "$remoteUserName" != "$remoteUserNameInRemoteHostRawValue" ]; then
-        wlc-print-error    "Remote user name was provided both in \e[33m--to-host=\"${remoteHostRawValue}\"\e[31m and \e[33m--remote-user-name=\"${remoteUserName}\"\e[31m."
-        wlc_bash_tools--deploy_to_remote--print-help
+    if [ $remoteUserNameIsProvededSeparately -gt 0 ] && [ ! -z "$__wlcDeployToRemote_resolvedRemoteUser__" ] && [ "$remoteUserName" != "$__wlcDeployToRemote_resolvedRemoteUser__" ]; then
+        wlc-print-error    "Remote user name was provided both in \e[33m--to-host=\"${remoteHostRawValue}\"\e[31m and \e[33m--remote-user-name=\"${remoteUserName}\"\e[31m. What's worse, they are different!"
+        wlc_bash_tools--deploy_to_remote--print_help    --should-print-separation-line
         return 2
     fi
 
-    if [ ! -z "$remoteUserNameInRemoteHostRawValue" ]; then
-        remoteUserName="$remoteUserNameInRemoteHostRawValue"
-    fi
-
-    if [ -z "$remoteUserName" ]; then
-        remoteUserName='root'
-        colorful -- 'Remote user name'    textBrightCyan
-        colorful -- ' was not provided. Thus "'    textGreen
-        colorful -- 'root'    textMagenta
-        colorful -n '" is assumed.'    textGreen
-        echo
-    fi
-
-
-    local remoteID="$remoteUserName@$remoteHostNameOrIPAddress"
-
-
-
     if [ $sourceFolderNameIsProvided -gt 0 ] && [ $sourceFolderPathIsProvided -gt 0 ]; then
         wlc-print-error    "Both \"\e[33m--source-package-folder-name\e[31m\" and \"\e[33m--source-package-folder-path\e[31m\" were provided."
-        wlc_bash_tools--deploy_to_remote--print-help
+        wlc_bash_tools--deploy_to_remote--print_help    --should-print-separation-line
         return 20
     fi
+
+    # echo -e "\e[30;42mDEBUG\e[0m\n    __wlcDeployToRemote_resolvedRemoteID__=\"\e[33m${__wlcDeployToRemote_resolvedRemoteID__}\e[0m\"\n    __wlcDeployToRemote_resolvedRemoteUser__=\"\e[33m${__wlcDeployToRemote_resolvedRemoteUser__}\e[0m\""
 
 
 
@@ -560,25 +557,28 @@ function wlc_bash_tools--deploy_to_remote {
         colorful -- '    "'    textRed
         colorful -- "$sourceFolderPath"    textYellow
         colorful -n '"'    textRed
-        echo
-
-        colorful -n 'Involved variables:'    textRed
-
-        colorful -- '$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES="'    textRed
-        colorful -- "$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES"      textYellow
-        colorful -n '"'    textRed
-
-        colorful -- 'argument: --source-package-folder-name="'    textRed
-        colorful -- "$sourceFolderName"    textYellow
-        colorful -n '"'    textRed
-
-        colorful -- 'argument: --source-package-folder-path="'    textRed
-        colorful -- "$sourceFolderPath"    textYellow
-        colorful -n '"'    textRed
-
-        echo
         colorful -n 'Thus, the deployment to a remote machine is not possible.'    textRed
         echo
+
+        colorful -n 'Involved variables:'
+
+        colorful -- '    env var:  '
+        colorful -- '$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES'    textGreen
+        colorful -- '="'
+        colorful -- "$WLC_BASH_TOOLS___FOLDER_PATH___OF_WLC_BASH_TOOLS_FOR_OTHER_MACHINES"    textYellow
+        colorful -n '"'
+
+        colorful -- '    argument: '
+        colorful -- '--source-package-folder-name'    textGreen
+        colorful -- '="'
+        colorful -- "$sourceFolderName"               textYellow
+        colorful -n '"'
+
+        colorful -- '    argument: '
+        colorful -- '--source-package-folder-path'    textGreen
+        colorful -- '="'
+        colorful -- "$sourceFolderPath"               textYellow
+        colorful -n '"'
 
         return 31
     fi
@@ -591,7 +591,7 @@ function wlc_bash_tools--deploy_to_remote {
     echo3
 
 
-    wlc-ssh-copy-id    "$remoteID"
+    wlc-ssh-copy-id    "$__wlcDeployToRemote_resolvedRemoteID__"
     stageReturnCode=$?
     if [ $stageReturnCode -gt 0 ]; then
         return $stageReturnCode
@@ -599,7 +599,11 @@ function wlc_bash_tools--deploy_to_remote {
 
 
 
-    wlc_bash_tools--deploy_to_remote--core    --from-source-package-folder-path="$sourceFolderPath"   --to-host="$remoteID"
+    wlc_bash_tools--deploy_to_remote--core \
+        --from-source-package-folder-path="$sourceFolderPath" \
+        --to-host="$__wlcDeployToRemote_resolvedRemoteID__" \
+        --remote-host-format="$__wlcDeployToRemote_resolvedRemoteIDFormat__"
+
     stageReturnCode=$?
     if [ $stageReturnCode -gt 0 ]; then
         return $stageReturnCode
@@ -608,14 +612,32 @@ function wlc_bash_tools--deploy_to_remote {
 
 
     echo3
-    wlc-print-message-of-source    'function'    'wlc_bash_tools--deploy_to_remote'
+    wlc-print-message-of-source    'function'    $__wlcBashToolsDeployToRemote_nameOfThisFunction__
     print-DONE
     echo3
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function wlc--design_computer_name_for_remote_machine {
-    local nameOfThisFunction='wlc--design_computer_name_for_remote_machine'
+    local __wlcDesignComputerName_nameOfThisFunction__='wlc--design_computer_name_for_remote_machine'
     local NAME_OF_FILE_FOR_CARRYING_COMPUTER_NAME='computer-name'
 
 
@@ -626,14 +648,20 @@ function wlc--design_computer_name_for_remote_machine {
 
         echo
 
+        if [ "$1" == '--should-print-separation-line' ]; then
+            colorful -n "$VE_line_60"
+            echo
+        fi
+
+
         colorful -n 'Usage:'
 
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -n ' \\'
 
         colorful -- "        --remote-id="                                   $colorOfArgumentName
-        colorful -- "\"<remote host name or ip, user name is optional>\""    $colorOfArgumentValue
+        colorful -- "<remote accessing id, user name is optional>"    $colorOfArgumentValue
         colorful -n ' \\'
 
         colorful -- "        [ "                                  $colorOfMarkers
@@ -643,11 +671,11 @@ function wlc--design_computer_name_for_remote_machine {
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -n ' \\'
 
         colorful -- "        "                                               $colorOfArgumentName
-        colorful -- "\"<remote host name or ip, user name is optional>\""    $colorOfArgumentValue
+        colorful -- "<remote accessing id, user name is optional>"    $colorOfArgumentValue
         colorful -n ' \\'
 
         colorful -- "        [ "                                  $colorOfMarkers
@@ -661,44 +689,44 @@ function wlc--design_computer_name_for_remote_machine {
 
         colorful -n 'Examples:'
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -- "    --remote-id="    $colorOfArgumentName
         colorful -- "19.79.3.19"          $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -- "    19.79.3.19"          $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -- "    --remote-id="        $colorOfArgumentName
         colorful -- "wulechuan@19.79.3.19"    $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -- "    root@test-machine"    $colorOfArgumentValue
         colorful -- "    \"my-docker\""        $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -- "    root@test-machine"                  $colorOfArgumentValue
         colorful -- "    --default-computer-name-prefix="    $colorOfArgumentName
         colorful -- "\"my-docker\""                          $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -- "    --remote-id="     $colorOfArgumentName
         colorful -- "root@test-machine"    $colorOfArgumentValue
         colorful -- "    \"my-docker\""    $colorOfArgumentValue
         echo
         echo
 
-        colorful -- "    $nameOfThisFunction"
+        colorful -- "    $__wlcDesignComputerName_nameOfThisFunction__"
         colorful -n ' \\'
         colorful -- "        --remote-id="    $colorOfArgumentName
         colorful -- "19.79.3.19"              $colorOfArgumentValue
@@ -717,32 +745,26 @@ function wlc--design_computer_name_for_remote_machine {
     fi
 
     if [ $# -gt 2 ]; then
-        wlc-print-message-of-source    'function'    "$nameOfThisFunction"
-        wlc-print-error    -1    "Two many arguments provided."
-
-        echo
-        colorful -n "$VE_line_60"
-        wlc--design_computer_name_for_remote_machine--print_help
+        wlc-print-message-of-source    'function'    "$__wlcDesignComputerName_nameOfThisFunction__"
+        wlc-print-error    -1    "Too many arguments provided."
+        wlc--design_computer_name_for_remote_machine--print_help    --should-print-separation-line
         return 3
     fi
 
 
 
     if [ -z "$1" ]; then
-        wlc-print-message-of-source    'function'    "$nameOfThisFunction"
+        wlc-print-message-of-source    'function'    "$__wlcDesignComputerName_nameOfThisFunction__"
         wlc-print-error    -1    "\e[33m\$1\e[31m is required."
-
-        echo
-        colorful -n "$VE_line_60"
-        wlc--design_computer_name_for_remote_machine--print_help
+        wlc--design_computer_name_for_remote_machine--print_help    --should-print-separation-line
         return 3
     fi
 
 
 
-    local remoteIDRawValue="$1"
-    if [[ "$remoteIDRawValue" =~ ^--remote-id= ]]; then
-        remoteIDRawValue="${remoteIDRawValue:12}" # --remote-id="..."
+    local __wlcDesignRemoteComputerName_remoteIDRawValue__="$1"
+    if [[ "$__wlcDesignRemoteComputerName_remoteIDRawValue__" =~ ^--remote-id= ]]; then
+        __wlcDesignRemoteComputerName_remoteIDRawValue__="${__wlcDesignRemoteComputerName_remoteIDRawValue__:12}"
     fi
 
 
@@ -752,41 +774,38 @@ function wlc--design_computer_name_for_remote_machine {
     fi
 
 
-    local remoteHostNameOrIPAddress
-    local remoteUserName
+    local __wlcDesignRemoteComputername_resolvedRemoteID__
+    local __wlcDesignRemoteComputername_resolvedRemoteHost__
+    local __wlcDesignRemoteComputername_resolvedRemoteUser__
+    local __wlcDesignRemoteComputername_resolvedRemoteIDFormat__
 
+    wlc-validate-host-name-or-ip-address-with-optional-user-name \
+        --should-not-print-help-after-printing-error \
+        "$__wlcDesignRemoteComputerName_remoteIDRawValue__" \
+        --default-user-name='root' \
+        __wlcDesignRemoteComputername_resolvedRemoteID__ \
+        __wlcDesignRemoteComputername_resolvedRemoteHost__ \
+        __wlcDesignRemoteComputername_resolvedRemoteUser__ \
+        __wlcDesignRemoteComputername_resolvedRemoteIDFormat__
 
-    wlc-validate-host-id-or-ip-address-with-optional-user-name    "$remoteIDRawValue"    remoteHostNameOrIPAddress    remoteUserName
     stageReturnCode=$?
 	if [ $stageReturnCode -gt 0 ]; then
-		wlc-print-error    "Invalid value \"\e[33m$remoteIDRawValue\e[31m\" for argument \"\e[32m\$1\e[31m\"."
-        wlc_bash_tools--deploy_to_remote--print-help
+        wlc-print-message-of-source    'function'    "$__wlcDesignComputerName_nameOfThisFunction__"
+		wlc-print-error    "Invalid value \"\e[33m$__wlcDesignRemoteComputerName_remoteIDRawValue__\e[31m\" for argument \"\e[32m\$1\e[31m\"."
+        wlc--design_computer_name_for_remote_machine--print_help    --should-print-separation-line
 		return 1
 	fi
 
 
-    if [ -z "$remoteUserName" ]; then
-        remoteUserName='root'
-        colorful -- 'Remote user name'    textBrightCyan
-        colorful -- ' was not provided. Thus "'    textGreen
-        colorful -- 'root'    textMagenta
-        colorful -n '" is assumed.'    textGreen
-        echo
-    fi
-
-    local remoteID="${remoteUserName}@${remoteHostNameOrIPAddress}"
-
-
-
-
     local decidedRemoteComputerName
     wlc--design_computer_name_for_remote_machine--core \
-        --remote-host-name-or-ip-address="$remoteHostNameOrIPAddress" \
+        --remote-host-name-or-ip-address="$__wlcDesignRemoteComputername_resolvedRemoteHost__" \
+        --remote-host-format="$__wlcDesignRemoteComputername_resolvedRemoteIDFormat__" \
         --default-computer-name-prefix="$remoteComputerNameDefaultPrefix" \
         decidedRemoteComputerName
 
 
-    local pathOfLocalWorkingTempFolder="$WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE/design-computer-name-for-${remoteID}"
+    local pathOfLocalWorkingTempFolder="$WLC_BASH_TOOLS___FOLDER_PATH___OF_CACHE/design-computer-name-for-${__wlcDesignRemoteComputername_resolvedRemoteID__}"
     mkdir    -p    "$pathOfLocalWorkingTempFolder"
 
     local pathOfLocalFileForCarryingComputerNameOfRemoteMachine="$pathOfLocalWorkingTempFolder/$NAME_OF_FILE_FOR_CARRYING_COMPUTER_NAME"
@@ -797,9 +816,9 @@ function wlc--design_computer_name_for_remote_machine {
 
     echo3
     colorful -n 'Now trying to send the file of computer name to remote...'    textGreen
-    ssh    "$remoteID"    "mkdir    -p    ~/'${subPathOfRemoteFolderToPutTheFileForCarryingComputerName}'"
+    ssh    "$__wlcDesignRemoteComputername_resolvedRemoteID__"    "mkdir    -p    ~/'${subPathOfRemoteFolderToPutTheFileForCarryingComputerName}'"
 
-    scp    -q    "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    "$remoteID:~/'${subPathOfRemoteFolderToPutTheFileForCarryingComputerName}'"
+    scp    -q    "$pathOfLocalFileForCarryingComputerNameOfRemoteMachine"    "$__wlcDesignRemoteComputername_resolvedRemoteID__:~/'${subPathOfRemoteFolderToPutTheFileForCarryingComputerName}'"
 
 
 
@@ -807,13 +826,13 @@ function wlc--design_computer_name_for_remote_machine {
     echo
 
     rm    -rf    "$pathOfLocalWorkingTempFolder"
-
     if [ $? -eq 0 ]; then
 
         colorful -n 'Temp folder:'                     textRed
         colorful -- '    "'                            textRed
-        colorful -n "$pathOfLocalWorkingTempFolder"    textYellow
-        colorful -n '" has been deleted.'              textRed
+        colorful -- "$pathOfLocalWorkingTempFolder"    textYellow
+        colorful -n '"'                                textRed
+        colorful -n 'has been deleted.'                textRed
 
     else
 
@@ -827,18 +846,20 @@ function wlc--design_computer_name_for_remote_machine {
 }
 
 function wlc--design_computer_name_for_remote_machine--core {
-    # $1: -remote-host-name-or-ip-address="..."
-    # $2: --default-computer-name-prefix="..."
-    # $3: <output> the decided computer name.
+    local ___wlcDesignComputerNameCore_nameOfThisFunction__='wlc--design_computer_name_for_remote_machine--core'
+    # $1: --remote-host-name-or-ip-address="..."
+    # $2: --remote-host-format="..."
+    # $3: --default-computer-name-prefix="..."
+    # $4: <output> the decided computer name.
 
     local REMOTE_COMPUTER_NAME_DEFAULT_PREFIX='computer'
 
 
 
-    if [ $# -ne 3 ]; then
-        wlc-print-message-of-source    'function'    "wlc--design_computer_name_for_remote_machine--core"
-        wlc-print-error    -1    "Must provide 3 arguments, and 3rd of which must be a variable reference."
-        return 3
+    if [ $# -ne 4 ]; then
+        wlc-print-message-of-source    'function'    $___wlcDesignComputerNameCore_nameOfThisFunction__
+        wlc-print-error    -1    "Must provide 4 arguments, 4th of which must be a variable reference."
+        return 4
     fi
 
 
@@ -846,12 +867,14 @@ function wlc--design_computer_name_for_remote_machine--core {
 
 
 
-    local ___remote_raw_name___="${1:33}"                     # --remote-host-name-or-ip-address="..."
-    local ___remote_computer_name_default_prefix___="${2:31}" # --default-computer-name-prefix="..."
+    local ___wlcDesignComputerNameCore_hostString___="${1:33}"          # --remote-host-name-or-ip-address="..."
+    local ___wlcDesignComputerNameCore_hostFormat___="${2:21}"          # --remote-host-format="..."
+    local ___wlcDesignComputerNameCore_defaultComputerName___="${3:31}" # --default-computer-name-prefix="..."
 
     # echo -e "\e[30;42mDEBUG\e[0m"
-    # echo  -e "   ___remote_raw_name___=\"\e[33m$___remote_raw_name___\e[0m\""
-    # echo  -e "   ___remote_computer_name_default_prefix___=\"\e[33m$___remote_computer_name_default_prefix___\e[0m\""
+    # echo  -e "   ___wlcDesignComputerNameCore_hostString___=\"\e[33m$___wlcDesignComputerNameCore_hostString___\e[0m\""
+    # echo  -e "   ___wlcDesignComputerNameCore_hostFormat___=\"\e[33m$___wlcDesignComputerNameCore_hostFormat___\e[0m\""
+    # echo  -e "   ___wlcDesignComputerNameCore_defaultComputerName___=\"\e[33m$___wlcDesignComputerNameCore_defaultComputerName___\e[0m\""
 
     echo3
     wlc-print-header "Design the computer name for the remote machine:"
@@ -859,13 +882,13 @@ function wlc--design_computer_name_for_remote_machine--core {
     local ___remoteComputerNamePrefix___
     local ___remoteComputerName___
 
-    if [[ "$___remote_raw_name___" =~ [0-9\.]+ ]]; then
-        local ___safeStringOfIPAddressToUseInComputerName___=$___remote_raw_name___
+    if [[ "$___wlcDesignComputerNameCore_hostFormat___" =~ ^IPv ]]; then
+        local ___safeStringOfIPAddressToUseInComputerName___=$___wlcDesignComputerNameCore_hostString___
         ___safeStringOfIPAddressToUseInComputerName___=${___safeStringOfIPAddressToUseInComputerName___//./-}
         ___safeStringOfIPAddressToUseInComputerName___="-ip-${___safeStringOfIPAddressToUseInComputerName___}"
 
-        if [ ! -z "$___remote_computer_name_default_prefix___" ]; then
-            ___remoteComputerNamePrefix___="$___remote_computer_name_default_prefix___"
+        if [ ! -z "$___wlcDesignComputerNameCore_defaultComputerName___" ]; then
+            ___remoteComputerNamePrefix___="$___wlcDesignComputerNameCore_defaultComputerName___"
         else
             ___remoteComputerNamePrefix___="$REMOTE_COMPUTER_NAME_DEFAULT_PREFIX"
         fi
@@ -873,22 +896,32 @@ function wlc--design_computer_name_for_remote_machine--core {
         ___remoteComputerName___="${___remoteComputerNamePrefix___}${___safeStringOfIPAddressToUseInComputerName___}"
 
     else
-        ___remoteComputerName___="$___remote_raw_name___"
+        ___remoteComputerName___="$___wlcDesignComputerNameCore_hostString___"
     fi
 
 
 
-    colorful -- 'I suggest you to input a descriptive '                   textGreen
-    colorful -- 'computer name'                                           textMagenta
-    colorful -n ' for the remote machine, simply for easy recognition.'   textGreen
+    colorful -- 'I suggest you to input a ' #    textGreen
+    colorful -- 'descriptive computer name'    textMagenta
+    colorful -n ' for the remote '          #   textGreen
+    colorful -n 'machine, simply for easier recognition.' #   textGreen
+    echo
+    colorful -- 'This step skip will automatically skip '
+    colorful -- 'after '
+    colorful -- '30 seconds'    textGreen
+    colorful -n ','
 
-    colorful -n 'You may skip this by press the <ENTER> key directly.'
-
-    colorful -- '(30 seconds for decision, default is "'
-    colorful -- "$___remoteComputerName___"   textGreen
-    colorful -n '")'
-
-    colorful -- "The remote computer name: "
+    colorful -- 'and the '
+    colorful -- 'default value'                textGreen
+    colorful -- ' "'
+    colorful -- "$___remoteComputerName___"    textMagenta
+    colorful -n '" would be used.'
+    echo
+    colorful -- 'You may also directly press '
+    colorful -- '<ENTER>'                              textBrightCyan
+    colorful -n ' key to accept the default value.'
+    echo
+    colorful -- "Now please input the remote computer name: "    textGreen
 
     local            userInputComputerNameForRemoteMachine
     read    -t 30    userInputComputerNameForRemoteMachine
@@ -898,23 +931,23 @@ function wlc--design_computer_name_for_remote_machine--core {
     fi
 
     if [ -z "$userInputComputerNameForRemoteMachine" ]; then
-        echo '<Skipped>'
+        colorful -n '<Skipped>'    textYellow
     else
         ___remoteComputerName___="$userInputComputerNameForRemoteMachine"
     fi
 
 
     echo
-    colorful -n "$VE_line_70"                  textGreen
+    colorful -n "$VE_line_80"                  textGreen
     colorful -- 'Computer name of "'           textGreen
-    colorful -- "$___remote_raw_name___"       textBrightCyan
+    colorful -- "$___wlcDesignComputerNameCore_hostString___"    textBrightCyan
     colorful -- '" decided to be "'            textGreen
     colorful -- "$___remoteComputerName___"    textMagenta
     colorful -n '"'                            textGreen
-    colorful -n "$VE_line_70"                  textGreen
+    colorful -n "$VE_line_80"                  textGreen
     echo
 
 
 
-    eval "$3=$___remoteComputerName___"
+    eval "$4=$___remoteComputerName___"
 }
