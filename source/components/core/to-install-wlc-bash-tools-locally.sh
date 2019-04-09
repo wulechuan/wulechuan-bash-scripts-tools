@@ -372,9 +372,11 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 
 
 			if     [ "$oldTargetItemFound" == 'yes' ] \
-				&& [ "$itemName" != "$WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE" ] \ # 不必备份 cache，也不应移除旧有 signals。
-				&& [ "$itemName" != "$WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS" ] # 不必备份 signals，也不应移除旧有 signals。
+				&& [ "$itemName" != "$WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE" ] \
+				&& [ "$itemName" != "$WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS" ]
 			then
+				# 不必备份 cache，也不应移除旧有 signals。
+				# 不必备份 signals，也不应移除旧有 signals。
 				# *************************************************** #
 				# *************************************************** #
 				# *************************************************** #
