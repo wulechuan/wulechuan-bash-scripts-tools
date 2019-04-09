@@ -1,40 +1,69 @@
 function wlc_bash_tools--detect_signal_file_on_remote_machine {
+    # $5: --print-signal-file-content
+
 	if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
-		wlc-print-error    "function wlc_bash_tools--detect_signal_file_on_remote_machine {}: \$1, \$2, \$3 and \$4 are all required."
+        wlc-print-message-of-source    'function'    'wlc_bash_tools--detect_signal_file_on_remote_machine'
+		wlc-print-error    -1    "\$1, \$2, \$3 and \$4 are all required."
 		return 1
 	fi
 
 
-	local remoteHostAndHost="$1"
-	local signalFileRemoteLocationPath="$2"
-	local signalFileName="$3"
-	local signalFileLocalTempStoragePath="$4"
+	local __wlcDetectSignalFileRemotely_remoteID="$1"
+	local __wlcDetectSignalFileRemotely_signalFile_remoteLocationPath="$2"
+	local __wlcDetectSignalFileRemotely_signalFileName="$3"
+	local __wlcDetectSignalFileRemotely_signalFile_localCacheLocationPath="$4"
 
 
 	local shouldEchoFullContentOfLocalTempFileAndThenDeleteIt='no'
-	if [ "$5" == '--print-signal-file-content' ]; then
-		shouldEchoFullContentOfLocalTempFileAndThenDeleteIt='yes'
+	if [ ! -z "$5" ]; then
+        if [ "$5" == '--print-signal-file-content' ]; then
+            shouldEchoFullContentOfLocalTempFileAndThenDeleteIt='yes'
+        else
+            colorful -- 'Invalid $5 ("'    textYellow
+            colorful -- "$5"               textMagenta
+            colorful -n '"). Ignored.'     textYellow
+
+            colorful -- 'By the way, a valid value of $5, if provided, should be "'
+            colorful -- '--print-signal-file-content'    textGreen
+            colorful -n '"'
+        fi
 	fi
 
-	local signalFileLocalFullPath="$signalFileLocalTempStoragePath/$signalFileName"
+	local __wlcDetectSignalFileRemotely_signalFile_localCacheFullPath="$__wlcDetectSignalFileRemotely_signalFile_localCacheLocationPath/$__wlcDetectSignalFileRemotely_signalFileName"
 
 
 
 
-	scp    -q    "$remoteHostAndHost:$signalFileRemoteLocationPath/$signalFileName"    "$signalFileLocalTempStoragePath/"
+	scp    -q    "$__wlcDetectSignalFileRemotely_remoteID:$__wlcDetectSignalFileRemotely_signalFile_remoteLocationPath/$__wlcDetectSignalFileRemotely_signalFileName"    "$__wlcDetectSignalFileRemotely_signalFile_localCacheLocationPath/"
 
-	if [ -f "$signalFileLocalFullPath" ]; then
+	if [ -f "$__wlcDetectSignalFileRemotely_signalFile_localCacheFullPath" ]; then
 
 		if [ "$shouldEchoFullContentOfLocalTempFileAndThenDeleteIt" == 'yes' ]; then
-			cat    "$signalFileLocalFullPath"
-			rm     "$signalFileLocalFullPath"
+			cat    "$__wlcDetectSignalFileRemotely_signalFile_localCacheFullPath"
+			rm     "$__wlcDetectSignalFileRemotely_signalFile_localCacheFullPath"
 		else
-			echo 'yes'
+            echo
+            colorful -- 'The signal file "'                                               textGreen
+            colorful -- "$__wlcDetectSignalFileRemotely_signalFileName"                   textBrightCyan
+            colorful -- '" exists at "'                                                   textGreen
+            colorful -- "$__wlcDetectSignalFileRemotely_remoteID"                         textMagenta
+            colorful -- ':'                                                               textGreen
+            colorful -- "$__wlcDetectSignalFileRemotely_signalFile_remoteLocationPath"    textBrightCyan
+            colorful -- '".'                                                              textGreen
 		fi
 	else
 		if [ "$shouldEchoFullContentOfLocalTempFileAndThenDeleteIt" != 'yes' ]; then
-			echo 'no'
+            echo
+            colorful -- 'The signal file "'                                               textRed
+            colorful -- "$__wlcDetectSignalFileRemotely_signalFileName"                   textYellow
+            colorful -- " doesn't exist at \""                                            textRed
+            colorful -- "$__wlcDetectSignalFileRemotely_remoteID"                         textMagenta
+            colorful -- ':'                                                               textRed
+            colorful -- "$__wlcDetectSignalFileRemotely_signalFile_remoteLocationPath"    textYellow
+            colorful -- '".'                                                              textRed
 		fi
+
+        return 1
 	fi
 }
 
