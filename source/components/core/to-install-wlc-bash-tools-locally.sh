@@ -17,7 +17,9 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 	# Those core global vars not available yet.
 	# So we have to manually provide them here.
 	local WLC_BASH_TOOLS___FOLDER_NAME='wlc-bash-tools'
+	local WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE=".${WLC_BASH_TOOLS___FOLDER_NAME}-cache"
 	local WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS=".${WLC_BASH_TOOLS___FOLDER_NAME}-signals"
+
 	local WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_NEW_INSTANCE_TO_DEPLOY="${WLC_BASH_TOOLS___FOLDER_NAME}___new-one-to-deploy"
 	# local WLC_BASH_TOOLS___FILE_NAME___OF_SIGNAL_OF_AUTO_LOGGING_OUT="should-auto-log-out-after-auto-tasks-done"
 	local VE_line='──────────' # 10 chars
@@ -369,7 +371,10 @@ function ___temp_func--wlc_bash_tools--deploy_locally {
 			fi
 
 
-			if [ "$oldTargetItemFound" == 'yes' ]; then
+			if     [ "$oldTargetItemFound" == 'yes' ] \
+				&& [ "$itemName" != "$WLC_BASH_TOOLS___FOLDER_NAME___OF_CACHE" ] \ # 不必备份 cache，也不应移除旧有 signals。
+				&& [ "$itemName" != "$WLC_BASH_TOOLS___FOLDER_NAME___OF_SIGNALS" ] # 不必备份 signals，也不应移除旧有 signals。
+			then
 				# *************************************************** #
 				# *************************************************** #
 				# *************************************************** #
